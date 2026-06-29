@@ -7,13 +7,14 @@ var exerciseCategories = []string{"rotator_cuff", "scapular", "mobility", "compo
 
 // PTHub is the satellite's landing page: PT is secondary to the care spine, so it
 // lives behind one nav entry that fans out to sessions, exercises, and metrics.
-templ PTHub(profile store.CaseProfile, recent []store.Session, exerciseCount int) {
+templ PTHub(profile store.CaseProfile, recent []store.Session, exerciseCount, protocolCount int, activeProtocol string) {
 	@Layout("PT", profile) {
 		@pageHeader("Physical therapy") {
 			@btnLink("/pt/sessions/new", "+ Log session")
 		}
-		<div class="grid grid-cols-3 gap-2 mb-6 text-center">
-			@hubTile("/pt/sessions", "Sessions", itoaInt(len(recent))+"+ recent")
+		<div class="grid grid-cols-2 gap-2 mb-6 text-center">
+			@hubTile("/pt/sessions", "Sessions", "log & history")
+			@hubTile("/pt/protocols", "Protocols", protocolSub(protocolCount, activeProtocol))
 			@hubTile("/pt/exercises", "Exercises", itoaInt(exerciseCount))
 			@hubTile("/pt/measurements", "Metrics", "charts")
 		</div>
@@ -199,7 +200,12 @@ templ SessionForm(profile store.CaseProfile) {
 templ SessionDetail(profile store.CaseProfile, se store.Session, exercises []store.Exercise) {
 	@Layout("Session", profile) {
 		<div class="flex items-center justify-between mb-4">
-			<h1 class="text-xl font-semibold text-slate-900">{ humanTime(se.PerformedAt) }</h1>
+			<div>
+				<h1 class="text-xl font-semibold text-slate-900">{ humanTime(se.PerformedAt) }</h1>
+				if se.ProtocolName != "" {
+					<a href={ templ.SafeURL(ptURL("protocols", *se.ProtocolID)) } class="text-xs text-teal-700 underline">{ se.ProtocolName }</a>
+				}
+			</div>
 			<form method="post" action={ templ.SafeURL(ptURL("sessions", se.ID) + "/delete") } onsubmit="return confirm('Delete this session and its sets?')">
 				<button class="text-xs text-red-600 underline">Delete</button>
 			</form>

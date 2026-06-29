@@ -50,8 +50,10 @@ once a transcript exists (the transcript is kept).
 **Phase 3 (PT logging satellite) is built.** Under the **PT** nav entry:
 exercises (with a metric type that drives which set inputs show), sessions with
 inline htmx set logging, and a tall `measurements` log with inline SVG trend
-charts. Prescription (`protocols` / `protocol_exercises`) is deferred per the
-design — this ships `exercises → sessions → sets → measurements`.
+charts. **Prescription** (`protocols` / `protocol_exercises`) is also now built:
+rehab phases with prescribed targets, new sessions auto-linked to the active
+phase, and a plan-vs-performed compliance view (each prescribed target shown next
+to the most recent set logged for it).
 
 **Phase 4 (PWA shell) is built.** The app is installable: a web manifest, maskable
 icons, and a **deliberately minimal** service worker. Per the design, the worker
@@ -64,7 +66,7 @@ All four planned phases are now built:
 
 1. ~~**Core loop:** resources + providers + appointments + AI question generator~~ ✅
 2. ~~**Recordings:** MediaRecorder upload → server-side transcription → AI highlights/tasks~~ ✅
-3. ~~**PT logging:** the satellite~~ ✅ (protocols/prescription still deferred)
+3. ~~**PT logging:** the satellite~~ ✅ (including prescription/compliance)
 4. ~~**PWA shell:** manifest + service worker~~ ✅
 
 **In-app settings & login (post-design).** AI/transcription credentials can be set

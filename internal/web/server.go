@@ -184,6 +184,14 @@ func (s *Server) Routes() http.Handler {
 	mux.HandleFunc("GET /pt/measurements", s.measurementList)
 	mux.HandleFunc("POST /pt/measurements", s.measurementCreate)
 	mux.HandleFunc("POST /pt/measurements/{id}/delete", s.measurementDelete)
+	mux.HandleFunc("GET /pt/protocols", s.protocolList)
+	mux.HandleFunc("GET /pt/protocols/new", s.protocolNew)
+	mux.HandleFunc("POST /pt/protocols", s.protocolCreate)
+	mux.HandleFunc("GET /pt/protocols/{id}", s.protocolDetail)
+	mux.HandleFunc("POST /pt/protocols/{id}/end", s.protocolEnd)
+	mux.HandleFunc("POST /pt/protocols/{id}/delete", s.protocolDelete)
+	mux.HandleFunc("POST /pt/protocols/{id}/exercises", s.addPrescription)
+	mux.HandleFunc("POST /pt/protocol-exercises/{id}/delete", s.deletePrescription)
 
 	return logRequests(s.requireAuth(mux))
 }

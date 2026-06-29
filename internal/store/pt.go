@@ -23,14 +23,16 @@ type Exercise struct {
 }
 
 type Session struct {
-	ID          int64
-	PerformedAt string
-	DurationMin *int64
-	PainPre     *int64
-	PainPost    *int64
-	Notes       string
-	SetCount    int
-	Sets        []Set // populated by Session(), not by ListSessions()
+	ID           int64
+	ProtocolID   *int64
+	ProtocolName string // joined; populated by Session()
+	PerformedAt  string
+	DurationMin  *int64
+	PainPre      *int64
+	PainPost     *int64
+	Notes        string
+	SetCount     int
+	Sets         []Set // populated by Session(), not by ListSessions()
 }
 
 type Set struct {
@@ -142,15 +144,18 @@ func (s *Store) ListSessions(ctx context.Context) ([]Session, error) {
 
 func (s *Store) Session(ctx context.Context, id int64) (Session, error) {
 	var se Session
-	var dur, pre, post sql.NullInt64
+	var dur, pre, post, protoID sql.NullInt64
 	err := s.db.QueryRowContext(ctx, `
-		SELECT id, performed_at, duration_min, pain_pre, pain_post, COALESCE(notes,'')
-		FROM sessions WHERE id = ?`, id).
-		Scan(&se.ID, &se.PerformedAt, &dur, &pre, &post, &se.Notes)
+		SELECT se.id, se.performed_at, se.duration_min, se.pain_pre, se.pain_post,
+		       COALESCE(se.notes,''), se.protocol_id, COALESCE(pr.name,'')
+		FROM sessions se LEFT JOIN protocols pr ON pr.id = se.protocol_id
+		WHERE se.id = ?`, id).
+		Scan(&se.ID, &se.PerformedAt, &dur, &pre, &post, &se.Notes, &protoID, &se.ProtocolName)
 	if err != nil {
 		return se, err
 	}
 	se.DurationMin, se.PainPre, se.PainPost = niptr(dur), niptr(pre), niptr(post)
+	se.ProtocolID = niptr(protoID)
 	se.Sets, err = s.SetsForSession(ctx, id)
 	return se, err
 }
@@ -158,9 +163,10 @@ func (s *Store) Session(ctx context.Context, id int64) (Session, error) {
 func (s *Store) CreateSession(ctx context.Context, se Session) (int64, error) {
 	// Empty performed_at falls back to now() so a quick log doesn't require a date.
 	res, err := s.db.ExecContext(ctx, `
-		INSERT INTO sessions (performed_at, duration_min, pain_pre, pain_post, notes)
-		VALUES (COALESCE(NULLIF(?,''), datetime('now')), ?, ?, ?, ?)`,
-		se.PerformedAt, i64val(se.DurationMin), i64val(se.PainPre), i64val(se.PainPost), nullify(se.Notes))
+		INSERT INTO sessions (performed_at, protocol_id, duration_min, pain_pre, pain_post, notes)
+		VALUES (COALESCE(NULLIF(?,''), datetime('now')), ?, ?, ?, ?, ?)`,
+		se.PerformedAt, i64val(se.ProtocolID), i64val(se.DurationMin),
+		i64val(se.PainPre), i64val(se.PainPost), nullify(se.Notes))
 	if err != nil {
 		return 0, err
 	}
