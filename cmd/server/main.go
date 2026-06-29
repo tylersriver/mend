@@ -20,6 +20,12 @@ import (
 )
 
 func main() {
+	// `mend -healthcheck` makes one HTTP request to /healthz and exits 0/1. This
+	// lets the scratch-based container HEALTHCHECK work without a shell or wget.
+	if len(os.Args) > 1 && os.Args[1] == "-healthcheck" {
+		os.Exit(healthcheck())
+	}
+
 	cfg := config.Load(os.Args[1:])
 
 	// Ensure the DB's parent dir and the blob dir exist.
@@ -30,6 +36,11 @@ func main() {
 	}
 	if err := os.MkdirAll(cfg.DataDir, 0o755); err != nil {
 		log.Fatalf("create data dir: %v", err)
+	}
+	// Ensure a temp dir exists for multipart upload spillover — a scratch image
+	// has no /tmp until we make it.
+	if err := os.MkdirAll(os.TempDir(), 0o1777); err != nil {
+		log.Printf("warning: create temp dir %s: %v", os.TempDir(), err)
 	}
 
 	database, err := db.Open(cfg.DBPath)
@@ -75,4 +86,20 @@ func main() {
 		log.Fatalf("serve: %v", err)
 	}
 	<-idle
+}
+
+// healthcheck probes the local /healthz endpoint, honoring the same PORT/ADDR
+// resolution as the server. Returns a process exit code (0 = healthy).
+func healthcheck() int {
+	cfg := config.Load(nil)
+	client := &http.Client{Timeout: 3 * time.Second}
+	resp, err := client.Get("http://127.0.0.1" + cfg.Addr + "/healthz")
+	if err != nil {
+		return 1
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		return 1
+	}
+	return 0
 }
