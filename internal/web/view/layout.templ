@@ -30,6 +30,22 @@ templ Layout(title string, profile store.CaseProfile) {
 					},
 				};
 			</script>
+			<style>
+				/* iOS Safari gives date/time inputs an intrinsic min-width that beats
+				   width:100%, overflowing their container. Strip the native appearance
+				   and min-width so they honor the box. */
+				input[type="date"], input[type="datetime-local"] {
+					-webkit-appearance: none;
+					appearance: none;
+					min-width: 0;
+					max-width: 100%;
+					text-align: left;
+				}
+				input[type="date"]::-webkit-date-and-time-value,
+				input[type="datetime-local"]::-webkit-date-and-time-value {
+					text-align: left;
+				}
+			</style>
 			<script src="https://unpkg.com/htmx.org@2.0.4"></script>
 			<script>
 				if ('serviceWorker' in navigator) {
