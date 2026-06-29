@@ -69,7 +69,7 @@ templ AppointmentForm(profile store.CaseProfile, providers []store.Provider) {
 	}
 }
 
-templ AppointmentDetail(profile store.CaseProfile, a store.Appointment, docs []store.AIDoc, aiEnabled bool) {
+templ AppointmentDetail(profile store.CaseProfile, a store.Appointment, docs []store.AIDoc, recs []store.Recording, aiEnabled bool) {
 	@Layout("Appointment", profile) {
 		<div class="flex items-center justify-between mb-4">
 			<div>
@@ -136,6 +136,26 @@ templ AppointmentDetail(profile store.CaseProfile, a store.Appointment, docs []s
 					<p id="ai-empty" class="text-sm text-slate-400">No AI documents yet for this appointment.</p>
 				}
 			</div>
+		</section>
+		<section class="mt-6">
+			<div class="flex items-center justify-between mb-2">
+				<h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wide">Recordings</h2>
+				@btnLink("/recordings/new?appointment_id="+itoa(a.ID), "+ Add")
+			</div>
+			if len(recs) == 0 {
+				<p class="text-sm text-slate-400">No recordings linked to this appointment.</p>
+			} else {
+				<ul class="space-y-2">
+					for _, rec := range recs {
+						<li>
+							<a href={ templ.SafeURL(recordingURL(rec.ID)) } class="flex justify-between items-center bg-white rounded-lg border border-slate-200 p-3 hover:border-teal-300">
+								<span class="text-sm">{ humanTime(rec.CreatedAt) }</span>
+								<span class={ "text-xs px-2 py-0.5 rounded-full " + recStatusClasses(rec.TranscriptStatus) }>{ label(rec.TranscriptStatus) }</span>
+							</a>
+						</li>
+					}
+				</ul>
+			}
 		</section>
 	}
 }

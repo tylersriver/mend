@@ -286,7 +286,12 @@ func (s *Server) appointmentDetail(w http.ResponseWriter, r *http.Request) {
 		s.fail(w, "load ai docs", err)
 		return
 	}
-	s.render(w, r, view.AppointmentDetail(s.profile(r.Context()), a, docs, s.aiEnabled()))
+	recs, err := s.store.RecordingsForAppointment(r.Context(), id)
+	if err != nil {
+		s.fail(w, "load recordings", err)
+		return
+	}
+	s.render(w, r, view.AppointmentDetail(s.profile(r.Context()), a, docs, recs, s.aiEnabled()))
 }
 
 func (s *Server) appointmentUpdate(w http.ResponseWriter, r *http.Request) {

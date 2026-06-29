@@ -13,20 +13,23 @@ import (
 	"github.com/a-h/templ"
 
 	"github.com/tylersriver/mend/internal/ai"
+	"github.com/tylersriver/mend/internal/recordings"
 	"github.com/tylersriver/mend/internal/store"
 )
 
 type Server struct {
 	store   *store.Store
-	ai      *ai.Service // nil when no API key is configured
+	ai      *ai.Service           // nil when no API key is configured
+	proc    *recordings.Processor // transcription/summary pipeline
 	dataDir string
 }
 
-func NewServer(st *store.Store, aiSvc *ai.Service, dataDir string) *Server {
-	return &Server{store: st, ai: aiSvc, dataDir: dataDir}
+func NewServer(st *store.Store, aiSvc *ai.Service, proc *recordings.Processor, dataDir string) *Server {
+	return &Server{store: st, ai: aiSvc, proc: proc, dataDir: dataDir}
 }
 
-func (s *Server) aiEnabled() bool { return s.ai != nil }
+func (s *Server) aiEnabled() bool         { return s.ai != nil }
+func (s *Server) transcribeEnabled() bool { return s.proc != nil && s.proc.TranscriptionEnabled() }
 
 // Routes returns the configured mux.
 func (s *Server) Routes() http.Handler {
@@ -44,6 +47,18 @@ func (s *Server) Routes() http.Handler {
 	mux.HandleFunc("GET /resources/{id}/file", s.resourceFile)
 	mux.HandleFunc("POST /resources/{id}/delete", s.resourceDelete)
 	mux.HandleFunc("POST /resources/{id}/summarize", s.resourceSummarize)
+
+	// Recordings (audio → transcript → AI highlights/tasks)
+	mux.HandleFunc("GET /recordings", s.recordingList)
+	mux.HandleFunc("GET /recordings/new", s.recordingNew)
+	mux.HandleFunc("POST /recordings", s.recordingCreate)
+	mux.HandleFunc("GET /recordings/{id}", s.recordingDetail)
+	mux.HandleFunc("GET /recordings/{id}/status", s.recordingStatus)
+	mux.HandleFunc("GET /recordings/{id}/audio", s.recordingAudio)
+	mux.HandleFunc("POST /recordings/{id}/transcribe", s.recordingTranscribe)
+	mux.HandleFunc("POST /recordings/{id}/summarize", s.recordingSummarize)
+	mux.HandleFunc("POST /recordings/{id}/audio/delete", s.recordingAudioDelete)
+	mux.HandleFunc("POST /recordings/{id}/delete", s.recordingDelete)
 
 	// Providers
 	mux.HandleFunc("GET /providers", s.providerList)

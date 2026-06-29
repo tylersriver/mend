@@ -14,6 +14,12 @@ type Config struct {
 	DataDir string // on-disk blob storage (uploads, recordings)
 	APIKey  string // ANTHROPIC_API_KEY — never stored in the DB
 	AIModel string // Anthropic model id used for care-prep flows
+
+	// Transcription (a Whisper-class API, kept separate from the Anthropic path).
+	// Provider-agnostic: any OpenAI-compatible /audio/transcriptions endpoint works.
+	TranscribeAPIKey  string
+	TranscribeBaseURL string
+	TranscribeModel   string
 }
 
 // Load reads env vars, then applies any explicitly-set flags on top.
@@ -24,6 +30,10 @@ func Load(args []string) *Config {
 		DataDir: envOr("DATA_DIR", "data"),
 		APIKey:  os.Getenv("ANTHROPIC_API_KEY"),
 		AIModel: envOr("AI_MODEL", "claude-opus-4-8"),
+
+		TranscribeAPIKey:  os.Getenv("TRANSCRIBE_API_KEY"),
+		TranscribeBaseURL: envOr("TRANSCRIBE_BASE_URL", "https://api.openai.com/v1"),
+		TranscribeModel:   envOr("TRANSCRIBE_MODEL", "whisper-1"),
 	}
 
 	fs := flag.NewFlagSet("mend", flag.ContinueOnError)
@@ -39,6 +49,9 @@ func Load(args []string) *Config {
 
 // AIEnabled reports whether AI flows can run. Handlers degrade gracefully when false.
 func (c *Config) AIEnabled() bool { return c.APIKey != "" }
+
+// TranscribeEnabled reports whether audio can be transcribed server-side.
+func (c *Config) TranscribeEnabled() bool { return c.TranscribeAPIKey != "" }
 
 func envOr(key, def string) string {
 	if v := os.Getenv(key); v != "" {

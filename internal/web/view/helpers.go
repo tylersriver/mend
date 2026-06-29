@@ -35,9 +35,24 @@ func backURL(d store.AIDoc) string {
 		return apptURL(d.SourceID)
 	case "resource":
 		return resourceURL(d.SourceID)
+	case "recording":
+		return recordingURL(d.SourceID)
 	default:
 		return ""
 	}
+}
+
+// recordingLabel gives a recording a human title from its linked appointment.
+func recordingLabel(r store.Recording) string {
+	if r.AppointmentLabel != "" {
+		return r.AppointmentLabel
+	}
+	return "Unlinked recording"
+}
+
+// apptOption renders an appointment as a one-line <option> label.
+func apptOption(a store.Appointment) string {
+	return label(a.Kind) + " · " + providerOr(a) + " · " + humanTime(a.ScheduledAt)
 }
 
 func sourceSuffix(r store.Resource) string {
@@ -119,3 +134,24 @@ func statusClasses(status string) string {
 		return "bg-blue-100 text-blue-800"
 	}
 }
+
+// recStatusClasses maps a transcript pipeline status to Tailwind badge colors.
+func recStatusClasses(status string) string {
+	switch status {
+	case "done":
+		return "bg-green-100 text-green-800"
+	case "failed":
+		return "bg-red-100 text-red-700"
+	case "processing":
+		return "bg-amber-100 text-amber-800"
+	default: // pending
+		return "bg-slate-100 text-slate-600"
+	}
+}
+
+// recActive reports whether the pipeline is still working (so the UI keeps polling).
+func recActive(status string) bool {
+	return status == "pending" || status == "processing"
+}
+
+func recordingURL(id int64) string { return "/recordings/" + strconv.FormatInt(id, 10) }

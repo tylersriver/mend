@@ -40,11 +40,17 @@ with an AI summarize action), **providers**, **appointments** (prep vs. outcome)
 and the **AI question generator** that drafts questions for an appointment grounded
 in the case file. AI flows degrade gracefully when `ANTHROPIC_API_KEY` is unset.
 
+**Phase 2 (recordings) is built.** Record or upload appointment audio; it's
+transcribed server-side (a Whisper-class API), then Claude turns the transcript
+into highlights + a task list. The browser only records (MediaRecorder) and
+uploads — transcription never runs client-side. Pipeline state
+(`pending → processing → done → failed`) is polled over htmx. Audio can be deleted
+once a transcript exists (the transcript is kept).
+
 Not yet built (in suggested build order):
 
 1. ~~**Core loop:** resources + providers + appointments + AI question generator~~ ✅
-2. **Recordings:** MediaRecorder upload → server-side transcription → AI highlights/tasks
-   (the `recordings` table and `SummarizeTranscript` flow exist; no handler/UI yet)
+2. ~~**Recordings:** MediaRecorder upload → server-side transcription → AI highlights/tasks~~ ✅
 3. **PT logging:** the satellite (schema is ready in migration `0001`)
 4. **PWA shell:** manifest + service worker, added last (~40 lines, no architecture impact)
 
@@ -52,6 +58,7 @@ Not yet built (in suggested build order):
 
 ```sh
 export ANTHROPIC_API_KEY=sk-ant-...   # optional; AI flows disable without it
+export TRANSCRIBE_API_KEY=sk-...      # optional; audio transcription disables without it
 go run ./cmd/server                   # serves http://localhost:8080
 ```
 
@@ -61,6 +68,8 @@ with `go run github.com/a-h/templ/cmd/templ@latest generate`.
 
 Config (env, with `-flag` overrides): `ADDR` (default `:8080`), `DB_PATH`
 (`data/mend.db`), `DATA_DIR` (`data`), `AI_MODEL` (`claude-opus-4-8`).
+Transcription (OpenAI-compatible): `TRANSCRIBE_API_KEY`, `TRANSCRIBE_BASE_URL`
+(default `https://api.openai.com/v1`), `TRANSCRIBE_MODEL` (default `whisper-1`).
 
 ## Security notes
 

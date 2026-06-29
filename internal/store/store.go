@@ -8,6 +8,7 @@ import (
 	"context"
 	"database/sql"
 	"log"
+	"strings"
 
 	"github.com/tylersriver/mend/internal/ai"
 )
@@ -71,6 +72,17 @@ type AIDoc struct {
 	SourceID   int64
 	IsEdited   bool
 	CreatedAt  string
+}
+
+type Recording struct {
+	ID               int64
+	AppointmentID    int64
+	AppointmentLabel string // joined provider + kind, for display
+	AudioPath        string
+	DurationSec      int64
+	Transcript       string
+	TranscriptStatus string // pending|processing|done|failed
+	CreatedAt        string
 }
 
 // --- Case profile -----------------------------------------------------------
@@ -279,6 +291,124 @@ func (s *Store) UpdateAppointment(ctx context.Context, a Appointment) error {
 	return err
 }
 
+// --- Recordings -------------------------------------------------------------
+
+const recordingCols = `r.id, COALESCE(r.appointment_id,0), COALESCE(a.kind,''),
+	COALESCE(p.name,''), COALESCE(r.audio_path,''), COALESCE(r.duration_sec,0),
+	COALESCE(r.transcript,''), r.transcript_status, r.created_at`
+
+func scanRecording(sc interface{ Scan(...any) error }) (Recording, error) {
+	var r Recording
+	var apptKind, providerName string
+	err := sc.Scan(&r.ID, &r.AppointmentID, &apptKind, &providerName, &r.AudioPath,
+		&r.DurationSec, &r.Transcript, &r.TranscriptStatus, &r.CreatedAt)
+	if r.AppointmentID != 0 {
+		parts := make([]string, 0, 2)
+		if k := strings.ReplaceAll(apptKind, "_", " "); k != "" {
+			parts = append(parts, k)
+		}
+		if providerName != "" {
+			parts = append(parts, providerName)
+		}
+		r.AppointmentLabel = strings.Join(parts, " · ")
+	}
+	return r, err
+}
+
+const recordingJoin = `FROM recordings r
+	LEFT JOIN appointments a ON a.id = r.appointment_id
+	LEFT JOIN providers p ON p.id = a.provider_id`
+
+func (s *Store) Recordings(ctx context.Context) ([]Recording, error) {
+	rows, err := s.db.QueryContext(ctx, `SELECT `+recordingCols+` `+recordingJoin+` ORDER BY r.created_at DESC`)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var out []Recording
+	for rows.Next() {
+		rec, err := scanRecording(rows)
+		if err != nil {
+			return nil, err
+		}
+		out = append(out, rec)
+	}
+	return out, rows.Err()
+}
+
+func (s *Store) RecordingsForAppointment(ctx context.Context, apptID int64) ([]Recording, error) {
+	rows, err := s.db.QueryContext(ctx, `SELECT `+recordingCols+` `+recordingJoin+`
+		WHERE r.appointment_id = ? ORDER BY r.created_at DESC`, apptID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var out []Recording
+	for rows.Next() {
+		rec, err := scanRecording(rows)
+		if err != nil {
+			return nil, err
+		}
+		out = append(out, rec)
+	}
+	return out, rows.Err()
+}
+
+func (s *Store) GetRecording(ctx context.Context, id int64) (Recording, error) {
+	return scanRecording(s.db.QueryRowContext(ctx, `SELECT `+recordingCols+` `+recordingJoin+` WHERE r.id = ?`, id))
+}
+
+func (s *Store) CreateRecording(ctx context.Context, r Recording) (int64, error) {
+	res, err := s.db.ExecContext(ctx, `
+		INSERT INTO recordings (appointment_id, audio_path, duration_sec, transcript_status)
+		VALUES (?, ?, ?, ?)`,
+		nullZero(r.AppointmentID), nullify(r.AudioPath), nullZero(r.DurationSec),
+		recStatusOr(r.TranscriptStatus))
+	if err != nil {
+		return 0, err
+	}
+	return res.LastInsertId()
+}
+
+// SetTranscriptStatus moves a recording through the pipeline states.
+func (s *Store) SetTranscriptStatus(ctx context.Context, id int64, status string) error {
+	_, err := s.db.ExecContext(ctx,
+		`UPDATE recordings SET transcript_status = ? WHERE id = ?`, status, id)
+	return err
+}
+
+// SaveTranscript stores the transcript text and marks the recording done.
+func (s *Store) SaveTranscript(ctx context.Context, id int64, transcript string, durationSec int64) error {
+	_, err := s.db.ExecContext(ctx, `
+		UPDATE recordings
+		SET transcript = ?, transcript_status = 'done', duration_sec = COALESCE(NULLIF(?,0), duration_sec)
+		WHERE id = ?`, transcript, durationSec, id)
+	return err
+}
+
+// DeleteAudio removes the on-disk blob and clears audio_path, keeping the
+// transcript — audio is the most sensitive data, so it can be purged once
+// transcribed (per the design's data-handling note).
+func (s *Store) DeleteAudio(ctx context.Context, id int64) (string, error) {
+	var path string
+	if err := s.db.QueryRowContext(ctx,
+		`SELECT COALESCE(audio_path,'') FROM recordings WHERE id = ?`, id).Scan(&path); err != nil {
+		return "", err
+	}
+	_, err := s.db.ExecContext(ctx, `UPDATE recordings SET audio_path = NULL WHERE id = ?`, id)
+	return path, err
+}
+
+func (s *Store) DeleteRecording(ctx context.Context, id int64) (string, error) {
+	var path string
+	if err := s.db.QueryRowContext(ctx,
+		`SELECT COALESCE(audio_path,'') FROM recordings WHERE id = ?`, id).Scan(&path); err != nil {
+		return "", err
+	}
+	_, err := s.db.ExecContext(ctx, `DELETE FROM recordings WHERE id = ?`, id)
+	return path, err
+}
+
 // --- AI documents -----------------------------------------------------------
 
 const aiDocCols = `id, doc_type, COALESCE(title,''), content, COALESCE(model,''),
@@ -447,6 +577,13 @@ func nullZero(n int64) any {
 func statusOr(s string) string {
 	if s == "" {
 		return "upcoming"
+	}
+	return s
+}
+
+func recStatusOr(s string) string {
+	if s == "" {
+		return "pending"
 	}
 	return s
 }
