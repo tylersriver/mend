@@ -53,12 +53,19 @@ inline htmx set logging, and a tall `measurements` log with inline SVG trend
 charts. Prescription (`protocols` / `protocol_exercises`) is deferred per the
 design — this ships `exercises → sessions → sets → measurements`.
 
-Not yet built (in suggested build order):
+**Phase 4 (PWA shell) is built.** The app is installable: a web manifest, maskable
+icons, and a **deliberately minimal** service worker. Per the design, the worker
+caches only the app shell + a static `/offline` page and **never caches dynamic
+responses** — htmx fragments and all medical data always hit the network (stale
+health data is worse than an error). Service workers require HTTPS in production
+(localhost is exempt for dev).
+
+All four planned phases are now built:
 
 1. ~~**Core loop:** resources + providers + appointments + AI question generator~~ ✅
 2. ~~**Recordings:** MediaRecorder upload → server-side transcription → AI highlights/tasks~~ ✅
 3. ~~**PT logging:** the satellite~~ ✅ (protocols/prescription still deferred)
-4. **PWA shell:** manifest + service worker, added last (~40 lines, no architecture impact)
+4. ~~**PWA shell:** manifest + service worker~~ ✅
 
 ## Quickstart
 
