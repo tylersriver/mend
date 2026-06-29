@@ -623,7 +623,7 @@ func ExerciseForm(profile store.CaseProfile) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 41, "\"></div><div class=\"flex gap-3\"><div class=\"flex-1\"><label class=\"block text-xs font-medium text-slate-500\">Metric type</label> ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 41, "\"></div><div class=\"grid grid-cols-1 sm:grid-cols-2 gap-3\"><div class=\"flex-1 min-w-0\"><label class=\"block text-xs font-medium text-slate-500\">Metric type</label> ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -681,7 +681,7 @@ func ExerciseForm(profile store.CaseProfile) templ.Component {
 						return templ_7745c5c3_Err
 					}
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 47, "</select></div><div class=\"flex-1\"><label class=\"block text-xs font-medium text-slate-500\">Category</label> ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 47, "</select></div><div class=\"flex-1 min-w-0\"><label class=\"block text-xs font-medium text-slate-500\">Category</label> ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -961,7 +961,7 @@ func SessionForm(profile store.CaseProfile) templ.Component {
 					}()
 				}
 				ctx = templ.InitializeContext(ctx)
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 63, "<form method=\"post\" action=\"/pt/sessions\" class=\"space-y-4\"><div class=\"flex gap-3\"><div class=\"flex-1\"><label class=\"block text-xs font-medium text-slate-500\">When</label> ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 63, "<form method=\"post\" action=\"/pt/sessions\" class=\"space-y-4\"><div class=\"grid grid-cols-1 sm:grid-cols-2 gap-3\"><div class=\"flex-1 min-w-0\"><label class=\"block text-xs font-medium text-slate-500\">When</label> ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -983,7 +983,7 @@ func SessionForm(profile store.CaseProfile) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 65, "\"></div><div class=\"flex-1\"><label class=\"block text-xs font-medium text-slate-500\">Duration (min)</label> ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 65, "\"></div><div class=\"flex-1 min-w-0\"><label class=\"block text-xs font-medium text-slate-500\">Duration (min)</label> ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -1005,7 +1005,7 @@ func SessionForm(profile store.CaseProfile) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 67, "\"></div></div><div class=\"flex gap-3\"><div class=\"flex-1\"><label class=\"block text-xs font-medium text-slate-500\">Pain before (0–10)</label> ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 67, "\"></div></div><div class=\"grid grid-cols-1 sm:grid-cols-2 gap-3\"><div class=\"flex-1 min-w-0\"><label class=\"block text-xs font-medium text-slate-500\">Pain before (0–10)</label> ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -1027,7 +1027,7 @@ func SessionForm(profile store.CaseProfile) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 69, "\"></div><div class=\"flex-1\"><label class=\"block text-xs font-medium text-slate-500\">Pain after (0–10)</label> ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 69, "\"></div><div class=\"flex-1 min-w-0\"><label class=\"block text-xs font-medium text-slate-500\">Pain after (0–10)</label> ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -1215,7 +1215,7 @@ func SessionDetail(profile store.CaseProfile, se store.Session, exercises []stor
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 82, "\" class=\"space-y-3\"><div class=\"flex gap-3\"><div class=\"flex-1\"><label class=\"block text-xs font-medium text-slate-500\">Duration (min)</label> ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 82, "\" class=\"space-y-3\"><div class=\"grid grid-cols-1 sm:grid-cols-2 gap-3\"><div class=\"flex-1 min-w-0\"><label class=\"block text-xs font-medium text-slate-500\">Duration (min)</label> ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -1250,7 +1250,7 @@ func SessionDetail(profile store.CaseProfile, se store.Session, exercises []stor
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 85, "\"></div><div class=\"flex-1\"><label class=\"block text-xs font-medium text-slate-500\">Pain before</label> ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 85, "\"></div><div class=\"flex-1 min-w-0\"><label class=\"block text-xs font-medium text-slate-500\">Pain before</label> ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -1285,7 +1285,7 @@ func SessionDetail(profile store.CaseProfile, se store.Session, exercises []stor
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 88, "\"></div><div class=\"flex-1\"><label class=\"block text-xs font-medium text-slate-500\">Pain after</label> ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 88, "\"></div><div class=\"flex-1 min-w-0\"><label class=\"block text-xs font-medium text-slate-500\">Pain after</label> ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -1908,7 +1908,7 @@ func MeasurementList(profile store.CaseProfile, series map[string][]store.Measur
 					}()
 				}
 				ctx = templ.InitializeContext(ctx)
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 135, "<form method=\"post\" action=\"/pt/measurements\" class=\"space-y-3\"><div class=\"flex gap-3\"><div class=\"flex-1\"><label class=\"block text-xs font-medium text-slate-500\">Metric</label> ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 135, "<form method=\"post\" action=\"/pt/measurements\" class=\"space-y-3\"><div class=\"grid grid-cols-1 sm:grid-cols-[1fr_7rem] gap-3\"><div><label class=\"block text-xs font-medium text-slate-500\">Metric</label> ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -1953,7 +1953,7 @@ func MeasurementList(profile store.CaseProfile, series map[string][]store.Measur
 						return templ_7745c5c3_Err
 					}
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 140, "</datalist></div><div class=\"w-24\"><label class=\"block text-xs font-medium text-slate-500\">Value</label> ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 140, "</datalist></div><div><label class=\"block text-xs font-medium text-slate-500\">Value</label> ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -1975,7 +1975,7 @@ func MeasurementList(profile store.CaseProfile, series map[string][]store.Measur
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 142, "\"></div></div><div class=\"flex gap-3\"><div class=\"flex-1\"><label class=\"block text-xs font-medium text-slate-500\">Unit</label> ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 142, "\"></div></div><div class=\"grid grid-cols-1 sm:grid-cols-3 gap-3\"><div><label class=\"block text-xs font-medium text-slate-500\">Unit</label> ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -1997,7 +1997,7 @@ func MeasurementList(profile store.CaseProfile, series map[string][]store.Measur
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 144, "\"></div><div class=\"flex-1\"><label class=\"block text-xs font-medium text-slate-500\">Side</label> ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 144, "\"></div><div><label class=\"block text-xs font-medium text-slate-500\">Side</label> ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -2019,7 +2019,7 @@ func MeasurementList(profile store.CaseProfile, series map[string][]store.Measur
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 146, "\"><option value=\"\">—</option> <option value=\"left\">Left</option> <option value=\"right\">Right</option></select></div><div class=\"flex-1\"><label class=\"block text-xs font-medium text-slate-500\">When</label> ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 146, "\"><option value=\"\">—</option> <option value=\"left\">Left</option> <option value=\"right\">Right</option></select></div><div><label class=\"block text-xs font-medium text-slate-500\">When</label> ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}

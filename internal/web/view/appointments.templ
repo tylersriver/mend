@@ -49,8 +49,8 @@ templ AppointmentForm(profile store.CaseProfile, providers []store.Provider) {
 					</select>
 					<p class="text-xs text-slate-400 mt-1">No provider listed? <a href="/providers/new" class="underline">Add one</a>.</p>
 				</div>
-				<div class="flex gap-3">
-					<div class="flex-1">
+				<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+					<div class="flex-1 min-w-0">
 						<label class="block text-xs font-medium text-slate-500">Kind</label>
 						<select name="kind" class={ inputCls }>
 							for _, k := range apptKinds {
@@ -58,7 +58,7 @@ templ AppointmentForm(profile store.CaseProfile, providers []store.Provider) {
 							}
 						</select>
 					</div>
-					<div class="flex-1">
+					<div class="flex-1 min-w-0">
 						<label class="block text-xs font-medium text-slate-500">When</label>
 						<input type="datetime-local" name="scheduled_at" required class={ inputCls }/>
 					</div>
@@ -92,8 +92,8 @@ templ AppointmentDetail(profile store.CaseProfile, a store.Appointment, docs []s
 						<label class="block text-xs font-medium text-slate-500">Outcome — what happened</label>
 						<textarea name="outcome" rows="4" class={ inputCls }>{ a.Outcome }</textarea>
 					</div>
-					<div class="flex gap-3">
-						<div class="flex-1">
+					<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+						<div class="flex-1 min-w-0">
 							<label class="block text-xs font-medium text-slate-500">Status</label>
 							<select name="status" class={ inputCls }>
 								for _, st := range apptStatuses {
@@ -105,7 +105,7 @@ templ AppointmentDetail(profile store.CaseProfile, a store.Appointment, docs []s
 								}
 							</select>
 						</div>
-						<div class="flex-1">
+						<div class="flex-1 min-w-0">
 							<label class="block text-xs font-medium text-slate-500">Follow-up on</label>
 							<input type="date" name="follow_up_on" value={ a.FollowUpOn } class={ inputCls }/>
 						</div>

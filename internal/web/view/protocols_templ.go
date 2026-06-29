@@ -794,7 +794,7 @@ func addPrescriptionForm(protocolID int64, exercises []store.Exercise) templ.Com
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 64, "</select></div><div class=\"grid grid-cols-3 gap-3\"><div><label class=\"block text-xs font-medium text-slate-500\">Sets</label> ")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 64, "</select></div><div class=\"grid grid-cols-2 sm:grid-cols-3 gap-3\"><div><label class=\"block text-xs font-medium text-slate-500\">Sets</label> ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -926,7 +926,7 @@ func addPrescriptionForm(protocolID int64, exercises []store.Exercise) templ.Com
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 76, "\"></div></div><div class=\"grid grid-cols-2 gap-3\"><div><label class=\"block text-xs font-medium text-slate-500\">Frequency</label> ")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 76, "\"></div></div><div class=\"grid grid-cols-1 sm:grid-cols-2 gap-3\"><div><label class=\"block text-xs font-medium text-slate-500\">Frequency</label> ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

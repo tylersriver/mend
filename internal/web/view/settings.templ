@@ -54,12 +54,12 @@ templ SettingsPage(profile store.CaseProfile, set store.Settings, st SettingsSta
 							<input type="checkbox" name="clear_transcribe" value="1"/> clear saved key
 						</label>
 					</div>
-					<div class="flex gap-3">
-						<div class="flex-1">
+					<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+						<div class="flex-1 min-w-0">
 							<label class="block text-xs font-medium text-slate-500">Transcription base URL</label>
 							<input name="transcribe_base_url" value={ set.TranscribeBaseURL } placeholder={ st.TranscribeBaseURLDefault } class={ inputCls }/>
 						</div>
-						<div class="flex-1">
+						<div class="flex-1 min-w-0">
 							<label class="block text-xs font-medium text-slate-500">Transcription model</label>
 							<input name="transcribe_model" value={ set.TranscribeModel } placeholder={ st.TranscribeModelDefault } class={ inputCls }/>
 						</div>

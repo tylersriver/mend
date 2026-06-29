@@ -12,7 +12,9 @@ import (
 )
 
 // inputCls is the shared Tailwind class set for text inputs/textareas/selects.
-const inputCls = "mt-1 block w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-400 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/30 focus:outline-none transition"
+// min-w-0 + max-w-full keep native date/datetime/select controls from overflowing
+// their (often flex) container on iOS Safari, where they have a wide intrinsic size.
+const inputCls = "mt-1 block w-full min-w-0 max-w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-400 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/30 focus:outline-none transition"
 
 func apptURL(id int64) string     { return "/appointments/" + strconv.FormatInt(id, 10) }
 func resourceURL(id int64) string { return "/resources/" + strconv.FormatInt(id, 10) }
