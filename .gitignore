@@ -1,0 +1,17 @@
+# Secrets — never commit
+.env
+*.env
+
+# SQLite database + WAL/SHM (holds medical data)
+*.db
+*.db-wal
+*.db-shm
+
+# Uploaded files / recordings (blobs live on disk, not in git)
+/data/
+/uploads/
+
+# Go
+/bin/
+*.test
+*.out

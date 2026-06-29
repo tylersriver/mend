@@ -1,0 +1,65 @@
+package view
+
+import "github.com/tylersriver/mend/internal/store"
+
+templ ProviderList(profile store.CaseProfile, providers []store.Provider) {
+	@Layout("Providers", profile) {
+		@pageHeader("Providers") {
+			@btnLink("/providers/new", "+ New")
+		}
+		if len(providers) == 0 {
+			<p class="text-sm text-slate-400">No providers yet.</p>
+		} else {
+			<ul class="space-y-2">
+				for _, p := range providers {
+					<li class="bg-white rounded-lg border border-slate-200 p-3">
+						<div class="flex justify-between items-center">
+							<span class="font-medium">{ p.Name }</span>
+							if p.Specialty != "" {
+								<span class="text-xs text-slate-500">{ p.Specialty }</span>
+							}
+						</div>
+						if p.Clinic != "" {
+							<p class="text-xs text-slate-500 mt-1">{ p.Clinic }</p>
+						}
+						if p.Contact != "" {
+							<p class="text-xs text-slate-500">{ p.Contact }</p>
+						}
+					</li>
+				}
+			</ul>
+		}
+	}
+}
+
+templ ProviderForm(profile store.CaseProfile) {
+	@Layout("New provider", profile) {
+		@pageHeader("New provider") {
+		}
+		@card() {
+			<form method="post" action="/providers" class="space-y-4">
+				<div>
+					<label class="block text-xs font-medium text-slate-500">Name</label>
+					<input name="name" required class={ inputCls }/>
+				</div>
+				<div>
+					<label class="block text-xs font-medium text-slate-500">Specialty</label>
+					<input name="specialty" placeholder="orthopedic surgeon · physical therapist · radiologist" class={ inputCls }/>
+				</div>
+				<div>
+					<label class="block text-xs font-medium text-slate-500">Clinic</label>
+					<input name="clinic" class={ inputCls }/>
+				</div>
+				<div>
+					<label class="block text-xs font-medium text-slate-500">Contact</label>
+					<input name="contact" class={ inputCls }/>
+				</div>
+				<div>
+					<label class="block text-xs font-medium text-slate-500">Notes</label>
+					<textarea name="notes" rows="3" class={ inputCls }></textarea>
+				</div>
+				<button class="px-3 py-2 bg-teal-700 text-white text-sm rounded-md hover:bg-teal-800">Save</button>
+			</form>
+		}
+	}
+}

@@ -1,0 +1,70 @@
+# Shoulder Tracker
+
+A mobile-first, installable (PWA) personal app for managing **one injury** end to
+end: diagnosis, research, clinician appointments, an AI care-prep copilot, and
+(secondarily) PT progress.
+
+This is **not** a workout app. The center of gravity is *prognosis, planning, and
+not losing the thread across months of appointments* — the gap the workout-app
+market doesn't fill. See [`docs/DESIGN.md`](docs/DESIGN.md) for the full decision
+log and rationale.
+
+## Stack
+
+- **Backend:** Go (stdlib `net/http`, 1.22+ method/path routing — no chi/gorilla)
+- **DB:** SQLite (blobs on disk, metadata in DB)
+- **UI:** templ + htmx, Tailwind — server-rendered, no SPA, no build pipeline
+- **Config/CLI:** viper (env-first); `flag` likely enough, cobra optional
+- **AI:** Anthropic Messages API, called server-side from Go (no SDK)
+- **PWA:** manifest + icons + a *minimal* service worker (app-shell cache only —
+  intentionally **no offline data**; installable + online is the target)
+
+## Status
+
+**Phase 1 (core loop) is built and runnable.** What's here:
+
+- `docs/DESIGN.md` — architecture decisions and rationale
+- `db/migrations/` — the SQLite schema (PT tracking + research/care + a single-row
+  case profile in `0003`)
+- `internal/ai/` — the Anthropic client and the four care-prep flows
+- `internal/config/` — env-first config (`flag` overrides; secrets stay in env)
+- `internal/db/` — opens SQLite (pure-Go `modernc.org/sqlite`, cgo-free) and runs
+  the embedded migrations on boot
+- `internal/store/` — typed CRUD; also implements `ai.Repo` so the AI flows read
+  the case file and write back editable artifacts
+- `internal/web/` — `net/http` 1.22 routing, templ + htmx views (Tailwind via CDN)
+- `cmd/server/` — wires it all together into one binary
+
+The working core loop: a **case profile**, **research library** (link/video/file
+with an AI summarize action), **providers**, **appointments** (prep vs. outcome),
+and the **AI question generator** that drafts questions for an appointment grounded
+in the case file. AI flows degrade gracefully when `ANTHROPIC_API_KEY` is unset.
+
+Not yet built (in suggested build order):
+
+1. ~~**Core loop:** resources + providers + appointments + AI question generator~~ ✅
+2. **Recordings:** MediaRecorder upload → server-side transcription → AI highlights/tasks
+   (the `recordings` table and `SummarizeTranscript` flow exist; no handler/UI yet)
+3. **PT logging:** the satellite (schema is ready in migration `0001`)
+4. **PWA shell:** manifest + service worker, added last (~40 lines, no architecture impact)
+
+## Quickstart
+
+```sh
+export ANTHROPIC_API_KEY=sk-ant-...   # optional; AI flows disable without it
+go run ./cmd/server                   # serves http://localhost:8080
+```
+
+The templ views are compiled to committed `*_templ.go` files, so a plain
+`go build ./...` works with no extra tooling. If you edit a `.templ`, regenerate
+with `go run github.com/a-h/templ/cmd/templ@latest generate`.
+
+Config (env, with `-flag` overrides): `ADDR` (default `:8080`), `DB_PATH`
+(`data/mend.db`), `DATA_DIR` (`data`), `AI_MODEL` (`claude-opus-4-8`).
+
+## Security notes
+
+This DB holds medical information. Keep the API key in env (not a SQLite row),
+serve over HTTPS (service workers require it), and put the app behind Tailscale or
+Cloudflare Access if it's internet-reachable. Encrypt audio recordings at rest;
+let yourself delete audio once a transcript exists.
