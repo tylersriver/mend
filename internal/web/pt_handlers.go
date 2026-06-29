@@ -25,7 +25,19 @@ func (s *Server) ptHub(w http.ResponseWriter, r *http.Request) {
 		s.fail(w, "list exercises", err)
 		return
 	}
-	s.render(w, r, view.PTHub(s.profile(r.Context()), sessions, len(exercises)))
+	protocols, err := s.store.ListProtocols(r.Context())
+	if err != nil {
+		s.fail(w, "list protocols", err)
+		return
+	}
+	var active string
+	for _, p := range protocols {
+		if p.Active() {
+			active = p.Name
+			break
+		}
+	}
+	s.render(w, r, view.PTHub(s.profile(r.Context()), sessions, len(exercises), len(protocols), active))
 }
 
 // --- Exercises --------------------------------------------------------------
@@ -98,6 +110,10 @@ func (s *Server) sessionCreate(w http.ResponseWriter, r *http.Request) {
 		PainPre:     parseIntPtr(r.FormValue("pain_pre")),
 		PainPost:    parseIntPtr(r.FormValue("pain_post")),
 		Notes:       strings.TrimSpace(r.FormValue("notes")),
+	}
+	// Link the session to the currently active rehab phase, if any.
+	if activeID, err := s.store.ActiveProtocolID(r.Context()); err == nil && activeID != 0 {
+		se.ProtocolID = &activeID
 	}
 	id, err := s.store.CreateSession(r.Context(), se)
 	if err != nil {

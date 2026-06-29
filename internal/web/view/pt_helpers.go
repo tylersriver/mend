@@ -81,6 +81,53 @@ func setSummary(s store.Set) string {
 
 func itoaInt(n int) string { return strconv.Itoa(n) }
 
+// ComplianceRow pairs a prescribed exercise with the most recent set logged for it
+// in the protocol — the plan vs. performance comparison on the protocol page.
+type ComplianceRow struct {
+	PE     store.ProtocolExercise
+	Last   store.Set
+	Logged bool
+}
+
+// targetSummary renders a prescription's targets in a compact line.
+func targetSummary(pe store.ProtocolExercise) string {
+	var parts []string
+	if pe.TargetSets != nil && pe.TargetReps != nil {
+		parts = append(parts, fmt.Sprintf("%d×%d", *pe.TargetSets, *pe.TargetReps))
+	} else if pe.TargetSets != nil {
+		parts = append(parts, fmt.Sprintf("%d sets", *pe.TargetSets))
+	} else if pe.TargetReps != nil {
+		parts = append(parts, fmt.Sprintf("%d reps", *pe.TargetReps))
+	}
+	if pe.TargetLoad != nil {
+		parts = append(parts, fmt.Sprintf("@ %s lb", ptNum(pe.TargetLoad)))
+	}
+	if pe.TargetDurationSec != nil {
+		parts = append(parts, fmt.Sprintf("%ds hold", *pe.TargetDurationSec))
+	}
+	if pe.TargetRPE != nil {
+		parts = append(parts, "RPE "+ptNum(pe.TargetRPE))
+	}
+	if len(parts) == 0 {
+		return "no targets set"
+	}
+	return strings.Join(parts, " ")
+}
+
+func protoExURL(id int64) string {
+	return "/pt/protocol-exercises/" + strconv.FormatInt(id, 10) + "/delete"
+}
+
+func protocolSub(count int, active string) string {
+	if active != "" {
+		return "active: " + active
+	}
+	if count > 0 {
+		return strconv.Itoa(count) + " phases"
+	}
+	return "none yet"
+}
+
 func archivedCls(archived bool) string {
 	if archived {
 		return "opacity-60"
