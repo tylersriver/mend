@@ -13,8 +13,21 @@ templ Layout(title string, profile store.CaseProfile) {
 			<meta name="viewport" content="width=device-width, initial-scale=1"/>
 			<meta name="theme-color" content="#0f766e"/>
 			<title>{ title } · mend</title>
+			<link rel="manifest" href="/manifest.webmanifest"/>
+			<link rel="icon" href="/static/icon-192.png"/>
+			<link rel="apple-touch-icon" href="/apple-touch-icon.png"/>
+			<meta name="apple-mobile-web-app-capable" content="yes"/>
+			<meta name="apple-mobile-web-app-title" content="mend"/>
+			<meta name="apple-mobile-web-app-status-bar-style" content="default"/>
 			<script src="https://cdn.tailwindcss.com"></script>
 			<script src="https://unpkg.com/htmx.org@2.0.4"></script>
+			<script>
+				if ('serviceWorker' in navigator) {
+					window.addEventListener('load', function () {
+						navigator.serviceWorker.register('/sw.js').catch(function () {});
+					});
+				}
+			</script>
 		</head>
 		<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
 			<header class="bg-teal-700 text-white">

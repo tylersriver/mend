@@ -1,0 +1,14 @@
+{
+  "name": "mend — care tracker",
+  "short_name": "mend",
+  "description": "Personal medical case-file, research, appointments, and PT tracker with an AI care-prep copilot.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#0f766e",
+  "icons": [
+    { "src": "/static/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/static/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

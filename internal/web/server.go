@@ -39,6 +39,9 @@ func (s *Server) Routes() http.Handler {
 	mux.HandleFunc("POST /profile", s.updateProfile)
 	mux.HandleFunc("GET /healthz", func(w http.ResponseWriter, _ *http.Request) { w.Write([]byte("ok")) })
 
+	// PWA shell assets (manifest, service worker, icons, offline page).
+	s.staticAssets(mux)
+
 	// Resources (research library)
 	mux.HandleFunc("GET /resources", s.resourceList)
 	mux.HandleFunc("GET /resources/new", s.resourceNew)
