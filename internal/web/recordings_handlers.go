@@ -55,7 +55,7 @@ func (s *Server) recordingCreate(w http.ResponseWriter, r *http.Request) {
 	}
 	// Kick off the pipeline off the request goroutine when we have audio + a transcriber.
 	if rec.AudioPath != "" && s.transcribeEnabled() {
-		go s.proc.Process(id)
+		go s.processor().Process(id)
 	}
 	http.Redirect(w, r, "/recordings/"+strconv.FormatInt(id, 10), http.StatusSeeOther)
 }
@@ -156,7 +156,7 @@ func (s *Server) recordingTranscribe(w http.ResponseWriter, r *http.Request) {
 		s.fail(w, "reset status", err)
 		return
 	}
-	go s.proc.Process(id)
+	go s.processor().Process(id)
 	http.Redirect(w, r, "/recordings/"+strconv.FormatInt(id, 10), http.StatusSeeOther)
 }
 
@@ -171,7 +171,7 @@ func (s *Server) recordingSummarize(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// Run synchronously: the user clicked Generate and expects the docs on return.
-	s.proc.Summarize(r.Context(), id)
+	s.processor().Summarize(r.Context(), id)
 	http.Redirect(w, r, "/recordings/"+strconv.FormatInt(id, 10), http.StatusSeeOther)
 }
 

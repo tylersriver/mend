@@ -1,0 +1,97 @@
+package view
+
+import "github.com/tylersriver/mend/internal/store"
+
+// SettingsStatus carries the resolved/effective state for the settings page so it
+// can show what's active without ever echoing a secret back to the browser.
+type SettingsStatus struct {
+	AIEnabled                bool
+	TranscribeEnabled        bool
+	AuthEnabled              bool
+	EnvAIKey                 bool // an Anthropic key is provided via env (fallback)
+	EnvTranscribeKey         bool
+	AIModelDefault           string
+	TranscribeBaseURLDefault string
+	TranscribeModelDefault   string
+	Saved                    bool
+}
+
+templ SettingsPage(profile store.CaseProfile, set store.Settings, st SettingsStatus) {
+	@Layout("Settings", profile) {
+		@pageHeader("Settings") {
+		}
+		if st.Saved {
+			<div class="mb-4">
+				@flash("warn", "Saved. AI and transcription were reconfigured live.")
+			</div>
+		}
+		<section class="mb-6">
+			@card() {
+				<h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-3">AI &amp; transcription</h2>
+				<div class="flex gap-2 mb-4 text-xs">
+					@statusPill("AI", st.AIEnabled)
+					@statusPill("Transcription", st.TranscribeEnabled)
+				</div>
+				<form method="post" action="/settings" class="space-y-4">
+					<div>
+						<label class="block text-xs font-medium text-slate-500">Anthropic API key</label>
+						<input type="password" name="anthropic_api_key" autocomplete="off"
+							placeholder={ keyPlaceholder(set.AnthropicAPIKey, st.EnvAIKey) } class={ inputCls }/>
+						<label class="inline-flex items-center gap-1 mt-1 text-xs text-slate-500">
+							<input type="checkbox" name="clear_anthropic" value="1"/> clear saved key
+						</label>
+					</div>
+					<div>
+						<label class="block text-xs font-medium text-slate-500">AI model</label>
+						<input name="ai_model" value={ set.AIModel } placeholder={ st.AIModelDefault } class={ inputCls }/>
+					</div>
+					<hr class="border-slate-100"/>
+					<div>
+						<label class="block text-xs font-medium text-slate-500">Transcription API key</label>
+						<input type="password" name="transcribe_api_key" autocomplete="off"
+							placeholder={ keyPlaceholder(set.TranscribeAPIKey, st.EnvTranscribeKey) } class={ inputCls }/>
+						<label class="inline-flex items-center gap-1 mt-1 text-xs text-slate-500">
+							<input type="checkbox" name="clear_transcribe" value="1"/> clear saved key
+						</label>
+					</div>
+					<div class="flex gap-3">
+						<div class="flex-1">
+							<label class="block text-xs font-medium text-slate-500">Transcription base URL</label>
+							<input name="transcribe_base_url" value={ set.TranscribeBaseURL } placeholder={ st.TranscribeBaseURLDefault } class={ inputCls }/>
+						</div>
+						<div class="flex-1">
+							<label class="block text-xs font-medium text-slate-500">Transcription model</label>
+							<input name="transcribe_model" value={ set.TranscribeModel } placeholder={ st.TranscribeModelDefault } class={ inputCls }/>
+						</div>
+					</div>
+					<button class="px-3 py-2 bg-teal-700 text-white text-sm rounded-md hover:bg-teal-800">Save</button>
+				</form>
+				<p class="text-xs text-slate-400 mt-3">
+					Keys are stored in your SQLite database (not echoed back here). Leave a key
+					field blank to keep the saved value; environment variables act as a fallback.
+				</p>
+			}
+		</section>
+		<section>
+			@card() {
+				<h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-2">Access</h2>
+				if st.AuthEnabled {
+					<p class="text-sm text-slate-600 mb-3">Login is required. Set via the <code>AUTH_PASSWORD</code> environment variable.</p>
+					<form method="post" action="/logout">
+						<button class="px-3 py-2 bg-slate-200 text-slate-800 text-sm rounded-md hover:bg-slate-300">Log out</button>
+					</form>
+				} else {
+					@flash("warn", "No login is set. Set AUTH_PASSWORD (and ideally SESSION_SECRET) before exposing this on the internet.")
+				}
+			}
+		</section>
+	}
+}
+
+templ statusPill(label string, on bool) {
+	if on {
+		<span class="px-2 py-0.5 rounded-full bg-green-100 text-green-800">{ label }: on</span>
+	} else {
+		<span class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-500">{ label }: off</span>
+	}
+}

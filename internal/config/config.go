@@ -20,12 +20,18 @@ type Config struct {
 	TranscribeAPIKey  string
 	TranscribeBaseURL string
 	TranscribeModel   string
+
+	// Auth: a single shared password gates the whole app (intended for a personal
+	// deploy). When AuthPassword is empty, auth is disabled (local dev).
+	AuthPassword  string
+	SessionSecret string
 }
 
 // Load reads env vars, then applies any explicitly-set flags on top.
 func Load(args []string) *Config {
 	c := &Config{
-		Addr:    envOr("ADDR", ":8080"),
+		// Honor $PORT (Railway and most PaaS set it) unless ADDR is given explicitly.
+		Addr:    envOr("ADDR", defaultAddr()),
 		DBPath:  envOr("DB_PATH", "data/mend.db"),
 		DataDir: envOr("DATA_DIR", "data"),
 		APIKey:  os.Getenv("ANTHROPIC_API_KEY"),
@@ -34,6 +40,9 @@ func Load(args []string) *Config {
 		TranscribeAPIKey:  os.Getenv("TRANSCRIBE_API_KEY"),
 		TranscribeBaseURL: envOr("TRANSCRIBE_BASE_URL", "https://api.openai.com/v1"),
 		TranscribeModel:   envOr("TRANSCRIBE_MODEL", "whisper-1"),
+
+		AuthPassword:  os.Getenv("AUTH_PASSWORD"),
+		SessionSecret: os.Getenv("SESSION_SECRET"),
 	}
 
 	fs := flag.NewFlagSet("mend", flag.ContinueOnError)
@@ -52,6 +61,16 @@ func (c *Config) AIEnabled() bool { return c.APIKey != "" }
 
 // TranscribeEnabled reports whether audio can be transcribed server-side.
 func (c *Config) TranscribeEnabled() bool { return c.TranscribeAPIKey != "" }
+
+// AuthEnabled reports whether the app requires a login.
+func (c *Config) AuthEnabled() bool { return c.AuthPassword != "" }
+
+func defaultAddr() string {
+	if p := os.Getenv("PORT"); p != "" {
+		return ":" + p
+	}
+	return ":8080"
+}
 
 func envOr(key, def string) string {
 	if v := os.Getenv(key); v != "" {

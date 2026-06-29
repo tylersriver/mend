@@ -9,27 +9,107 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"sync"
 
 	"github.com/a-h/templ"
 
 	"github.com/tylersriver/mend/internal/ai"
+	"github.com/tylersriver/mend/internal/config"
 	"github.com/tylersriver/mend/internal/recordings"
 	"github.com/tylersriver/mend/internal/store"
+	"github.com/tylersriver/mend/internal/transcribe"
 )
 
 type Server struct {
 	store   *store.Store
-	ai      *ai.Service           // nil when no API key is configured
-	proc    *recordings.Processor // transcription/summary pipeline
+	env     *config.Config
 	dataDir string
+
+	// ai and proc are rebuilt from effective config whenever settings change, so
+	// they're guarded for concurrent reads (request handlers) vs. a settings save.
+	mu   sync.RWMutex
+	ai   *ai.Service           // nil when no API key is configured
+	proc *recordings.Processor // transcription/summary pipeline
 }
 
-func NewServer(st *store.Store, aiSvc *ai.Service, proc *recordings.Processor, dataDir string) *Server {
-	return &Server{store: st, ai: aiSvc, proc: proc, dataDir: dataDir}
+func NewServer(st *store.Store, env *config.Config) *Server {
+	s := &Server{store: st, env: env, dataDir: env.DataDir}
+	if err := s.reconfigure(context.Background()); err != nil {
+		log.Printf("web: initial AI config: %v", err)
+	}
+	return s
 }
 
-func (s *Server) aiEnabled() bool         { return s.ai != nil }
-func (s *Server) transcribeEnabled() bool { return s.proc != nil && s.proc.TranscriptionEnabled() }
+func (s *Server) aiSvc() *ai.Service {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	return s.ai
+}
+
+func (s *Server) processor() *recordings.Processor {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	return s.proc
+}
+
+func (s *Server) aiEnabled() bool { return s.aiSvc() != nil }
+
+func (s *Server) transcribeEnabled() bool {
+	p := s.processor()
+	return p != nil && p.TranscriptionEnabled()
+}
+
+// effectiveAI is the resolved config used to build the clients: a DB setting wins
+// over the env default, which wins over nothing.
+type effectiveAI struct {
+	anthropicKey      string
+	aiModel           string
+	transcribeKey     string
+	transcribeBaseURL string
+	transcribeModel   string
+}
+
+func (s *Server) effective(set store.Settings) effectiveAI {
+	return effectiveAI{
+		anthropicKey:      orStr(set.AnthropicAPIKey, s.env.APIKey),
+		aiModel:           orStr(set.AIModel, s.env.AIModel),
+		transcribeKey:     orStr(set.TranscribeAPIKey, s.env.TranscribeAPIKey),
+		transcribeBaseURL: orStr(set.TranscribeBaseURL, s.env.TranscribeBaseURL),
+		transcribeModel:   orStr(set.TranscribeModel, s.env.TranscribeModel),
+	}
+}
+
+// reconfigure rebuilds the AI service and transcription pipeline from the current
+// effective config. Called at startup and after any settings change.
+func (s *Server) reconfigure(ctx context.Context) error {
+	set, err := s.store.Settings(ctx)
+	if err != nil {
+		return err
+	}
+	eff := s.effective(set)
+
+	var aiSvc *ai.Service
+	if eff.anthropicKey != "" {
+		aiSvc = ai.NewService(s.store, ai.New(eff.anthropicKey, eff.aiModel))
+	}
+	var tr transcribe.Transcriber
+	if eff.transcribeKey != "" {
+		tr = transcribe.New(eff.transcribeKey, eff.transcribeBaseURL, eff.transcribeModel)
+	}
+
+	s.mu.Lock()
+	s.ai = aiSvc
+	s.proc = recordings.NewProcessor(s.store, tr, aiSvc)
+	s.mu.Unlock()
+	return nil
+}
+
+func orStr(a, b string) string {
+	if a != "" {
+		return a
+	}
+	return b
+}
 
 // Routes returns the configured mux.
 func (s *Server) Routes() http.Handler {
@@ -80,6 +160,13 @@ func (s *Server) Routes() http.Handler {
 	mux.HandleFunc("GET /ai/docs/{id}", s.aiDocEdit)
 	mux.HandleFunc("POST /ai/docs/{id}", s.aiDocUpdate)
 
+	// Auth + settings
+	mux.HandleFunc("GET /login", s.loginPage)
+	mux.HandleFunc("POST /login", s.login)
+	mux.HandleFunc("POST /logout", s.logout)
+	mux.HandleFunc("GET /settings", s.settingsPage)
+	mux.HandleFunc("POST /settings", s.updateSettings)
+
 	// PT logging satellite
 	mux.HandleFunc("GET /pt", s.ptHub)
 	mux.HandleFunc("GET /pt/exercises", s.exerciseList)
@@ -98,7 +185,7 @@ func (s *Server) Routes() http.Handler {
 	mux.HandleFunc("POST /pt/measurements", s.measurementCreate)
 	mux.HandleFunc("POST /pt/measurements/{id}/delete", s.measurementDelete)
 
-	return logRequests(mux)
+	return logRequests(s.requireAuth(mux))
 }
 
 // --- shared helpers ---------------------------------------------------------
