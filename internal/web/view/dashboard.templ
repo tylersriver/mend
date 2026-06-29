@@ -1,0 +1,78 @@
+package view
+
+import "github.com/tylersriver/mend/internal/store"
+
+templ Dashboard(profile store.CaseProfile, upcoming []store.Appointment, recent []store.Resource, aiEnabled bool) {
+	@Layout("Dashboard", profile) {
+		if !aiEnabled {
+			<div class="mb-4">
+				@flash("warn", "AI flows are disabled — set ANTHROPIC_API_KEY to enable question generation and summaries.")
+			</div>
+		}
+		<section class="mb-6">
+			@card() {
+				<h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-2">Case profile</h2>
+				<form method="post" action="/profile" class="space-y-3">
+					<div>
+						<label class="block text-xs font-medium text-slate-500">Injury</label>
+						<input name="injury_name" value={ profile.InjuryName } class={ inputCls }/>
+					</div>
+					<div>
+						<label class="block text-xs font-medium text-slate-500">Working diagnosis</label>
+						<textarea name="working_diagnosis" rows="2" class={ inputCls }>{ profile.WorkingDiagnosis }</textarea>
+					</div>
+					<div class="flex gap-3">
+						<div class="flex-1">
+							<label class="block text-xs font-medium text-slate-500">Onset</label>
+							<input type="date" name="onset_on" value={ profile.OnsetOn } class={ inputCls }/>
+						</div>
+					</div>
+					<button class="px-3 py-2 bg-teal-700 text-white text-sm rounded-md hover:bg-teal-800">Save profile</button>
+				</form>
+			}
+		</section>
+		<section class="mb-6">
+			<div class="flex items-center justify-between mb-2">
+				<h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wide">Upcoming appointments</h2>
+				@btnLink("/appointments/new", "+ New")
+			</div>
+			if len(upcoming) == 0 {
+				<p class="text-sm text-slate-400">Nothing scheduled. Add an appointment to start prepping.</p>
+			} else {
+				<ul class="space-y-2">
+					for _, a := range upcoming {
+						<li>
+							<a href={ templ.SafeURL(apptURL(a.ID)) } class="block bg-white rounded-lg border border-slate-200 p-3 hover:border-teal-300">
+								<div class="flex justify-between items-center">
+									<span class="font-medium">{ providerOr(a) }</span>
+									<span class="text-xs text-slate-500">{ humanTime(a.ScheduledAt) }</span>
+								</div>
+								<span class="text-xs text-slate-500">{ label(a.Kind) }</span>
+							</a>
+						</li>
+					}
+				</ul>
+			}
+		</section>
+		<section>
+			<div class="flex items-center justify-between mb-2">
+				<h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wide">Recent research</h2>
+				@btnLink("/resources/new", "+ Add")
+			</div>
+			if len(recent) == 0 {
+				<p class="text-sm text-slate-400">No research saved yet.</p>
+			} else {
+				<ul class="space-y-2">
+					for _, r := range recent {
+						<li>
+							<a href={ templ.SafeURL(resourceURL(r.ID)) } class="block bg-white rounded-lg border border-slate-200 p-3 hover:border-teal-300">
+								<span class="font-medium">{ r.Title }</span>
+								<span class="ml-2 text-xs text-slate-400">{ label(r.Kind) }</span>
+							</a>
+						</li>
+					}
+				</ul>
+			}
+		</section>
+	}
+}

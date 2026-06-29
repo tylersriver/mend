@@ -1,0 +1,32 @@
+package view
+
+import "github.com/tylersriver/mend/internal/store"
+
+// AIDocEdit is the full-page editor for an AI artifact. Editing flips is_edited so
+// the document's provenance stays honest (AI-drafted vs. user-revised).
+templ AIDocEdit(profile store.CaseProfile, d store.AIDoc) {
+	@Layout("Edit "+docTitle(d), profile) {
+		<div class="flex items-center justify-between mb-4">
+			<h1 class="text-xl font-semibold text-slate-900">{ docTitle(d) }</h1>
+			if backURL(d) != "" {
+				<a href={ templ.SafeURL(backURL(d)) } class="text-sm text-teal-700 underline">← Back</a>
+			}
+		</div>
+		<div class="grid gap-4">
+			@card() {
+				<form method="post" action={ templ.SafeURL(aiDocURL(d.ID)) } class="space-y-3">
+					<textarea name="content" rows="16" class={ inputCls + " font-mono" }>{ d.Content }</textarea>
+					<button class="px-3 py-2 bg-teal-700 text-white text-sm rounded-md hover:bg-teal-800">Save</button>
+				</form>
+			}
+			<div>
+				<h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-2">Preview</h2>
+				@card() {
+					<div class="prose prose-sm max-w-none">
+						@Markdown(d.Content)
+					</div>
+				}
+			</div>
+		</div>
+	}
+}

@@ -1,0 +1,183 @@
+package view
+
+import "github.com/tylersriver/mend/internal/store"
+
+var apptKinds = []string{"consult", "follow_up", "pt", "imaging", "procedure"}
+var apptStatuses = []string{"upcoming", "completed", "cancelled"}
+
+templ AppointmentList(profile store.CaseProfile, appts []store.Appointment) {
+	@Layout("Appointments", profile) {
+		@pageHeader("Appointments") {
+			@btnLink("/appointments/new", "+ New")
+		}
+		if len(appts) == 0 {
+			<p class="text-sm text-slate-400">No appointments yet.</p>
+		} else {
+			<ul class="space-y-2">
+				for _, a := range appts {
+					<li>
+						<a href={ templ.SafeURL(apptURL(a.ID)) } class="block bg-white rounded-lg border border-slate-200 p-3 hover:border-teal-300">
+							<div class="flex justify-between items-center">
+								<span class="font-medium">{ providerOr(a) }</span>
+								<span class={ "text-xs px-2 py-0.5 rounded-full " + statusClasses(a.Status) }>{ label(a.Status) }</span>
+							</div>
+							<div class="flex justify-between mt-1 text-xs text-slate-500">
+								<span>{ label(a.Kind) }</span>
+								<span>{ humanTime(a.ScheduledAt) }</span>
+							</div>
+						</a>
+					</li>
+				}
+			</ul>
+		}
+	}
+}
+
+templ AppointmentForm(profile store.CaseProfile, providers []store.Provider) {
+	@Layout("New appointment", profile) {
+		@pageHeader("New appointment") {
+		}
+		@card() {
+			<form method="post" action="/appointments" class="space-y-4">
+				<div>
+					<label class="block text-xs font-medium text-slate-500">Provider</label>
+					<select name="provider_id" class={ inputCls }>
+						<option value="0">— none —</option>
+						for _, p := range providers {
+							<option value={ itoa(p.ID) }>{ p.Name }</option>
+						}
+					</select>
+					<p class="text-xs text-slate-400 mt-1">No provider listed? <a href="/providers/new" class="underline">Add one</a>.</p>
+				</div>
+				<div class="flex gap-3">
+					<div class="flex-1">
+						<label class="block text-xs font-medium text-slate-500">Kind</label>
+						<select name="kind" class={ inputCls }>
+							for _, k := range apptKinds {
+								<option value={ k }>{ label(k) }</option>
+							}
+						</select>
+					</div>
+					<div class="flex-1">
+						<label class="block text-xs font-medium text-slate-500">When</label>
+						<input type="datetime-local" name="scheduled_at" required class={ inputCls }/>
+					</div>
+				</div>
+				<button class="px-3 py-2 bg-teal-700 text-white text-sm rounded-md hover:bg-teal-800">Create</button>
+			</form>
+		}
+	}
+}
+
+templ AppointmentDetail(profile store.CaseProfile, a store.Appointment, docs []store.AIDoc, recs []store.Recording, aiEnabled bool) {
+	@Layout("Appointment", profile) {
+		<div class="flex items-center justify-between mb-4">
+			<div>
+				<h1 class="text-xl font-semibold text-slate-900">{ providerOr(a) }</h1>
+				<p class="text-sm text-slate-500">{ label(a.Kind) } · { humanTime(a.ScheduledAt) }</p>
+			</div>
+			<span class={ "text-xs px-2 py-0.5 rounded-full " + statusClasses(a.Status) }>{ label(a.Status) }</span>
+		</div>
+		<section class="mb-6">
+			<div class="flex items-center justify-between mb-2">
+				<h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wide">Prep & outcome</h2>
+			</div>
+			@card() {
+				<form method="post" action={ templ.SafeURL(apptURL(a.ID)) } class="space-y-4">
+					<div>
+						<label class="block text-xs font-medium text-slate-500">Prep notes — questions to raise</label>
+						<textarea name="prep_notes" rows="4" class={ inputCls }>{ a.PrepNotes }</textarea>
+					</div>
+					<div>
+						<label class="block text-xs font-medium text-slate-500">Outcome — what happened</label>
+						<textarea name="outcome" rows="4" class={ inputCls }>{ a.Outcome }</textarea>
+					</div>
+					<div class="flex gap-3">
+						<div class="flex-1">
+							<label class="block text-xs font-medium text-slate-500">Status</label>
+							<select name="status" class={ inputCls }>
+								for _, st := range apptStatuses {
+									if st == a.Status {
+										<option value={ st } selected>{ label(st) }</option>
+									} else {
+										<option value={ st }>{ label(st) }</option>
+									}
+								}
+							</select>
+						</div>
+						<div class="flex-1">
+							<label class="block text-xs font-medium text-slate-500">Follow-up on</label>
+							<input type="date" name="follow_up_on" value={ a.FollowUpOn } class={ inputCls }/>
+						</div>
+					</div>
+					<button class="px-3 py-2 bg-teal-700 text-white text-sm rounded-md hover:bg-teal-800">Save</button>
+				</form>
+			}
+		</section>
+		<section>
+			<div class="flex items-center justify-between mb-2">
+				<h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wide">AI prep</h2>
+				if aiEnabled {
+					<button
+						hx-post={ apptURL(a.ID) + "/questions" }
+						hx-target="#ai-docs"
+						hx-swap="afterbegin"
+						hx-indicator="#ai-spin"
+						class="px-3 py-2 bg-teal-700 text-white text-sm rounded-md hover:bg-teal-800"
+					>Generate questions</button>
+				}
+			</div>
+			<div id="ai-spin" class="htmx-indicator text-sm text-slate-400 mb-2">Drafting questions…</div>
+			<div id="ai-docs" class="space-y-3">
+				for _, d := range docs {
+					@AIDocCard(d)
+				}
+				if len(docs) == 0 {
+					<p id="ai-empty" class="text-sm text-slate-400">No AI documents yet for this appointment.</p>
+				}
+			</div>
+		</section>
+		<section class="mt-6">
+			<div class="flex items-center justify-between mb-2">
+				<h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wide">Recordings</h2>
+				@btnLink("/recordings/new?appointment_id="+itoa(a.ID), "+ Add")
+			</div>
+			if len(recs) == 0 {
+				<p class="text-sm text-slate-400">No recordings linked to this appointment.</p>
+			} else {
+				<ul class="space-y-2">
+					for _, rec := range recs {
+						<li>
+							<a href={ templ.SafeURL(recordingURL(rec.ID)) } class="flex justify-between items-center bg-white rounded-lg border border-slate-200 p-3 hover:border-teal-300">
+								<span class="text-sm">{ humanTime(rec.CreatedAt) }</span>
+								<span class={ "text-xs px-2 py-0.5 rounded-full " + recStatusClasses(rec.TranscriptStatus) }>{ label(rec.TranscriptStatus) }</span>
+							</a>
+						</li>
+					}
+				</ul>
+			}
+		</section>
+	}
+}
+
+// AIDocCard renders one editable AI artifact. Also returned standalone over htmx
+// after a generation, so it must be self-contained.
+templ AIDocCard(d store.AIDoc) {
+	<article class="bg-white rounded-lg border border-slate-200 p-4">
+		<div class="flex items-center justify-between mb-2">
+			<h3 class="font-medium text-slate-900">{ docTitle(d) }</h3>
+			<div class="flex items-center gap-2">
+				if d.IsEdited {
+					<span class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">edited</span>
+				}
+				<a href={ templ.SafeURL(aiDocURL(d.ID)) } class="text-xs text-teal-700 underline">Edit</a>
+			</div>
+		</div>
+		<div class="prose prose-sm max-w-none">
+			@Markdown(d.Content)
+		</div>
+		if d.Model != "" {
+			<p class="text-xs text-slate-400 mt-3">{ d.Model }</p>
+		}
+	</article>
+}

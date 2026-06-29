@@ -1,0 +1,121 @@
+package view
+
+import "github.com/tylersriver/mend/internal/store"
+
+var resourceKinds = []string{"link", "video", "file"}
+
+templ ResourceList(profile store.CaseProfile, resources []store.Resource) {
+	@Layout("Research", profile) {
+		@pageHeader("Research") {
+			@btnLink("/resources/new", "+ Add")
+		}
+		if len(resources) == 0 {
+			<p class="text-sm text-slate-400">No research saved. Add articles, videos, or files to build your case file.</p>
+		} else {
+			<ul class="space-y-2">
+				for _, r := range resources {
+					<li>
+						<a href={ templ.SafeURL(resourceURL(r.ID)) } class="block bg-white rounded-lg border border-slate-200 p-3 hover:border-teal-300">
+							<div class="flex justify-between items-center">
+								<span class="font-medium">{ r.Title }</span>
+								<span class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">{ label(r.Kind) }</span>
+							</div>
+							if r.Summary != "" {
+								<p class="text-xs text-slate-500 mt-1 line-clamp-2">{ r.Summary }</p>
+							}
+						</a>
+					</li>
+				}
+			</ul>
+		}
+	}
+}
+
+templ ResourceForm(profile store.CaseProfile) {
+	@Layout("Add research", profile) {
+		@pageHeader("Add research") {
+		}
+		@card() {
+			<form method="post" action="/resources" enctype="multipart/form-data" class="space-y-4">
+				<div>
+					<label class="block text-xs font-medium text-slate-500">Type</label>
+					<select name="kind" class={ inputCls }>
+						for _, k := range resourceKinds {
+							<option value={ k }>{ label(k) }</option>
+						}
+					</select>
+				</div>
+				<div>
+					<label class="block text-xs font-medium text-slate-500">Title</label>
+					<input name="title" required class={ inputCls }/>
+				</div>
+				<div>
+					<label class="block text-xs font-medium text-slate-500">URL <span class="text-slate-400">(for link/video)</span></label>
+					<input name="url" type="url" class={ inputCls }/>
+				</div>
+				<div>
+					<label class="block text-xs font-medium text-slate-500">File <span class="text-slate-400">(for file)</span></label>
+					<input name="file" type="file" class={ inputCls }/>
+				</div>
+				<div>
+					<label class="block text-xs font-medium text-slate-500">Source</label>
+					<input name="source" placeholder="youtube · pubmed · clinic · reddit" class={ inputCls }/>
+				</div>
+				<div>
+					<label class="block text-xs font-medium text-slate-500">Notes / summary</label>
+					<textarea name="summary" rows="4" class={ inputCls } placeholder="Paste the abstract or your notes; the AI can condense this later."></textarea>
+				</div>
+				<button class="px-3 py-2 bg-teal-700 text-white text-sm rounded-md hover:bg-teal-800">Save</button>
+			</form>
+		}
+	}
+}
+
+templ ResourceDetail(profile store.CaseProfile, r store.Resource, aiEnabled bool) {
+	@Layout(r.Title, profile) {
+		<div class="flex items-center justify-between mb-4">
+			<div>
+				<h1 class="text-xl font-semibold text-slate-900">{ r.Title }</h1>
+				<p class="text-sm text-slate-500">{ label(r.Kind) }{ sourceSuffix(r) }</p>
+			</div>
+			<form method="post" action={ templ.SafeURL(resourceURL(r.ID) + "/delete") } onsubmit="return confirm('Delete this resource?')">
+				<button class="text-xs text-red-600 underline">Delete</button>
+			</form>
+		</div>
+		if r.URL != "" {
+			<p class="mb-4"><a href={ templ.SafeURL(r.URL) } target="_blank" rel="noopener" class="text-teal-700 underline break-all">{ r.URL }</a></p>
+		}
+		if r.FilePath != "" {
+			<p class="mb-4"><a href={ templ.SafeURL(resourceURL(r.ID) + "/file") } class="text-teal-700 underline">Download file</a></p>
+		}
+		<section>
+			<div class="flex items-center justify-between mb-2">
+				<h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wide">Summary</h2>
+				if aiEnabled {
+					<button
+						hx-post={ resourceURL(r.ID) + "/summarize" }
+						hx-target="#summary-body"
+						hx-swap="innerHTML"
+						hx-indicator="#sum-spin"
+						class="px-3 py-2 bg-teal-700 text-white text-sm rounded-md hover:bg-teal-800"
+					>AI summarize</button>
+				}
+			</div>
+			<div id="sum-spin" class="htmx-indicator text-sm text-slate-400 mb-2">Summarizing…</div>
+			@card() {
+				<div id="summary-body" class="prose prose-sm max-w-none">
+					@SummaryBody(r.Summary)
+				</div>
+			}
+		</section>
+	}
+}
+
+// SummaryBody is the swappable summary region (returned standalone after AI summarize).
+templ SummaryBody(summary string) {
+	if summary == "" {
+		<p class="text-sm text-slate-400">No summary yet.</p>
+	} else {
+		@Markdown(summary)
+	}
+}
