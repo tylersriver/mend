@@ -28,6 +28,18 @@ func providerOr(a store.Appointment) string {
 
 func itoa(id int64) string { return strconv.FormatInt(id, 10) }
 
+// keyPlaceholder hints at a secret field's state without revealing the secret.
+func keyPlaceholder(dbValue string, envSet bool) string {
+	switch {
+	case dbValue != "":
+		return "•••••••• saved — leave blank to keep"
+	case envSet:
+		return "•••••••• provided by environment"
+	default:
+		return "not set"
+	}
+}
+
 // backURL points an AI doc back to whatever it was generated from.
 func backURL(d store.AIDoc) string {
 	switch d.SourceKind {

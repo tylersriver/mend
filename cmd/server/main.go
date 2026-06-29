@@ -13,12 +13,9 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/tylersriver/mend/internal/ai"
 	"github.com/tylersriver/mend/internal/config"
 	"github.com/tylersriver/mend/internal/db"
-	"github.com/tylersriver/mend/internal/recordings"
 	"github.com/tylersriver/mend/internal/store"
-	"github.com/tylersriver/mend/internal/transcribe"
 	"github.com/tylersriver/mend/internal/web"
 )
 
@@ -43,24 +40,16 @@ func main() {
 
 	st := store.New(database)
 
-	var aiSvc *ai.Service
-	if cfg.AIEnabled() {
-		aiSvc = ai.NewService(st, ai.New(cfg.APIKey, cfg.AIModel))
-		log.Printf("AI enabled (model %s)", cfg.AIModel)
+	// AI/transcription clients are built inside the server from effective config
+	// (in-app settings over env defaults) and can be reconfigured at runtime.
+	srv := web.NewServer(st, cfg)
+
+	if cfg.AuthEnabled() {
+		log.Printf("auth enabled — login required")
 	} else {
-		log.Printf("AI disabled — set ANTHROPIC_API_KEY to enable care-prep flows")
+		log.Printf("auth DISABLED — set AUTH_PASSWORD to require a login")
 	}
 
-	var transcriber transcribe.Transcriber
-	if cfg.TranscribeEnabled() {
-		transcriber = transcribe.New(cfg.TranscribeAPIKey, cfg.TranscribeBaseURL, cfg.TranscribeModel)
-		log.Printf("transcription enabled (model %s)", cfg.TranscribeModel)
-	} else {
-		log.Printf("transcription disabled — set TRANSCRIBE_API_KEY to enable")
-	}
-	proc := recordings.NewProcessor(st, transcriber, aiSvc)
-
-	srv := web.NewServer(st, aiSvc, proc, cfg.DataDir)
 	httpSrv := &http.Server{
 		Addr:              cfg.Addr,
 		Handler:           srv.Routes(),

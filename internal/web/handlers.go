@@ -187,7 +187,7 @@ func (s *Server) resourceSummarize(w http.ResponseWriter, r *http.Request) {
 	if body == "" {
 		body = res.Title
 	}
-	if err := s.ai.SummarizeResource(r.Context(), id, body); err != nil {
+	if err := s.aiSvc().SummarizeResource(r.Context(), id, body); err != nil {
 		log.Printf("web: summarize resource %d: %v", id, err)
 		s.render(w, r, view.SummaryBody("_Summary failed: "+err.Error()+"_"))
 		return
@@ -326,7 +326,7 @@ func (s *Server) appointmentQuestions(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "AI disabled — set ANTHROPIC_API_KEY", http.StatusServiceUnavailable)
 		return
 	}
-	docID, err := s.ai.DoctorQuestions(r.Context(), id)
+	docID, err := s.aiSvc().DoctorQuestions(r.Context(), id)
 	if err != nil {
 		log.Printf("web: doctor questions for appt %d: %v", id, err)
 		http.Error(w, "Question generation failed: "+err.Error(), http.StatusBadGateway)

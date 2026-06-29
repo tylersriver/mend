@@ -67,10 +67,16 @@ All four planned phases are now built:
 3. ~~**PT logging:** the satellite~~ ✅ (protocols/prescription still deferred)
 4. ~~**PWA shell:** manifest + service worker~~ ✅
 
+**In-app settings & login (post-design).** AI/transcription credentials can be set
+in-app at **/settings** (stored in the DB, applied live — no restart) instead of
+only via env; env values act as a fallback. A single shared password gates the
+whole app when `AUTH_PASSWORD` is set (signed session cookie); with it unset, auth
+is off for local dev.
+
 ## Quickstart
 
 ```sh
-export ANTHROPIC_API_KEY=sk-ant-...   # optional; AI flows disable without it
+export ANTHROPIC_API_KEY=sk-ant-...   # optional; or set it in-app at /settings
 export TRANSCRIBE_API_KEY=sk-...      # optional; audio transcription disables without it
 go run ./cmd/server                   # serves http://localhost:8080
 ```
@@ -79,14 +85,36 @@ The templ views are compiled to committed `*_templ.go` files, so a plain
 `go build ./...` works with no extra tooling. If you edit a `.templ`, regenerate
 with `go run github.com/a-h/templ/cmd/templ@latest generate`.
 
-Config (env, with `-flag` overrides): `ADDR` (default `:8080`), `DB_PATH`
+Config (env, with `-flag` overrides): `PORT` or `ADDR` (default `:8080`), `DB_PATH`
 (`data/mend.db`), `DATA_DIR` (`data`), `AI_MODEL` (`claude-opus-4-8`).
 Transcription (OpenAI-compatible): `TRANSCRIBE_API_KEY`, `TRANSCRIBE_BASE_URL`
 (default `https://api.openai.com/v1`), `TRANSCRIBE_MODEL` (default `whisper-1`).
+Auth: `AUTH_PASSWORD` (enables login), `SESSION_SECRET` (optional; stabilizes
+session cookies across restarts — defaults to one derived from the password).
+
+## Deploying (Railway)
+
+1. Point Railway at this repo — it auto-detects Go and runs `go build ./...`.
+2. **Attach a volume** and set `DB_PATH` and `DATA_DIR` to a path on it (e.g.
+   `/data/mend.db` and `/data`). Railway's filesystem is otherwise ephemeral, so
+   the SQLite DB and uploaded blobs must live on the volume.
+3. Set env vars: `AUTH_PASSWORD` (required for a private deploy), `SESSION_SECRET`
+   (a long random string), and optionally `ANTHROPIC_API_KEY` / `TRANSCRIBE_API_KEY`
+   (or add those in-app at `/settings`). `PORT` is provided by Railway automatically.
+4. TLS is terminated at Railway's edge; the app detects HTTPS via
+   `X-Forwarded-Proto` and marks the session cookie `Secure`.
 
 ## Security notes
 
-This DB holds medical information. Keep the API key in env (not a SQLite row),
-serve over HTTPS (service workers require it), and put the app behind Tailscale or
-Cloudflare Access if it's internet-reachable. Encrypt audio recordings at rest;
-let yourself delete audio once a transcript exists.
+This DB holds medical information. Always set `AUTH_PASSWORD` before exposing the
+app, and serve over HTTPS (service workers require it; the session cookie is marked
+`Secure` behind a TLS-terminating proxy). For extra defense in depth you can still
+put it behind Tailscale or Cloudflare Access.
+
+The original design kept API keys in env only, never in the DB. The in-app
+`/settings` screen relaxes that — keys you enter there are stored in the SQLite
+file — an accepted tradeoff for a single-user, login-gated instance. If you'd
+rather not persist keys in the DB, leave those fields blank and provide
+`ANTHROPIC_API_KEY` / `TRANSCRIBE_API_KEY` via env instead. Either way, treat the
+SQLite file (and any volume it lives on) as a secret. You can delete a recording's
+audio once its transcript exists.
