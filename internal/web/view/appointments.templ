@@ -16,7 +16,7 @@ templ AppointmentList(profile store.CaseProfile, appts []store.Appointment) {
 			<ul class="space-y-2">
 				for _, a := range appts {
 					<li>
-						<a href={ templ.SafeURL(apptURL(a.ID)) } class="block bg-white rounded-lg border border-slate-200 p-3 hover:border-teal-300">
+						<a href={ templ.SafeURL(apptURL(a.ID)) } class="block bg-white rounded-2xl border border-slate-200 p-3 hover:border-teal-300">
 							<div class="flex justify-between items-center">
 								<span class="font-medium">{ providerOr(a) }</span>
 								<span class={ "text-xs px-2 py-0.5 rounded-full " + statusClasses(a.Status) }>{ label(a.Status) }</span>
@@ -63,7 +63,7 @@ templ AppointmentForm(profile store.CaseProfile, providers []store.Provider) {
 						<input type="datetime-local" name="scheduled_at" required class={ inputCls }/>
 					</div>
 				</div>
-				<button class="px-3 py-2 bg-teal-700 text-white text-sm rounded-md hover:bg-teal-800">Create</button>
+				<button class="px-4 py-2.5 bg-teal-600 text-white text-sm font-medium rounded-xl shadow-sm shadow-teal-600/20 hover:bg-teal-700 active:scale-[.98] transition">Create</button>
 			</form>
 		}
 	}
@@ -110,7 +110,7 @@ templ AppointmentDetail(profile store.CaseProfile, a store.Appointment, docs []s
 							<input type="date" name="follow_up_on" value={ a.FollowUpOn } class={ inputCls }/>
 						</div>
 					</div>
-					<button class="px-3 py-2 bg-teal-700 text-white text-sm rounded-md hover:bg-teal-800">Save</button>
+					<button class="px-4 py-2.5 bg-teal-600 text-white text-sm font-medium rounded-xl shadow-sm shadow-teal-600/20 hover:bg-teal-700 active:scale-[.98] transition">Save</button>
 				</form>
 			}
 		</section>
@@ -123,7 +123,7 @@ templ AppointmentDetail(profile store.CaseProfile, a store.Appointment, docs []s
 						hx-target="#ai-docs"
 						hx-swap="afterbegin"
 						hx-indicator="#ai-spin"
-						class="px-3 py-2 bg-teal-700 text-white text-sm rounded-md hover:bg-teal-800"
+						class="px-4 py-2.5 bg-teal-600 text-white text-sm font-medium rounded-xl shadow-sm shadow-teal-600/20 hover:bg-teal-700 active:scale-[.98] transition"
 					>Generate questions</button>
 				}
 			</div>
@@ -148,7 +148,7 @@ templ AppointmentDetail(profile store.CaseProfile, a store.Appointment, docs []s
 				<ul class="space-y-2">
 					for _, rec := range recs {
 						<li>
-							<a href={ templ.SafeURL(recordingURL(rec.ID)) } class="flex justify-between items-center bg-white rounded-lg border border-slate-200 p-3 hover:border-teal-300">
+							<a href={ templ.SafeURL(recordingURL(rec.ID)) } class="flex justify-between items-center bg-white rounded-2xl border border-slate-200 p-3 hover:border-teal-300">
 								<span class="text-sm">{ humanTime(rec.CreatedAt) }</span>
 								<span class={ "text-xs px-2 py-0.5 rounded-full " + recStatusClasses(rec.TranscriptStatus) }>{ label(rec.TranscriptStatus) }</span>
 							</a>
@@ -163,7 +163,7 @@ templ AppointmentDetail(profile store.CaseProfile, a store.Appointment, docs []s
 // AIDocCard renders one editable AI artifact. Also returned standalone over htmx
 // after a generation, so it must be self-contained.
 templ AIDocCard(d store.AIDoc) {
-	<article class="bg-white rounded-lg border border-slate-200 p-4">
+	<article class="bg-white rounded-2xl border border-slate-200 p-4">
 		<div class="flex items-center justify-between mb-2">
 			<h3 class="font-medium text-slate-900">{ docTitle(d) }</h3>
 			<div class="flex items-center gap-2">

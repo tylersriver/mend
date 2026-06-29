@@ -32,7 +32,7 @@ templ PTHub(profile store.CaseProfile, recent []store.Session, exerciseCount, pr
 }
 
 templ hubTile(href, title, sub string) {
-	<a href={ templ.SafeURL(href) } class="block bg-white rounded-lg border border-slate-200 p-4 hover:border-teal-300">
+	<a href={ templ.SafeURL(href) } class="block bg-white rounded-2xl border border-slate-200 p-4 hover:border-teal-300">
 		<div class="font-medium text-slate-900">{ title }</div>
 		<div class="text-xs text-slate-400 mt-1">{ sub }</div>
 	</a>
@@ -40,7 +40,7 @@ templ hubTile(href, title, sub string) {
 
 templ sessionRow(se store.Session) {
 	<li>
-		<a href={ templ.SafeURL(ptURL("sessions", se.ID)) } class="block bg-white rounded-lg border border-slate-200 p-3 hover:border-teal-300">
+		<a href={ templ.SafeURL(ptURL("sessions", se.ID)) } class="block bg-white rounded-2xl border border-slate-200 p-3 hover:border-teal-300">
 			<div class="flex justify-between items-center">
 				<span class="font-medium">{ humanTime(se.PerformedAt) }</span>
 				<span class="text-xs text-slate-500">{ itoaInt(se.SetCount) } sets</span>
@@ -64,7 +64,7 @@ templ ExerciseList(profile store.CaseProfile, exercises []store.Exercise) {
 		} else {
 			<ul class="space-y-2">
 				for _, e := range exercises {
-					<li class={ "bg-white rounded-lg border border-slate-200 p-3 " + archivedCls(e.IsArchived) }>
+					<li class={ "bg-white rounded-2xl border border-slate-200 p-3 " + archivedCls(e.IsArchived) }>
 						<div class="flex justify-between items-center">
 							<span class="font-medium">{ e.Name }</span>
 							<span class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">{ label(e.MetricType) }</span>
@@ -136,7 +136,7 @@ templ ExerciseForm(profile store.CaseProfile) {
 					<label class="block text-xs font-medium text-slate-500">Demo URL</label>
 					<input name="demo_url" type="url" class={ inputCls }/>
 				</div>
-				<button class="px-3 py-2 bg-teal-700 text-white text-sm rounded-md hover:bg-teal-800">Save</button>
+				<button class="px-4 py-2.5 bg-teal-600 text-white text-sm font-medium rounded-xl shadow-sm shadow-teal-600/20 hover:bg-teal-700 active:scale-[.98] transition">Save</button>
 			</form>
 		}
 	}
@@ -191,7 +191,7 @@ templ SessionForm(profile store.CaseProfile) {
 					<label class="block text-xs font-medium text-slate-500">Notes</label>
 					<textarea name="notes" rows="2" class={ inputCls }></textarea>
 				</div>
-				<button class="px-3 py-2 bg-teal-700 text-white text-sm rounded-md hover:bg-teal-800">Create &amp; log sets</button>
+				<button class="px-4 py-2.5 bg-teal-600 text-white text-sm font-medium rounded-xl shadow-sm shadow-teal-600/20 hover:bg-teal-700 active:scale-[.98] transition">Create &amp; log sets</button>
 			</form>
 		}
 	}
@@ -231,7 +231,7 @@ templ SessionDetail(profile store.CaseProfile, se store.Session, exercises []sto
 						<label class="block text-xs font-medium text-slate-500">Notes</label>
 						<textarea name="notes" rows="2" class={ inputCls }>{ se.Notes }</textarea>
 					</div>
-					<button class="px-3 py-2 bg-teal-700 text-white text-sm rounded-md hover:bg-teal-800">Save</button>
+					<button class="px-4 py-2.5 bg-teal-600 text-white text-sm font-medium rounded-xl shadow-sm shadow-teal-600/20 hover:bg-teal-700 active:scale-[.98] transition">Save</button>
 				</form>
 			}
 		</section>
@@ -240,7 +240,7 @@ templ SessionDetail(profile store.CaseProfile, se store.Session, exercises []sto
 			if len(exercises) == 0 {
 				<p class="text-sm text-slate-400 mb-3">Add an <a href="/pt/exercises/new" class="underline">exercise</a> first to log sets.</p>
 			}
-			<div class="bg-white rounded-lg border border-slate-200 overflow-hidden mb-4">
+			<div class="bg-white rounded-2xl border border-slate-200 overflow-hidden mb-4">
 				<table class="w-full text-sm">
 					<tbody id="sets-tbody">
 						for _, st := range se.Sets {
@@ -282,7 +282,7 @@ templ addSetForm(sessionID int64, exercises []store.Exercise) {
 		hx-post={ ptURL("sessions", sessionID) + "/sets" }
 		hx-target="#sets-tbody"
 		hx-swap="beforeend"
-		class="bg-white rounded-lg border border-slate-200 p-3 space-y-3"
+		class="bg-white rounded-2xl border border-slate-200 p-3 space-y-3"
 		data-set-form
 	>
 		<div>
@@ -327,7 +327,7 @@ templ addSetForm(sessionID int64, exercises []store.Exercise) {
 				<input name="notes" class={ inputCls }/>
 			</div>
 		</div>
-		<button class="px-3 py-2 bg-teal-700 text-white text-sm rounded-md hover:bg-teal-800">Add set</button>
+		<button class="px-4 py-2.5 bg-teal-600 text-white text-sm font-medium rounded-xl shadow-sm shadow-teal-600/20 hover:bg-teal-700 active:scale-[.98] transition">Add set</button>
 	</form>
 	@setFormScript()
 }
@@ -398,7 +398,7 @@ templ MeasurementList(profile store.CaseProfile, series map[string][]store.Measu
 							<input type="date" name="measured_at" class={ inputCls }/>
 						</div>
 					</div>
-					<button class="px-3 py-2 bg-teal-700 text-white text-sm rounded-md hover:bg-teal-800">Add measurement</button>
+					<button class="px-4 py-2.5 bg-teal-600 text-white text-sm font-medium rounded-xl shadow-sm shadow-teal-600/20 hover:bg-teal-700 active:scale-[.98] transition">Add measurement</button>
 				</form>
 			}
 		</section>
@@ -423,7 +423,7 @@ templ MeasurementList(profile store.CaseProfile, series map[string][]store.Measu
 			if len(recent) == 0 {
 				<p class="text-sm text-slate-400">No measurements yet.</p>
 			} else {
-				<div class="bg-white rounded-lg border border-slate-200 overflow-hidden">
+				<div class="bg-white rounded-2xl border border-slate-200 overflow-hidden">
 					<table class="w-full text-sm">
 						<tbody>
 							for _, m := range recent {

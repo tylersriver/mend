@@ -96,7 +96,7 @@ func AppointmentList(profile store.CaseProfile, appts []store.Appointment) templ
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\" class=\"block bg-white rounded-lg border border-slate-200 p-3 hover:border-teal-300\"><div class=\"flex justify-between items-center\"><span class=\"font-medium\">")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\" class=\"block bg-white rounded-2xl border border-slate-200 p-3 hover:border-teal-300\"><div class=\"flex justify-between items-center\"><span class=\"font-medium\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -395,7 +395,7 @@ func AppointmentForm(profile store.CaseProfile, providers []store.Provider) temp
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 28, "\"></div></div><button class=\"px-3 py-2 bg-teal-700 text-white text-sm rounded-md hover:bg-teal-800\">Create</button></form>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 28, "\"></div></div><button class=\"px-4 py-2.5 bg-teal-600 text-white text-sm font-medium rounded-xl shadow-sm shadow-teal-600/20 hover:bg-teal-700 active:scale-[.98] transition\">Create</button></form>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -747,7 +747,7 @@ func AppointmentDetail(profile store.CaseProfile, a store.Appointment, docs []st
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 55, "\"></div></div><button class=\"px-3 py-2 bg-teal-700 text-white text-sm rounded-md hover:bg-teal-800\">Save</button></form>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 55, "\"></div></div><button class=\"px-4 py-2.5 bg-teal-600 text-white text-sm font-medium rounded-xl shadow-sm shadow-teal-600/20 hover:bg-teal-700 active:scale-[.98] transition\">Save</button></form>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -775,7 +775,7 @@ func AppointmentDetail(profile store.CaseProfile, a store.Appointment, docs []st
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 58, "\" hx-target=\"#ai-docs\" hx-swap=\"afterbegin\" hx-indicator=\"#ai-spin\" class=\"px-3 py-2 bg-teal-700 text-white text-sm rounded-md hover:bg-teal-800\">Generate questions</button>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 58, "\" hx-target=\"#ai-docs\" hx-swap=\"afterbegin\" hx-indicator=\"#ai-spin\" class=\"px-4 py-2.5 bg-teal-600 text-white text-sm font-medium rounded-xl shadow-sm shadow-teal-600/20 hover:bg-teal-700 active:scale-[.98] transition\">Generate questions</button>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -832,7 +832,7 @@ func AppointmentDetail(profile store.CaseProfile, a store.Appointment, docs []st
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 66, "\" class=\"flex justify-between items-center bg-white rounded-lg border border-slate-200 p-3 hover:border-teal-300\"><span class=\"text-sm\">")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 66, "\" class=\"flex justify-between items-center bg-white rounded-2xl border border-slate-200 p-3 hover:border-teal-300\"><span class=\"text-sm\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -927,7 +927,7 @@ func AIDocCard(d store.AIDoc) templ.Component {
 			templ_7745c5c3_Var56 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 73, "<article class=\"bg-white rounded-lg border border-slate-200 p-4\"><div class=\"flex items-center justify-between mb-2\"><h3 class=\"font-medium text-slate-900\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 73, "<article class=\"bg-white rounded-2xl border border-slate-200 p-4\"><div class=\"flex items-center justify-between mb-2\"><h3 class=\"font-medium text-slate-900\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

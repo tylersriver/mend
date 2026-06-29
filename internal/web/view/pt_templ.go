@@ -159,7 +159,7 @@ func hubTile(href, title, sub string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "\" class=\"block bg-white rounded-lg border border-slate-200 p-4 hover:border-teal-300\"><div class=\"font-medium text-slate-900\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "\" class=\"block bg-white rounded-2xl border border-slate-200 p-4 hover:border-teal-300\"><div class=\"font-medium text-slate-900\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -227,7 +227,7 @@ func sessionRow(se store.Session) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "\" class=\"block bg-white rounded-lg border border-slate-200 p-3 hover:border-teal-300\"><div class=\"flex justify-between items-center\"><span class=\"font-medium\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "\" class=\"block bg-white rounded-2xl border border-slate-200 p-3 hover:border-teal-300\"><div class=\"flex justify-between items-center\"><span class=\"font-medium\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -368,7 +368,7 @@ func ExerciseList(profile store.CaseProfile, exercises []store.Exercise) templ.C
 					return templ_7745c5c3_Err
 				}
 				for _, e := range exercises {
-					var templ_7745c5c3_Var17 = []any{"bg-white rounded-lg border border-slate-200 p-3 " + archivedCls(e.IsArchived)}
+					var templ_7745c5c3_Var17 = []any{"bg-white rounded-2xl border border-slate-200 p-3 " + archivedCls(e.IsArchived)}
 					templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var17...)
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
@@ -783,7 +783,7 @@ func ExerciseForm(profile store.CaseProfile) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 57, "\"></div><button class=\"px-3 py-2 bg-teal-700 text-white text-sm rounded-md hover:bg-teal-800\">Save</button></form>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 57, "\"></div><button class=\"px-4 py-2.5 bg-teal-600 text-white text-sm font-medium rounded-xl shadow-sm shadow-teal-600/20 hover:bg-teal-700 active:scale-[.98] transition\">Save</button></form>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -1071,7 +1071,7 @@ func SessionForm(profile store.CaseProfile) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 73, "\"></textarea></div><button class=\"px-3 py-2 bg-teal-700 text-white text-sm rounded-md hover:bg-teal-800\">Create &amp; log sets</button></form>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 73, "\"></textarea></div><button class=\"px-4 py-2.5 bg-teal-600 text-white text-sm font-medium rounded-xl shadow-sm shadow-teal-600/20 hover:bg-teal-700 active:scale-[.98] transition\">Create &amp; log sets</button></form>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -1355,7 +1355,7 @@ func SessionDetail(profile store.CaseProfile, se store.Session, exercises []stor
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 94, "</textarea></div><button class=\"px-3 py-2 bg-teal-700 text-white text-sm rounded-md hover:bg-teal-800\">Save</button></form>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 94, "</textarea></div><button class=\"px-4 py-2.5 bg-teal-600 text-white text-sm font-medium rounded-xl shadow-sm shadow-teal-600/20 hover:bg-teal-700 active:scale-[.98] transition\">Save</button></form>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -1375,7 +1375,7 @@ func SessionDetail(profile store.CaseProfile, se store.Session, exercises []stor
 					return templ_7745c5c3_Err
 				}
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 97, "<div class=\"bg-white rounded-lg border border-slate-200 overflow-hidden mb-4\"><table class=\"w-full text-sm\"><tbody id=\"sets-tbody\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 97, "<div class=\"bg-white rounded-2xl border border-slate-200 overflow-hidden mb-4\"><table class=\"w-full text-sm\"><tbody id=\"sets-tbody\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -1548,7 +1548,7 @@ func addSetForm(sessionID int64, exercises []store.Exercise) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 109, "\" hx-target=\"#sets-tbody\" hx-swap=\"beforeend\" class=\"bg-white rounded-lg border border-slate-200 p-3 space-y-3\" data-set-form><div><label class=\"block text-xs font-medium text-slate-500\">Exercise</label> ")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 109, "\" hx-target=\"#sets-tbody\" hx-swap=\"beforeend\" class=\"bg-white rounded-2xl border border-slate-200 p-3 space-y-3\" data-set-form><div><label class=\"block text-xs font-medium text-slate-500\">Exercise</label> ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -1795,7 +1795,7 @@ func addSetForm(sessionID int64, exercises []store.Exercise) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 132, "\"></div></div><button class=\"px-3 py-2 bg-teal-700 text-white text-sm rounded-md hover:bg-teal-800\">Add set</button></form>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 132, "\"></div></div><button class=\"px-4 py-2.5 bg-teal-600 text-white text-sm font-medium rounded-xl shadow-sm shadow-teal-600/20 hover:bg-teal-700 active:scale-[.98] transition\">Add set</button></form>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -2041,7 +2041,7 @@ func MeasurementList(profile store.CaseProfile, series map[string][]store.Measur
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 148, "\"></div></div><button class=\"px-3 py-2 bg-teal-700 text-white text-sm rounded-md hover:bg-teal-800\">Add measurement</button></form>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 148, "\"></div></div><button class=\"px-4 py-2.5 bg-teal-600 text-white text-sm font-medium rounded-xl shadow-sm shadow-teal-600/20 hover:bg-teal-700 active:scale-[.98] transition\">Add measurement</button></form>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -2129,7 +2129,7 @@ func MeasurementList(profile store.CaseProfile, series map[string][]store.Measur
 					return templ_7745c5c3_Err
 				}
 			} else {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 157, "<div class=\"bg-white rounded-lg border border-slate-200 overflow-hidden\"><table class=\"w-full text-sm\"><tbody>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 157, "<div class=\"bg-white rounded-2xl border border-slate-200 overflow-hidden\"><table class=\"w-full text-sm\"><tbody>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
