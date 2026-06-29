@@ -76,10 +76,13 @@ is off for local dev.
 ## Quickstart
 
 ```sh
+cp .env.dist .env                     # then edit; or just export the vars you need
 export ANTHROPIC_API_KEY=sk-ant-...   # optional; or set it in-app at /settings
 export TRANSCRIBE_API_KEY=sk-...      # optional; audio transcription disables without it
 go run ./cmd/server                   # serves http://localhost:8080
 ```
+
+See [`.env.dist`](.env.dist) for every supported variable with defaults and notes.
 
 The templ views are compiled to committed `*_templ.go` files, so a plain
 `go build ./...` works with no extra tooling. If you edit a `.templ`, regenerate
@@ -94,15 +97,27 @@ session cookies across restarts — defaults to one derived from the password).
 
 ## Deploying (Railway)
 
-1. Point Railway at this repo — it auto-detects Go and runs `go build ./...`.
-2. **Attach a volume** and set `DB_PATH` and `DATA_DIR` to a path on it (e.g.
-   `/data/mend.db` and `/data`). Railway's filesystem is otherwise ephemeral, so
-   the SQLite DB and uploaded blobs must live on the volume.
-3. Set env vars: `AUTH_PASSWORD` (required for a private deploy), `SESSION_SECRET`
-   (a long random string), and optionally `ANTHROPIC_API_KEY` / `TRANSCRIBE_API_KEY`
-   (or add those in-app at `/settings`). `PORT` is provided by Railway automatically.
+This repo ships a `Dockerfile` and `railway.json`, so Railway builds the image
+directly (multi-stage, CGO-free → a tiny static binary) and health-checks
+`/healthz`.
+
+1. Create a Railway project from this repo. `railway.json` selects the Dockerfile
+   builder automatically; `PORT` is injected by Railway.
+2. **Attach a volume mounted at `/data`.** The image already defaults
+   `DB_PATH=/data/mend.db` and `DATA_DIR=/data`, so the SQLite DB and uploaded
+   blobs persist there (Railway's container filesystem is otherwise ephemeral).
+3. Set variables (see [`.env.dist`](.env.dist)): `AUTH_PASSWORD` (required for a
+   private deploy) and `SESSION_SECRET` (`openssl rand -hex 32`). Optionally add
+   `ANTHROPIC_API_KEY` / `TRANSCRIBE_API_KEY` — or set those in-app at `/settings`.
 4. TLS is terminated at Railway's edge; the app detects HTTPS via
    `X-Forwarded-Proto` and marks the session cookie `Secure`.
+
+To build/run the container locally:
+
+```sh
+docker build -t mend .
+docker run --rm -p 8080:8080 -v "$PWD/data:/data" -e AUTH_PASSWORD=changeme mend
+```
 
 ## Security notes
 
