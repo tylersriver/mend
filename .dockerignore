@@ -1,0 +1,21 @@
+# Keep the build context small and free of secrets/local state.
+.git
+.gitignore
+*.md
+docs/
+
+# Local data — must never enter the image (medical data + secrets).
+/data/
+/uploads/
+*.db
+*.db-wal
+*.db-shm
+.env
+*.env
+
+# Build artifacts / binaries
+/bin/
+mend
+mendp
+*.test
+*.out
