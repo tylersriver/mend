@@ -156,7 +156,7 @@ templ addPrescriptionForm(protocolID int64, exercises []store.Exercise) {
 				}
 			</select>
 		</div>
-		<div class="grid grid-cols-3 gap-3">
+		<div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
 			<div>
 				<label class="block text-xs font-medium text-slate-500">Sets</label>
 				<input type="number" name="target_sets" min="0" class={ inputCls }/>
@@ -182,7 +182,7 @@ templ addPrescriptionForm(protocolID int64, exercises []store.Exercise) {
 				<input type="number" name="sort_order" min="0" value="0" class={ inputCls }/>
 			</div>
 		</div>
-		<div class="grid grid-cols-2 gap-3">
+		<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
 			<div>
 				<label class="block text-xs font-medium text-slate-500">Frequency</label>
 				<input name="frequency" placeholder="daily · 3x/week" class={ inputCls }/>

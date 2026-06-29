@@ -315,7 +315,7 @@ func AppointmentForm(profile store.CaseProfile, providers []store.Provider) temp
 						return templ_7745c5c3_Err
 					}
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, "</select><p class=\"text-xs text-slate-400 mt-1\">No provider listed? <a href=\"/providers/new\" class=\"underline\">Add one</a>.</p></div><div class=\"flex gap-3\"><div class=\"flex-1\"><label class=\"block text-xs font-medium text-slate-500\">Kind</label> ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, "</select><p class=\"text-xs text-slate-400 mt-1\">No provider listed? <a href=\"/providers/new\" class=\"underline\">Add one</a>.</p></div><div class=\"grid grid-cols-1 sm:grid-cols-2 gap-3\"><div class=\"flex-1 min-w-0\"><label class=\"block text-xs font-medium text-slate-500\">Kind</label> ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -373,7 +373,7 @@ func AppointmentForm(profile store.CaseProfile, providers []store.Provider) temp
 						return templ_7745c5c3_Err
 					}
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 26, "</select></div><div class=\"flex-1\"><label class=\"block text-xs font-medium text-slate-500\">When</label> ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 26, "</select></div><div class=\"flex-1 min-w-0\"><label class=\"block text-xs font-medium text-slate-500\">When</label> ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -621,7 +621,7 @@ func AppointmentDetail(profile store.CaseProfile, a store.Appointment, docs []st
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 43, "</textarea></div><div class=\"flex gap-3\"><div class=\"flex-1\"><label class=\"block text-xs font-medium text-slate-500\">Status</label> ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 43, "</textarea></div><div class=\"grid grid-cols-1 sm:grid-cols-2 gap-3\"><div class=\"flex-1 min-w-0\"><label class=\"block text-xs font-medium text-slate-500\">Status</label> ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -712,7 +712,7 @@ func AppointmentDetail(profile store.CaseProfile, a store.Appointment, docs []st
 						}
 					}
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 52, "</select></div><div class=\"flex-1\"><label class=\"block text-xs font-medium text-slate-500\">Follow-up on</label> ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 52, "</select></div><div class=\"flex-1 min-w-0\"><label class=\"block text-xs font-medium text-slate-500\">Follow-up on</label> ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}

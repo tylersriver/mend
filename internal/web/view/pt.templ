@@ -109,8 +109,8 @@ templ ExerciseForm(profile store.CaseProfile) {
 					<label class="block text-xs font-medium text-slate-500">Name</label>
 					<input name="name" required class={ inputCls }/>
 				</div>
-				<div class="flex gap-3">
-					<div class="flex-1">
+				<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+					<div class="flex-1 min-w-0">
 						<label class="block text-xs font-medium text-slate-500">Metric type</label>
 						<select name="metric_type" class={ inputCls }>
 							for _, m := range metricTypes {
@@ -118,7 +118,7 @@ templ ExerciseForm(profile store.CaseProfile) {
 							}
 						</select>
 					</div>
-					<div class="flex-1">
+					<div class="flex-1 min-w-0">
 						<label class="block text-xs font-medium text-slate-500">Category</label>
 						<select name="category" class={ inputCls }>
 							<option value="">—</option>
@@ -167,22 +167,22 @@ templ SessionForm(profile store.CaseProfile) {
 		}
 		@card() {
 			<form method="post" action="/pt/sessions" class="space-y-4">
-				<div class="flex gap-3">
-					<div class="flex-1">
+				<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+					<div class="flex-1 min-w-0">
 						<label class="block text-xs font-medium text-slate-500">When</label>
 						<input type="datetime-local" name="performed_at" class={ inputCls }/>
 					</div>
-					<div class="flex-1">
+					<div class="flex-1 min-w-0">
 						<label class="block text-xs font-medium text-slate-500">Duration (min)</label>
 						<input type="number" name="duration_min" min="0" class={ inputCls }/>
 					</div>
 				</div>
-				<div class="flex gap-3">
-					<div class="flex-1">
+				<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+					<div class="flex-1 min-w-0">
 						<label class="block text-xs font-medium text-slate-500">Pain before (0–10)</label>
 						<input type="number" name="pain_pre" min="0" max="10" class={ inputCls }/>
 					</div>
-					<div class="flex-1">
+					<div class="flex-1 min-w-0">
 						<label class="block text-xs font-medium text-slate-500">Pain after (0–10)</label>
 						<input type="number" name="pain_post" min="0" max="10" class={ inputCls }/>
 					</div>
@@ -213,16 +213,16 @@ templ SessionDetail(profile store.CaseProfile, se store.Session, exercises []sto
 		<section class="mb-6">
 			@card() {
 				<form method="post" action={ templ.SafeURL(ptURL("sessions", se.ID)) } class="space-y-3">
-					<div class="flex gap-3">
-						<div class="flex-1">
+					<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+						<div class="flex-1 min-w-0">
 							<label class="block text-xs font-medium text-slate-500">Duration (min)</label>
 							<input type="number" name="duration_min" min="0" value={ ptIntVal(se.DurationMin) } class={ inputCls }/>
 						</div>
-						<div class="flex-1">
+						<div class="flex-1 min-w-0">
 							<label class="block text-xs font-medium text-slate-500">Pain before</label>
 							<input type="number" name="pain_pre" min="0" max="10" value={ ptIntVal(se.PainPre) } class={ inputCls }/>
 						</div>
-						<div class="flex-1">
+						<div class="flex-1 min-w-0">
 							<label class="block text-xs font-medium text-slate-500">Pain after</label>
 							<input type="number" name="pain_post" min="0" max="10" value={ ptIntVal(se.PainPost) } class={ inputCls }/>
 						</div>
@@ -365,8 +365,8 @@ templ MeasurementList(profile store.CaseProfile, series map[string][]store.Measu
 		<section class="mb-6">
 			@card() {
 				<form method="post" action="/pt/measurements" class="space-y-3">
-					<div class="flex gap-3">
-						<div class="flex-1">
+					<div class="grid grid-cols-1 sm:grid-cols-[1fr_7rem] gap-3">
+						<div>
 							<label class="block text-xs font-medium text-slate-500">Metric</label>
 							<input name="metric" list="metric-list" required placeholder="pain_daily" class={ inputCls }/>
 							<datalist id="metric-list">
@@ -375,17 +375,17 @@ templ MeasurementList(profile store.CaseProfile, series map[string][]store.Measu
 								}
 							</datalist>
 						</div>
-						<div class="w-24">
+						<div>
 							<label class="block text-xs font-medium text-slate-500">Value</label>
 							<input name="value" type="number" step="any" required class={ inputCls }/>
 						</div>
 					</div>
-					<div class="flex gap-3">
-						<div class="flex-1">
+					<div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+						<div>
 							<label class="block text-xs font-medium text-slate-500">Unit</label>
 							<input name="unit" placeholder="deg · lbs · 0-10" class={ inputCls }/>
 						</div>
-						<div class="flex-1">
+						<div>
 							<label class="block text-xs font-medium text-slate-500">Side</label>
 							<select name="side" class={ inputCls }>
 								<option value="">—</option>
@@ -393,7 +393,7 @@ templ MeasurementList(profile store.CaseProfile, series map[string][]store.Measu
 								<option value="right">Right</option>
 							</select>
 						</div>
-						<div class="flex-1">
+						<div>
 							<label class="block text-xs font-medium text-slate-500">When</label>
 							<input type="date" name="measured_at" class={ inputCls }/>
 						</div>

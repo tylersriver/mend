@@ -239,7 +239,7 @@ func SettingsPage(profile store.CaseProfile, set store.Settings, st SettingsStat
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "\"> <label class=\"inline-flex items-center gap-1 mt-1 text-xs text-slate-500\"><input type=\"checkbox\" name=\"clear_transcribe\" value=\"1\"> clear saved key</label></div><div class=\"flex gap-3\"><div class=\"flex-1\"><label class=\"block text-xs font-medium text-slate-500\">Transcription base URL</label> ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "\"> <label class=\"inline-flex items-center gap-1 mt-1 text-xs text-slate-500\"><input type=\"checkbox\" name=\"clear_transcribe\" value=\"1\"> clear saved key</label></div><div class=\"grid grid-cols-1 sm:grid-cols-2 gap-3\"><div class=\"flex-1 min-w-0\"><label class=\"block text-xs font-medium text-slate-500\">Transcription base URL</label> ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -287,7 +287,7 @@ func SettingsPage(profile store.CaseProfile, set store.Settings, st SettingsStat
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, "\"></div><div class=\"flex-1\"><label class=\"block text-xs font-medium text-slate-500\">Transcription model</label> ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, "\"></div><div class=\"flex-1 min-w-0\"><label class=\"block text-xs font-medium text-slate-500\">Transcription model</label> ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
