@@ -77,6 +77,24 @@ func (s *Server) Routes() http.Handler {
 	mux.HandleFunc("GET /ai/docs/{id}", s.aiDocEdit)
 	mux.HandleFunc("POST /ai/docs/{id}", s.aiDocUpdate)
 
+	// PT logging satellite
+	mux.HandleFunc("GET /pt", s.ptHub)
+	mux.HandleFunc("GET /pt/exercises", s.exerciseList)
+	mux.HandleFunc("GET /pt/exercises/new", s.exerciseNew)
+	mux.HandleFunc("POST /pt/exercises", s.exerciseCreate)
+	mux.HandleFunc("POST /pt/exercises/{id}/archive", s.exerciseArchive)
+	mux.HandleFunc("GET /pt/sessions", s.sessionList)
+	mux.HandleFunc("GET /pt/sessions/new", s.sessionNew)
+	mux.HandleFunc("POST /pt/sessions", s.sessionCreate)
+	mux.HandleFunc("GET /pt/sessions/{id}", s.sessionDetail)
+	mux.HandleFunc("POST /pt/sessions/{id}", s.sessionUpdate)
+	mux.HandleFunc("POST /pt/sessions/{id}/sets", s.addSet)
+	mux.HandleFunc("POST /pt/sessions/{id}/delete", s.sessionDelete)
+	mux.HandleFunc("POST /pt/sets/{id}/delete", s.deleteSet)
+	mux.HandleFunc("GET /pt/measurements", s.measurementList)
+	mux.HandleFunc("POST /pt/measurements", s.measurementCreate)
+	mux.HandleFunc("POST /pt/measurements/{id}/delete", s.measurementDelete)
+
 	return logRequests(mux)
 }
 

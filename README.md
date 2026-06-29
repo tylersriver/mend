@@ -47,11 +47,17 @@ uploads — transcription never runs client-side. Pipeline state
 (`pending → processing → done → failed`) is polled over htmx. Audio can be deleted
 once a transcript exists (the transcript is kept).
 
+**Phase 3 (PT logging satellite) is built.** Under the **PT** nav entry:
+exercises (with a metric type that drives which set inputs show), sessions with
+inline htmx set logging, and a tall `measurements` log with inline SVG trend
+charts. Prescription (`protocols` / `protocol_exercises`) is deferred per the
+design — this ships `exercises → sessions → sets → measurements`.
+
 Not yet built (in suggested build order):
 
 1. ~~**Core loop:** resources + providers + appointments + AI question generator~~ ✅
 2. ~~**Recordings:** MediaRecorder upload → server-side transcription → AI highlights/tasks~~ ✅
-3. **PT logging:** the satellite (schema is ready in migration `0001`)
+3. ~~**PT logging:** the satellite~~ ✅ (protocols/prescription still deferred)
 4. **PWA shell:** manifest + service worker, added last (~40 lines, no architecture impact)
 
 ## Quickstart
