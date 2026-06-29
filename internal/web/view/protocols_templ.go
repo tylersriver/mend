@@ -93,7 +93,7 @@ func ProtocolList(profile store.CaseProfile, protocols []store.Protocol) templ.C
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\" class=\"block bg-white rounded-lg border border-slate-200 p-3 hover:border-teal-300\"><div class=\"flex justify-between items-center\"><span class=\"font-medium\">")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\" class=\"block bg-white rounded-2xl border border-slate-200 p-3 hover:border-teal-300\"><div class=\"flex justify-between items-center\"><span class=\"font-medium\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -352,7 +352,7 @@ func ProtocolForm(profile store.CaseProfile) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 23, "\"></textarea></div><button class=\"px-3 py-2 bg-teal-700 text-white text-sm rounded-md hover:bg-teal-800\">Create</button></form>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 23, "\"></textarea></div><button class=\"px-4 py-2.5 bg-teal-600 text-white text-sm font-medium rounded-xl shadow-sm shadow-teal-600/20 hover:bg-teal-700 active:scale-[.98] transition\">Create</button></form>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -529,7 +529,7 @@ func ProtocolDetail(profile store.CaseProfile, p store.Protocol, rows []Complian
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 37, "\" onsubmit=\"return confirm('End this phase?')\"><button class=\"px-3 py-2 bg-slate-200 text-slate-800 text-sm rounded-md hover:bg-slate-300\">End phase</button></form>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 37, "\" onsubmit=\"return confirm('End this phase?')\"><button class=\"px-4 py-2.5 bg-slate-100 text-slate-700 text-sm font-medium rounded-xl hover:bg-slate-200 active:scale-[.98] transition\">End phase</button></form>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -557,7 +557,7 @@ func ProtocolDetail(profile store.CaseProfile, p store.Protocol, rows []Complian
 					return templ_7745c5c3_Err
 				}
 			} else {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 41, "<div class=\"bg-white rounded-lg border border-slate-200 overflow-hidden mb-4\"><table class=\"w-full text-sm\"><tbody>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 41, "<div class=\"bg-white rounded-2xl border border-slate-200 overflow-hidden mb-4\"><table class=\"w-full text-sm\"><tbody>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -736,7 +736,7 @@ func addPrescriptionForm(protocolID int64, exercises []store.Exercise) templ.Com
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 58, "\" class=\"bg-white rounded-lg border border-slate-200 p-3 space-y-3\"><div><label class=\"block text-xs font-medium text-slate-500\">Prescribe exercise</label> ")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 58, "\" class=\"bg-white rounded-2xl border border-slate-200 p-3 space-y-3\"><div><label class=\"block text-xs font-medium text-slate-500\">Prescribe exercise</label> ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -970,7 +970,7 @@ func addPrescriptionForm(protocolID int64, exercises []store.Exercise) templ.Com
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 80, "\"></div></div><button class=\"px-3 py-2 bg-teal-700 text-white text-sm rounded-md hover:bg-teal-800\">Add to protocol</button></form>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 80, "\"></div></div><button class=\"px-4 py-2.5 bg-teal-600 text-white text-sm font-medium rounded-xl shadow-sm shadow-teal-600/20 hover:bg-teal-700 active:scale-[.98] transition\">Add to protocol</button></form>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -2,16 +2,15 @@ package view
 
 import "github.com/tylersriver/mend/internal/store"
 
-// Layout is the app shell: mobile-first, htmx + Tailwind via CDN (no build step,
-// matching the design's "installable + online is fine" stance). The PWA manifest
-// and service worker are deliberately deferred to a later phase.
+// Layout is the app shell: mobile-first, htmx + Tailwind via CDN (no build step).
+// Light, translucent "Apple-style" chrome with a hamburger menu on small screens.
 templ Layout(title string, profile store.CaseProfile) {
 	<!DOCTYPE html>
 	<html lang="en">
 		<head>
 			<meta charset="utf-8"/>
-			<meta name="viewport" content="width=device-width, initial-scale=1"/>
-			<meta name="theme-color" content="#0f766e"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+			<meta name="theme-color" content="#f5f5f7"/>
 			<title>{ title } · mend</title>
 			<link rel="manifest" href="/manifest.webmanifest"/>
 			<link rel="icon" href="/static/icon-192.png"/>
@@ -20,6 +19,17 @@ templ Layout(title string, profile store.CaseProfile) {
 			<meta name="apple-mobile-web-app-title" content="mend"/>
 			<meta name="apple-mobile-web-app-status-bar-style" content="default"/>
 			<script src="https://cdn.tailwindcss.com"></script>
+			<script>
+				tailwind.config = {
+					theme: {
+						extend: {
+							fontFamily: {
+								sans: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Text"', '"Segoe UI"', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],
+							},
+						},
+					},
+				};
+			</script>
 			<script src="https://unpkg.com/htmx.org@2.0.4"></script>
 			<script>
 				if ('serviceWorker' in navigator) {
@@ -29,55 +39,72 @@ templ Layout(title string, profile store.CaseProfile) {
 				}
 			</script>
 		</head>
-		<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
-			<header class="bg-teal-700 text-white">
-				<div class="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
-					<a href="/" class="font-semibold text-lg tracking-tight">mend</a>
-					if profile.InjuryName != "" {
-						<span class="text-teal-100 text-sm truncate ml-3">{ profile.InjuryName }</span>
-					}
+		<body class="min-h-screen flex flex-col bg-[#f5f5f7] text-slate-800 font-sans antialiased">
+			<header class="sticky top-0 z-30 bg-white/75 backdrop-blur-xl border-b border-slate-200/70">
+				<!-- peer checkbox drives the mobile menu with no JS -->
+				<input type="checkbox" id="nav-toggle" class="peer hidden"/>
+				<div class="max-w-3xl mx-auto px-4 h-14 flex items-center justify-between gap-3">
+					<a href="/" class="flex items-baseline gap-2 min-w-0">
+						<span class="text-lg font-semibold tracking-tight text-slate-900">mend</span>
+						if profile.InjuryName != "" {
+							<span class="text-xs text-slate-400 truncate">· { profile.InjuryName }</span>
+						}
+					</a>
+					<nav class="hidden md:flex items-center gap-1 text-sm font-medium text-slate-600">
+						@navLinks()
+					</nav>
+					<label for="nav-toggle" aria-label="Menu" class="md:hidden inline-flex items-center justify-center w-9 h-9 -mr-1 rounded-xl text-slate-600 hover:bg-slate-100 cursor-pointer transition">
+						<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+							<path stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16"></path>
+						</svg>
+					</label>
 				</div>
-				<nav class="max-w-3xl mx-auto px-2 flex gap-1 text-sm overflow-x-auto">
-					@navLink("/", "Dashboard")
-					@navLink("/appointments", "Appointments")
-					@navLink("/recordings", "Recordings")
-					@navLink("/resources", "Research")
-					@navLink("/providers", "Providers")
-					@navLink("/pt", "PT")
-					@navLink("/settings", "Settings")
+				<nav class="md:hidden hidden peer-checked:grid gap-0.5 border-t border-slate-200/70 bg-white/95 px-3 py-2 text-sm font-medium text-slate-700">
+					@navLinks()
 				</nav>
 			</header>
 			<main class="max-w-3xl mx-auto w-full px-4 py-6 flex-1">
 				{ children... }
 			</main>
-			<footer class="max-w-3xl mx-auto w-full px-4 py-6 text-xs text-slate-400">
+			<footer class="max-w-3xl mx-auto w-full px-4 py-8 text-xs text-slate-400">
 				Personal care-prep tool · not medical advice.
 			</footer>
 		</body>
 	</html>
 }
 
-templ navLink(href, text string) {
-	<a href={ templ.SafeURL(href) } class="px-3 py-2 rounded-t-md hover:bg-teal-600 whitespace-nowrap">{ text }</a>
+// navLinks is shared between the desktop row and the mobile drop-down.
+templ navLinks() {
+	@navLink("/", "Dashboard")
+	@navLink("/appointments", "Appointments")
+	@navLink("/recordings", "Recordings")
+	@navLink("/resources", "Research")
+	@navLink("/providers", "Providers")
+	@navLink("/pt", "PT")
+	@navLink("/settings", "Settings")
 }
 
-// pageHeader is a small reusable heading with an optional action slot.
+templ navLink(href, text string) {
+	<a href={ templ.SafeURL(href) } class="px-3 py-2 rounded-xl hover:bg-slate-100 hover:text-slate-900 transition whitespace-nowrap">{ text }</a>
+}
+
+// pageHeader is a reusable heading with an optional action slot.
 templ pageHeader(title string) {
-	<div class="flex items-center justify-between mb-4">
-		<h1 class="text-xl font-semibold text-slate-900">{ title }</h1>
-		<div class="flex gap-2">
+	<div class="flex items-center justify-between gap-3 mb-5">
+		<h1 class="text-2xl font-semibold tracking-tight text-slate-900">{ title }</h1>
+		<div class="flex gap-2 shrink-0">
 			{ children... }
 		</div>
 	</div>
 }
 
 templ btnLink(href, text string) {
-	<a href={ templ.SafeURL(href) } class="inline-flex items-center px-3 py-2 bg-teal-700 text-white text-sm rounded-md hover:bg-teal-800">{ text }</a>
+	<a href={ templ.SafeURL(href) } class="inline-flex items-center px-4 py-2.5 bg-teal-600 text-white text-sm font-medium rounded-xl shadow-sm shadow-teal-600/20 hover:bg-teal-700 active:scale-[.98] transition">{ text }</a>
 }
 
 // card is a generic white panel.
 templ card() {
-	<div class="bg-white rounded-lg shadow-sm border border-slate-200 p-4">
+	<div class="bg-white rounded-2xl shadow-sm ring-1 ring-slate-900/5 p-5">
 		{ children... }
 	</div>
 }
@@ -85,8 +112,8 @@ templ card() {
 // flash renders an inline error/notice fragment (also returned standalone over htmx).
 templ flash(kind, msg string) {
 	if kind == "error" {
-		<div class="rounded-md bg-red-50 border border-red-200 text-red-700 text-sm px-3 py-2">{ msg }</div>
+		<div class="rounded-xl bg-red-50 ring-1 ring-red-200 text-red-700 text-sm px-4 py-3">{ msg }</div>
 	} else {
-		<div class="rounded-md bg-amber-50 border border-amber-200 text-amber-800 text-sm px-3 py-2">{ msg }</div>
+		<div class="rounded-xl bg-amber-50 ring-1 ring-amber-200 text-amber-800 text-sm px-4 py-3">{ msg }</div>
 	}
 }

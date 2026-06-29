@@ -335,7 +335,7 @@ func SettingsPage(profile store.CaseProfile, set store.Settings, st SettingsStat
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 24, "\"></div></div><button class=\"px-3 py-2 bg-teal-700 text-white text-sm rounded-md hover:bg-teal-800\">Save</button></form><p class=\"text-xs text-slate-400 mt-3\">Keys are stored in your SQLite database (not echoed back here). Leave a key field blank to keep the saved value; environment variables act as a fallback.</p>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 24, "\"></div></div><button class=\"px-4 py-2.5 bg-teal-600 text-white text-sm font-medium rounded-xl shadow-sm shadow-teal-600/20 hover:bg-teal-700 active:scale-[.98] transition\">Save</button></form><p class=\"text-xs text-slate-400 mt-3\">Keys are stored in your SQLite database (not echoed back here). Leave a key field blank to keep the saved value; environment variables act as a fallback.</p>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -366,7 +366,7 @@ func SettingsPage(profile store.CaseProfile, set store.Settings, st SettingsStat
 					return templ_7745c5c3_Err
 				}
 				if st.AuthEnabled {
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 27, "<p class=\"text-sm text-slate-600 mb-3\">Login is required. Set via the <code>AUTH_PASSWORD</code> environment variable.</p><form method=\"post\" action=\"/logout\"><button class=\"px-3 py-2 bg-slate-200 text-slate-800 text-sm rounded-md hover:bg-slate-300\">Log out</button></form>")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 27, "<p class=\"text-sm text-slate-600 mb-3\">Login is required. Set via the <code>AUTH_PASSWORD</code> environment variable.</p><form method=\"post\" action=\"/logout\"><button class=\"px-4 py-2.5 bg-slate-100 text-slate-700 text-sm font-medium rounded-xl hover:bg-slate-200 active:scale-[.98] transition\">Log out</button></form>")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}

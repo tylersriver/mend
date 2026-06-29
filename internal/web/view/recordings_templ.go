@@ -111,7 +111,7 @@ func RecordingList(profile store.CaseProfile, recs []store.Recording, transcribe
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "\" class=\"block bg-white rounded-lg border border-slate-200 p-3 hover:border-teal-300\"><div class=\"flex justify-between items-center\"><span class=\"font-medium\">")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "\" class=\"block bg-white rounded-2xl border border-slate-200 p-3 hover:border-teal-300\"><div class=\"flex justify-between items-center\"><span class=\"font-medium\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -350,7 +350,7 @@ func RecordingForm(profile store.CaseProfile, appts []store.Appointment, selecte
 						}
 					}
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 25, "</select></div><!-- In-browser recorder (MediaRecorder). Falls back to the file input below. --><div class=\"rounded-md border border-slate-200 p-3\"><div class=\"flex items-center gap-3\"><button type=\"button\" id=\"rec-toggle\" class=\"px-3 py-2 bg-rose-600 text-white text-sm rounded-md hover:bg-rose-700\">● Record</button> <span id=\"rec-timer\" class=\"text-sm text-slate-500 tabular-nums\">0:00</span> <audio id=\"rec-preview\" controls class=\"hidden ml-auto\"></audio></div><p id=\"rec-msg\" class=\"text-xs text-slate-400 mt-2\">Tap Record to capture audio. It will attach below automatically.</p></div><div><label class=\"block text-xs font-medium text-slate-500\">Or upload an audio file</label> ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 25, "</select></div><!-- In-browser recorder (MediaRecorder). Falls back to the file input below. --><div class=\"rounded-xl border border-slate-200 p-3\"><div class=\"flex items-center gap-3\"><button type=\"button\" id=\"rec-toggle\" class=\"px-3 py-2 bg-rose-600 text-white text-sm rounded-xl hover:bg-rose-700\">● Record</button> <span id=\"rec-timer\" class=\"text-sm text-slate-500 tabular-nums\">0:00</span> <audio id=\"rec-preview\" controls class=\"hidden ml-auto\"></audio></div><p id=\"rec-msg\" class=\"text-xs text-slate-400 mt-2\">Tap Record to capture audio. It will attach below automatically.</p></div><div><label class=\"block text-xs font-medium text-slate-500\">Or upload an audio file</label> ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -372,7 +372,7 @@ func RecordingForm(profile store.CaseProfile, appts []store.Appointment, selecte
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 27, "\"></div><input type=\"hidden\" id=\"duration-input\" name=\"duration_sec\" value=\"0\"> <button class=\"px-3 py-2 bg-teal-700 text-white text-sm rounded-md hover:bg-teal-800\">Save recording</button> ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 27, "\"></div><input type=\"hidden\" id=\"duration-input\" name=\"duration_sec\" value=\"0\"> <button class=\"px-4 py-2.5 bg-teal-600 text-white text-sm font-medium rounded-xl shadow-sm shadow-teal-600/20 hover:bg-teal-700 active:scale-[.98] transition\">Save recording</button> ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -665,7 +665,7 @@ func RecordingStatus(r store.Recording, docs []store.AIDoc, transcribeEnabled, a
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 52, "\" class=\"mb-4\"><button class=\"px-3 py-2 bg-teal-700 text-white text-sm rounded-md hover:bg-teal-800\">Transcribe now</button></form>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 52, "\" class=\"mb-4\"><button class=\"px-4 py-2.5 bg-teal-600 text-white text-sm font-medium rounded-xl shadow-sm shadow-teal-600/20 hover:bg-teal-700 active:scale-[.98] transition\">Transcribe now</button></form>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -728,7 +728,7 @@ func RecordingStatus(r store.Recording, docs []store.AIDoc, transcribeEnabled, a
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 58, "\"><button class=\"px-3 py-2 bg-teal-700 text-white text-sm rounded-md hover:bg-teal-800\">Generate</button></form>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 58, "\"><button class=\"px-4 py-2.5 bg-teal-600 text-white text-sm font-medium rounded-xl shadow-sm shadow-teal-600/20 hover:bg-teal-700 active:scale-[.98] transition\">Generate</button></form>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}

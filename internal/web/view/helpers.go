@@ -12,7 +12,7 @@ import (
 )
 
 // inputCls is the shared Tailwind class set for text inputs/textareas/selects.
-const inputCls = "mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-teal-500 focus:ring-teal-500"
+const inputCls = "mt-1 block w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-400 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/30 focus:outline-none transition"
 
 func apptURL(id int64) string     { return "/appointments/" + strconv.FormatInt(id, 10) }
 func resourceURL(id int64) string { return "/resources/" + strconv.FormatInt(id, 10) }
