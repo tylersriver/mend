@@ -1,6 +1,7 @@
 package web
 
 import (
+	"context"
 	"io"
 	"log"
 	"net/http"
@@ -10,6 +11,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/tylersriver/mend/internal/research"
 	"github.com/tylersriver/mend/internal/store"
 	"github.com/tylersriver/mend/internal/web/view"
 )
@@ -183,9 +185,10 @@ func (s *Server) resourceSummarize(w http.ResponseWriter, r *http.Request) {
 		http.NotFound(w, r)
 		return
 	}
-	body := res.Summary
-	if body == "" {
-		body = res.Title
+	body, note := s.summarizeSource(r.Context(), res)
+	if note != "" {
+		s.render(w, r, view.SummaryBody(note))
+		return
 	}
 	if err := s.aiSvc().SummarizeResource(r.Context(), id, body); err != nil {
 		log.Printf("web: summarize resource %d: %v", id, err)
@@ -194,6 +197,37 @@ func (s *Server) resourceSummarize(w http.ResponseWriter, r *http.Request) {
 	}
 	res, _ = s.store.Resource(r.Context(), id)
 	s.render(w, r, view.SummaryBody(res.Summary))
+}
+
+// researchClient fetches resource URLs for AI summarization (video transcripts,
+// article text). Generous timeout: a transcript is a second request.
+var researchClient = &http.Client{Timeout: 25 * time.Second}
+
+// summarizeSource picks the best text to summarize for a resource. For a link or
+// video with a URL it fetches the page/transcript (a YouTube link alone gives the
+// model nothing); on failure it falls back to any notes, then the title. The
+// returned note (if non-empty) is a ready-to-render message to show instead of
+// summarizing — used when there's genuinely nothing to work with.
+func (s *Server) summarizeSource(ctx context.Context, res store.Resource) (body, note string) {
+	if res.URL != "" && (res.Kind == "video" || res.Kind == "link") {
+		text, err := research.SourceText(ctx, researchClient, res.URL)
+		if err == nil && strings.TrimSpace(text) != "" {
+			return text, ""
+		}
+		log.Printf("web: fetch source for resource %d (%s): %v", res.ID, res.URL, err)
+		if strings.TrimSpace(res.Summary) == "" {
+			kind := "page"
+			if res.Kind == "video" {
+				kind = "video (it may have no captions)"
+			}
+			return "", "_Couldn't read the " + kind + " automatically. Paste the transcript " +
+				"or a description into Notes, then summarize again._"
+		}
+	}
+	if strings.TrimSpace(res.Summary) != "" {
+		return res.Summary, ""
+	}
+	return res.Title, ""
 }
 
 // --- Providers --------------------------------------------------------------
