@@ -8,22 +8,22 @@ templ ProviderList(profile store.CaseProfile, providers []store.Provider) {
 			@btnLink("/providers/new", "+ New")
 		}
 		if len(providers) == 0 {
-			<p class="text-sm text-slate-400">No providers yet.</p>
+			<p class="text-sm text-slate-400 dark:text-slate-500">No providers yet.</p>
 		} else {
 			<ul class="space-y-2">
 				for _, p := range providers {
-					<li class="bg-white rounded-2xl border border-slate-200 p-3">
+					<li class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-3">
 						<div class="flex justify-between items-center">
 							<span class="font-medium">{ p.Name }</span>
 							if p.Specialty != "" {
-								<span class="text-xs text-slate-500">{ p.Specialty }</span>
+								<span class="text-xs text-slate-500 dark:text-slate-400">{ p.Specialty }</span>
 							}
 						</div>
 						if p.Clinic != "" {
-							<p class="text-xs text-slate-500 mt-1">{ p.Clinic }</p>
+							<p class="text-xs text-slate-500 dark:text-slate-400 mt-1">{ p.Clinic }</p>
 						}
 						if p.Contact != "" {
-							<p class="text-xs text-slate-500">{ p.Contact }</p>
+							<p class="text-xs text-slate-500 dark:text-slate-400">{ p.Contact }</p>
 						}
 					</li>
 				}
@@ -39,23 +39,23 @@ templ ProviderForm(profile store.CaseProfile) {
 		@card() {
 			<form method="post" action="/providers" class="space-y-4">
 				<div>
-					<label class="block text-xs font-medium text-slate-500">Name</label>
+					<label class="block text-xs font-medium text-slate-500 dark:text-slate-400">Name</label>
 					<input name="name" required class={ inputCls }/>
 				</div>
 				<div>
-					<label class="block text-xs font-medium text-slate-500">Specialty</label>
+					<label class="block text-xs font-medium text-slate-500 dark:text-slate-400">Specialty</label>
 					<input name="specialty" placeholder="orthopedic surgeon · physical therapist · radiologist" class={ inputCls }/>
 				</div>
 				<div>
-					<label class="block text-xs font-medium text-slate-500">Clinic</label>
+					<label class="block text-xs font-medium text-slate-500 dark:text-slate-400">Clinic</label>
 					<input name="clinic" class={ inputCls }/>
 				</div>
 				<div>
-					<label class="block text-xs font-medium text-slate-500">Contact</label>
+					<label class="block text-xs font-medium text-slate-500 dark:text-slate-400">Contact</label>
 					<input name="contact" class={ inputCls }/>
 				</div>
 				<div>
-					<label class="block text-xs font-medium text-slate-500">Notes</label>
+					<label class="block text-xs font-medium text-slate-500 dark:text-slate-400">Notes</label>
 					<textarea name="notes" rows="3" class={ inputCls }></textarea>
 				</div>
 				<button class="px-4 py-2.5 bg-teal-600 text-white text-sm font-medium rounded-xl shadow-sm shadow-teal-600/20 hover:bg-teal-700 active:scale-[.98] transition">Save</button>

@@ -14,7 +14,7 @@ import (
 // inputCls is the shared Tailwind class set for text inputs/textareas/selects.
 // min-w-0 + max-w-full keep native date/datetime/select controls from overflowing
 // their (often flex) container on iOS Safari, where they have a wide intrinsic size.
-const inputCls = "mt-1 block w-full min-w-0 max-w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-400 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/30 focus:outline-none transition"
+const inputCls = "mt-1 block w-full min-w-0 max-w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3.5 py-2.5 text-sm text-slate-900 dark:text-slate-100 shadow-sm placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/30 focus:outline-none transition"
 
 func apptURL(id int64) string     { return "/appointments/" + strconv.FormatInt(id, 10) }
 func resourceURL(id int64) string { return "/resources/" + strconv.FormatInt(id, 10) }
@@ -148,15 +148,15 @@ func label(s string) string {
 	return strings.ToUpper(s[:1]) + s[1:]
 }
 
-// statusClasses maps an appointment status to Tailwind badge colors.
+// statusClasses maps an appointment status to Tailwind badge colors (light + dark).
 func statusClasses(status string) string {
 	switch status {
 	case "completed":
-		return "bg-green-100 text-green-800"
+		return "bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300"
 	case "cancelled":
-		return "bg-gray-100 text-gray-600"
+		return "bg-gray-100 text-gray-600 dark:bg-slate-800 dark:text-slate-400"
 	default: // upcoming
-		return "bg-blue-100 text-blue-800"
+		return "bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300"
 	}
 }
 
@@ -164,13 +164,13 @@ func statusClasses(status string) string {
 func recStatusClasses(status string) string {
 	switch status {
 	case "done":
-		return "bg-green-100 text-green-800"
+		return "bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300"
 	case "failed":
-		return "bg-red-100 text-red-700"
+		return "bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300"
 	case "processing":
-		return "bg-amber-100 text-amber-800"
+		return "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300"
 	default: // pending
-		return "bg-slate-100 text-slate-600"
+		return "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300"
 	}
 }
 

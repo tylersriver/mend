@@ -83,14 +83,14 @@ func Dashboard(profile store.CaseProfile, upcoming []store.Appointment, recent [
 					}()
 				}
 				ctx = templ.InitializeContext(ctx)
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "<div class=\"flex items-start justify-between gap-3\"><div class=\"min-w-0\"><p class=\"text-xs font-semibold text-slate-400 uppercase tracking-wide\">Case profile</p><h2 class=\"text-lg font-semibold text-slate-900 mt-0.5 truncate\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "<div class=\"flex items-start justify-between gap-3\"><div class=\"min-w-0\"><p class=\"text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wide\">Case profile</p><h2 class=\"text-lg font-semibold text-slate-900 dark:text-slate-100 mt-0.5 truncate\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var4 string
 				templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(profile.InjuryName)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/dashboard.templ`, Line: 21, Col: 92}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/dashboard.templ`, Line: 21, Col: 112}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 				if templ_7745c5c3_Err != nil {
@@ -101,14 +101,14 @@ func Dashboard(profile store.CaseProfile, upcoming []store.Appointment, recent [
 					return templ_7745c5c3_Err
 				}
 				if profile.WorkingDiagnosis != "" {
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "<p class=\"text-sm text-slate-600 mt-1 whitespace-pre-wrap\">")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "<p class=\"text-sm text-slate-600 dark:text-slate-300 mt-1 whitespace-pre-wrap\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 					var templ_7745c5c3_Var5 string
 					templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(profile.WorkingDiagnosis)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/dashboard.templ`, Line: 23, Col: 93}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/dashboard.templ`, Line: 23, Col: 113}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 					if templ_7745c5c3_Err != nil {
@@ -119,20 +119,20 @@ func Dashboard(profile store.CaseProfile, upcoming []store.Appointment, recent [
 						return templ_7745c5c3_Err
 					}
 				} else {
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "<p class=\"text-sm text-slate-400 mt-1\">No working diagnosis recorded yet.</p>")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "<p class=\"text-sm text-slate-400 dark:text-slate-500 mt-1\">No working diagnosis recorded yet.</p>")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 				}
 				if profile.OnsetOn != "" {
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "<p class=\"text-xs text-slate-400 mt-3\">Onset · ")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "<p class=\"text-xs text-slate-400 dark:text-slate-500 mt-3\">Onset · ")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 					var templ_7745c5c3_Var6 string
 					templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(humanTime(profile.OnsetOn))
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/dashboard.templ`, Line: 28, Col: 84}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/dashboard.templ`, Line: 28, Col: 104}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 					if templ_7745c5c3_Err != nil {
@@ -143,7 +143,7 @@ func Dashboard(profile store.CaseProfile, upcoming []store.Appointment, recent [
 						return templ_7745c5c3_Err
 					}
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "</div><label for=\"edit-profile\" class=\"shrink-0 inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-teal-700 rounded-xl hover:bg-teal-50 cursor-pointer transition\"><svg class=\"w-4 h-4\" fill=\"none\" viewBox=\"0 0 24 24\" stroke=\"currentColor\" stroke-width=\"2\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z\"></path></svg> Edit</label></div>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "</div><label for=\"edit-profile\" class=\"shrink-0 inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-teal-700 dark:text-teal-400 rounded-xl hover:bg-teal-50 dark:hover:bg-slate-800 cursor-pointer transition\"><svg class=\"w-4 h-4\" fill=\"none\" viewBox=\"0 0 24 24\" stroke=\"currentColor\" stroke-width=\"2\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z\"></path></svg> Edit</label></div>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -169,7 +169,7 @@ func Dashboard(profile store.CaseProfile, upcoming []store.Appointment, recent [
 					}()
 				}
 				ctx = templ.InitializeContext(ctx)
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 15, "<div class=\"flex items-center justify-between mb-3\"><h2 class=\"text-sm font-semibold text-slate-500 uppercase tracking-wide\">Edit case profile</h2><label for=\"edit-profile\" class=\"text-sm text-slate-500 hover:text-slate-700 cursor-pointer\">Cancel</label></div><form method=\"post\" action=\"/profile\" class=\"space-y-3\"><div><label class=\"block text-xs font-medium text-slate-500\">Injury</label> ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 15, "<div class=\"flex items-center justify-between mb-3\"><h2 class=\"text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide\">Edit case profile</h2><label for=\"edit-profile\" class=\"text-sm text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 cursor-pointer\">Cancel</label></div><form method=\"post\" action=\"/profile\" class=\"space-y-3\"><div><label class=\"block text-xs font-medium text-slate-500 dark:text-slate-400\">Injury</label> ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -204,7 +204,7 @@ func Dashboard(profile store.CaseProfile, upcoming []store.Appointment, recent [
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, "\"></div><div><label class=\"block text-xs font-medium text-slate-500\">Working diagnosis</label> ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, "\"></div><div><label class=\"block text-xs font-medium text-slate-500 dark:text-slate-400\">Working diagnosis</label> ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -239,7 +239,7 @@ func Dashboard(profile store.CaseProfile, upcoming []store.Appointment, recent [
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 21, "</textarea></div><div><label class=\"block text-xs font-medium text-slate-500\">Onset</label> ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 21, "</textarea></div><div><label class=\"block text-xs font-medium text-slate-500 dark:text-slate-400\">Onset</label> ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -284,7 +284,7 @@ func Dashboard(profile store.CaseProfile, upcoming []store.Appointment, recent [
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 25, "</div></section><section class=\"mb-6\"><div class=\"flex items-center justify-between mb-2\"><h2 class=\"text-sm font-semibold text-slate-500 uppercase tracking-wide\">Upcoming appointments</h2>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 25, "</div></section><section class=\"mb-6\"><div class=\"flex items-center justify-between mb-2\"><h2 class=\"text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide\">Upcoming appointments</h2>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -297,7 +297,7 @@ func Dashboard(profile store.CaseProfile, upcoming []store.Appointment, recent [
 				return templ_7745c5c3_Err
 			}
 			if len(upcoming) == 0 {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 27, "<p class=\"text-sm text-slate-400\">Nothing scheduled. Add an appointment to start prepping.</p>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 27, "<p class=\"text-sm text-slate-400 dark:text-slate-500\">Nothing scheduled. Add an appointment to start prepping.</p>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -320,7 +320,7 @@ func Dashboard(profile store.CaseProfile, upcoming []store.Appointment, recent [
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 30, "\" class=\"block bg-white rounded-2xl border border-slate-200 p-3 hover:border-teal-300\"><div class=\"flex justify-between items-center\"><span class=\"font-medium\">")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 30, "\" class=\"block bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-3 hover:border-teal-300 dark:hover:border-teal-700\"><div class=\"flex justify-between items-center\"><span class=\"font-medium\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -333,27 +333,27 @@ func Dashboard(profile store.CaseProfile, upcoming []store.Appointment, recent [
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 31, "</span> <span class=\"text-xs text-slate-500\">")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 31, "</span> <span class=\"text-xs text-slate-500 dark:text-slate-400\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 					var templ_7745c5c3_Var19 string
 					templ_7745c5c3_Var19, templ_7745c5c3_Err = templ.JoinStringErrs(humanTime(a.ScheduledAt))
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/dashboard.templ`, Line: 78, Col: 72}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/dashboard.templ`, Line: 78, Col: 92}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var19))
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 32, "</span></div><span class=\"text-xs text-slate-500\">")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 32, "</span></div><span class=\"text-xs text-slate-500 dark:text-slate-400\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 					var templ_7745c5c3_Var20 string
 					templ_7745c5c3_Var20, templ_7745c5c3_Err = templ.JoinStringErrs(label(a.Kind))
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/dashboard.templ`, Line: 80, Col: 60}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/dashboard.templ`, Line: 80, Col: 80}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var20))
 					if templ_7745c5c3_Err != nil {
@@ -369,7 +369,7 @@ func Dashboard(profile store.CaseProfile, upcoming []store.Appointment, recent [
 					return templ_7745c5c3_Err
 				}
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 35, "</section><section><div class=\"flex items-center justify-between mb-2\"><h2 class=\"text-sm font-semibold text-slate-500 uppercase tracking-wide\">Recent research</h2>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 35, "</section><section><div class=\"flex items-center justify-between mb-2\"><h2 class=\"text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide\">Recent research</h2>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -382,7 +382,7 @@ func Dashboard(profile store.CaseProfile, upcoming []store.Appointment, recent [
 				return templ_7745c5c3_Err
 			}
 			if len(recent) == 0 {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 37, "<p class=\"text-sm text-slate-400\">No research saved yet.</p>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 37, "<p class=\"text-sm text-slate-400 dark:text-slate-500\">No research saved yet.</p>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -405,7 +405,7 @@ func Dashboard(profile store.CaseProfile, upcoming []store.Appointment, recent [
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 40, "\" class=\"block bg-white rounded-2xl border border-slate-200 p-3 hover:border-teal-300\"><span class=\"font-medium\">")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 40, "\" class=\"block bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-3 hover:border-teal-300 dark:hover:border-teal-700\"><span class=\"font-medium\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -418,14 +418,14 @@ func Dashboard(profile store.CaseProfile, upcoming []store.Appointment, recent [
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 41, "</span> <span class=\"ml-2 text-xs text-slate-400\">")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 41, "</span> <span class=\"ml-2 text-xs text-slate-400 dark:text-slate-500\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 					var templ_7745c5c3_Var23 string
 					templ_7745c5c3_Var23, templ_7745c5c3_Err = templ.JoinStringErrs(label(r.Kind))
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/dashboard.templ`, Line: 100, Col: 65}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/dashboard.templ`, Line: 100, Col: 85}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var23))
 					if templ_7745c5c3_Err != nil {

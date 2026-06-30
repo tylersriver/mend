@@ -70,7 +70,7 @@ func ProviderList(profile store.CaseProfile, providers []store.Provider) templ.C
 				return templ_7745c5c3_Err
 			}
 			if len(providers) == 0 {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<p class=\"text-sm text-slate-400\">No providers yet.</p>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<p class=\"text-sm text-slate-400 dark:text-slate-500\">No providers yet.</p>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -80,7 +80,7 @@ func ProviderList(profile store.CaseProfile, providers []store.Provider) templ.C
 					return templ_7745c5c3_Err
 				}
 				for _, p := range providers {
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<li class=\"bg-white rounded-2xl border border-slate-200 p-3\"><div class=\"flex justify-between items-center\"><span class=\"font-medium\">")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<li class=\"bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-3\"><div class=\"flex justify-between items-center\"><span class=\"font-medium\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -98,14 +98,14 @@ func ProviderList(profile store.CaseProfile, providers []store.Provider) templ.C
 						return templ_7745c5c3_Err
 					}
 					if p.Specialty != "" {
-						templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "<span class=\"text-xs text-slate-500\">")
+						templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "<span class=\"text-xs text-slate-500 dark:text-slate-400\">")
 						if templ_7745c5c3_Err != nil {
 							return templ_7745c5c3_Err
 						}
 						var templ_7745c5c3_Var5 string
 						templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(p.Specialty)
 						if templ_7745c5c3_Err != nil {
-							return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/providers.templ`, Line: 19, Col: 58}
+							return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/providers.templ`, Line: 19, Col: 78}
 						}
 						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 						if templ_7745c5c3_Err != nil {
@@ -121,14 +121,14 @@ func ProviderList(profile store.CaseProfile, providers []store.Provider) templ.C
 						return templ_7745c5c3_Err
 					}
 					if p.Clinic != "" {
-						templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "<p class=\"text-xs text-slate-500 mt-1\">")
+						templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "<p class=\"text-xs text-slate-500 dark:text-slate-400 mt-1\">")
 						if templ_7745c5c3_Err != nil {
 							return templ_7745c5c3_Err
 						}
 						var templ_7745c5c3_Var6 string
 						templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(p.Clinic)
 						if templ_7745c5c3_Err != nil {
-							return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/providers.templ`, Line: 23, Col: 56}
+							return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/providers.templ`, Line: 23, Col: 76}
 						}
 						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 						if templ_7745c5c3_Err != nil {
@@ -140,14 +140,14 @@ func ProviderList(profile store.CaseProfile, providers []store.Provider) templ.C
 						}
 					}
 					if p.Contact != "" {
-						templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "<p class=\"text-xs text-slate-500\">")
+						templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "<p class=\"text-xs text-slate-500 dark:text-slate-400\">")
 						if templ_7745c5c3_Err != nil {
 							return templ_7745c5c3_Err
 						}
 						var templ_7745c5c3_Var7 string
 						templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(p.Contact)
 						if templ_7745c5c3_Err != nil {
-							return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/providers.templ`, Line: 26, Col: 52}
+							return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/providers.templ`, Line: 26, Col: 72}
 						}
 						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 						if templ_7745c5c3_Err != nil {
@@ -245,7 +245,7 @@ func ProviderForm(profile store.CaseProfile) templ.Component {
 					}()
 				}
 				ctx = templ.InitializeContext(ctx)
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "<form method=\"post\" action=\"/providers\" class=\"space-y-4\"><div><label class=\"block text-xs font-medium text-slate-500\">Name</label> ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "<form method=\"post\" action=\"/providers\" class=\"space-y-4\"><div><label class=\"block text-xs font-medium text-slate-500 dark:text-slate-400\">Name</label> ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -267,7 +267,7 @@ func ProviderForm(profile store.CaseProfile) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, "\"></div><div><label class=\"block text-xs font-medium text-slate-500\">Specialty</label> ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, "\"></div><div><label class=\"block text-xs font-medium text-slate-500 dark:text-slate-400\">Specialty</label> ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -289,7 +289,7 @@ func ProviderForm(profile store.CaseProfile) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, "\"></div><div><label class=\"block text-xs font-medium text-slate-500\">Clinic</label> ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, "\"></div><div><label class=\"block text-xs font-medium text-slate-500 dark:text-slate-400\">Clinic</label> ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -311,7 +311,7 @@ func ProviderForm(profile store.CaseProfile) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 22, "\"></div><div><label class=\"block text-xs font-medium text-slate-500\">Contact</label> ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 22, "\"></div><div><label class=\"block text-xs font-medium text-slate-500 dark:text-slate-400\">Contact</label> ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -333,7 +333,7 @@ func ProviderForm(profile store.CaseProfile) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 24, "\"></div><div><label class=\"block text-xs font-medium text-slate-500\">Notes</label> ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 24, "\"></div><div><label class=\"block text-xs font-medium text-slate-500 dark:text-slate-400\">Notes</label> ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}

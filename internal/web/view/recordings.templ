@@ -13,17 +13,17 @@ templ RecordingList(profile store.CaseProfile, recs []store.Recording, transcrib
 			</div>
 		}
 		if len(recs) == 0 {
-			<p class="text-sm text-slate-400">No recordings yet. Record or upload an appointment to get a transcript, highlights, and a task list.</p>
+			<p class="text-sm text-slate-400 dark:text-slate-500">No recordings yet. Record or upload an appointment to get a transcript, highlights, and a task list.</p>
 		} else {
 			<ul class="space-y-2">
 				for _, r := range recs {
 					<li>
-						<a href={ templ.SafeURL(recordingURL(r.ID)) } class="block bg-white rounded-2xl border border-slate-200 p-3 hover:border-teal-300">
+						<a href={ templ.SafeURL(recordingURL(r.ID)) } class="block bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-3 hover:border-teal-300 dark:hover:border-teal-700">
 							<div class="flex justify-between items-center">
 								<span class="font-medium">{ recordingLabel(r) }</span>
 								<span class={ "text-xs px-2 py-0.5 rounded-full " + recStatusClasses(r.TranscriptStatus) }>{ label(r.TranscriptStatus) }</span>
 							</div>
-							<span class="text-xs text-slate-500">{ humanTime(r.CreatedAt) }</span>
+							<span class="text-xs text-slate-500 dark:text-slate-400">{ humanTime(r.CreatedAt) }</span>
 						</a>
 					</li>
 				}
@@ -39,7 +39,7 @@ templ RecordingForm(profile store.CaseProfile, appts []store.Appointment, select
 		@card() {
 			<form method="post" action="/recordings" enctype="multipart/form-data" class="space-y-4">
 				<div>
-					<label class="block text-xs font-medium text-slate-500">Link to appointment</label>
+					<label class="block text-xs font-medium text-slate-500 dark:text-slate-400">Link to appointment</label>
 					<select name="appointment_id" class={ inputCls }>
 						<option value="0">— none —</option>
 						for _, a := range appts {
@@ -52,26 +52,26 @@ templ RecordingForm(profile store.CaseProfile, appts []store.Appointment, select
 					</select>
 				</div>
 				<!-- In-browser recorder (MediaRecorder). Falls back to the file input below. -->
-				<div class="rounded-xl border border-slate-200 p-3">
+				<div class="rounded-xl border border-slate-200 dark:border-slate-800 p-3">
 					<div class="flex items-center gap-3">
 						<button type="button" id="rec-toggle" class="px-3 py-2 bg-rose-600 text-white text-sm rounded-xl hover:bg-rose-700">● Record</button>
-						<span id="rec-timer" class="text-sm text-slate-500 tabular-nums">0:00</span>
+						<span id="rec-timer" class="text-sm text-slate-500 dark:text-slate-400 tabular-nums">0:00</span>
 						<audio id="rec-preview" controls class="hidden ml-auto"></audio>
 					</div>
-					<p id="rec-msg" class="text-xs text-slate-400 mt-2">Tap Record to capture audio. It will attach below automatically.</p>
+					<p id="rec-msg" class="text-xs text-slate-400 dark:text-slate-500 mt-2">Tap Record to capture audio. It will attach below automatically.</p>
 				</div>
 				<div>
-					<label class="block text-xs font-medium text-slate-500">Or upload an audio file</label>
+					<label class="block text-xs font-medium text-slate-500 dark:text-slate-400">Or upload an audio file</label>
 					<input id="audio-input" name="audio" type="file" accept="audio/*" class={ inputCls }/>
 				</div>
 				<input type="hidden" id="duration-input" name="duration_sec" value="0"/>
 				<button class="px-4 py-2.5 bg-teal-600 text-white text-sm font-medium rounded-xl shadow-sm shadow-teal-600/20 hover:bg-teal-700 active:scale-[.98] transition">Save recording</button>
 				if transcribeEnabled {
-					<p class="text-xs text-slate-400">After saving, transcription runs automatically and the page will update.</p>
+					<p class="text-xs text-slate-400 dark:text-slate-500">After saving, transcription runs automatically and the page will update.</p>
 				}
 			</form>
 		}
-		<p class="text-xs text-slate-400 mt-3">
+		<p class="text-xs text-slate-400 dark:text-slate-500 mt-3">
 			Recording your own visit is legal in one-party-consent states, but a quick
 			"mind if I record this for my notes?" is the courteous habit. Audio is the
 			most sensitive data here — you can delete the audio once a transcript exists.
@@ -84,8 +84,8 @@ templ RecordingDetail(profile store.CaseProfile, r store.Recording, docs []store
 	@Layout("Recording", profile) {
 		<div class="flex items-center justify-between mb-4">
 			<div>
-				<h1 class="text-xl font-semibold text-slate-900">{ recordingLabel(r) }</h1>
-				<p class="text-sm text-slate-500">{ humanTime(r.CreatedAt) }</p>
+				<h1 class="text-xl font-semibold text-slate-900 dark:text-slate-100">{ recordingLabel(r) }</h1>
+				<p class="text-sm text-slate-500 dark:text-slate-400">{ humanTime(r.CreatedAt) }</p>
 			</div>
 			<form method="post" action={ templ.SafeURL(recordingURL(r.ID) + "/delete") } onsubmit="return confirm('Delete this recording and its audio?')">
 				<button class="text-xs text-red-600 underline">Delete</button>
@@ -117,13 +117,13 @@ templ RecordingStatus(r store.Recording, docs []store.AIDoc, transcribeEnabled, 
 		<div class="flex items-center gap-2 mb-3">
 			<span class={ "text-xs px-2 py-0.5 rounded-full " + recStatusClasses(r.TranscriptStatus) }>{ label(r.TranscriptStatus) }</span>
 			if r.TranscriptStatus == "processing" {
-				<span class="text-sm text-slate-400">Transcribing… this can take a minute.</span>
+				<span class="text-sm text-slate-400 dark:text-slate-500">Transcribing… this can take a minute.</span>
 			}
 			if r.TranscriptStatus == "pending" && transcribeEnabled {
-				<span class="text-sm text-slate-400">Queued…</span>
+				<span class="text-sm text-slate-400 dark:text-slate-500">Queued…</span>
 			}
 			if r.TranscriptStatus == "pending" && !transcribeEnabled {
-				<span class="text-sm text-slate-400">Transcription not configured.</span>
+				<span class="text-sm text-slate-400 dark:text-slate-500">Transcription not configured.</span>
 			}
 		</div>
 		if r.TranscriptStatus == "failed" {
@@ -138,14 +138,14 @@ templ RecordingStatus(r store.Recording, docs []store.AIDoc, transcribeEnabled, 
 		}
 		if r.Transcript != "" {
 			<section class="mb-6">
-				<h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-2">Transcript</h2>
+				<h2 class="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-2">Transcript</h2>
 				@card() {
 					<p class="whitespace-pre-wrap text-sm leading-relaxed">{ r.Transcript }</p>
 				}
 			</section>
 			<section>
 				<div class="flex items-center justify-between mb-2">
-					<h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wide">Highlights & tasks</h2>
+					<h2 class="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Highlights & tasks</h2>
 					if aiEnabled && len(docs) == 0 {
 						<form method="post" action={ templ.SafeURL(recordingURL(r.ID) + "/summarize") }>
 							<button class="px-4 py-2.5 bg-teal-600 text-white text-sm font-medium rounded-xl shadow-sm shadow-teal-600/20 hover:bg-teal-700 active:scale-[.98] transition">Generate</button>
@@ -154,9 +154,9 @@ templ RecordingStatus(r store.Recording, docs []store.AIDoc, transcribeEnabled, 
 				</div>
 				if len(docs) == 0 {
 					if aiEnabled {
-						<p class="text-sm text-slate-400">No AI documents yet — generate highlights and a task list from this transcript.</p>
+						<p class="text-sm text-slate-400 dark:text-slate-500">No AI documents yet — generate highlights and a task list from this transcript.</p>
 					} else {
-						<p class="text-sm text-slate-400">Set ANTHROPIC_API_KEY to generate highlights and tasks.</p>
+						<p class="text-sm text-slate-400 dark:text-slate-500">Set ANTHROPIC_API_KEY to generate highlights and tasks.</p>
 					}
 				} else {
 					<div class="space-y-3">

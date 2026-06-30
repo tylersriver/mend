@@ -17,18 +17,18 @@ templ Dashboard(profile store.CaseProfile, upcoming []store.Appointment, recent 
 				@card() {
 					<div class="flex items-start justify-between gap-3">
 						<div class="min-w-0">
-							<p class="text-xs font-semibold text-slate-400 uppercase tracking-wide">Case profile</p>
-							<h2 class="text-lg font-semibold text-slate-900 mt-0.5 truncate">{ profile.InjuryName }</h2>
+							<p class="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wide">Case profile</p>
+							<h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mt-0.5 truncate">{ profile.InjuryName }</h2>
 							if profile.WorkingDiagnosis != "" {
-								<p class="text-sm text-slate-600 mt-1 whitespace-pre-wrap">{ profile.WorkingDiagnosis }</p>
+								<p class="text-sm text-slate-600 dark:text-slate-300 mt-1 whitespace-pre-wrap">{ profile.WorkingDiagnosis }</p>
 							} else {
-								<p class="text-sm text-slate-400 mt-1">No working diagnosis recorded yet.</p>
+								<p class="text-sm text-slate-400 dark:text-slate-500 mt-1">No working diagnosis recorded yet.</p>
 							}
 							if profile.OnsetOn != "" {
-								<p class="text-xs text-slate-400 mt-3">Onset · { humanTime(profile.OnsetOn) }</p>
+								<p class="text-xs text-slate-400 dark:text-slate-500 mt-3">Onset · { humanTime(profile.OnsetOn) }</p>
 							}
 						</div>
-						<label for="edit-profile" class="shrink-0 inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-teal-700 rounded-xl hover:bg-teal-50 cursor-pointer transition">
+						<label for="edit-profile" class="shrink-0 inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-teal-700 dark:text-teal-400 rounded-xl hover:bg-teal-50 dark:hover:bg-slate-800 cursor-pointer transition">
 							<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 								<path stroke-linecap="round" stroke-linejoin="round" d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"></path>
 							</svg>
@@ -40,20 +40,20 @@ templ Dashboard(profile store.CaseProfile, upcoming []store.Appointment, recent 
 			<div class="hidden peer-checked:block">
 				@card() {
 					<div class="flex items-center justify-between mb-3">
-						<h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wide">Edit case profile</h2>
-						<label for="edit-profile" class="text-sm text-slate-500 hover:text-slate-700 cursor-pointer">Cancel</label>
+						<h2 class="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Edit case profile</h2>
+						<label for="edit-profile" class="text-sm text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 cursor-pointer">Cancel</label>
 					</div>
 					<form method="post" action="/profile" class="space-y-3">
 						<div>
-							<label class="block text-xs font-medium text-slate-500">Injury</label>
+							<label class="block text-xs font-medium text-slate-500 dark:text-slate-400">Injury</label>
 							<input name="injury_name" value={ profile.InjuryName } class={ inputCls }/>
 						</div>
 						<div>
-							<label class="block text-xs font-medium text-slate-500">Working diagnosis</label>
+							<label class="block text-xs font-medium text-slate-500 dark:text-slate-400">Working diagnosis</label>
 							<textarea name="working_diagnosis" rows="3" class={ inputCls }>{ profile.WorkingDiagnosis }</textarea>
 						</div>
 						<div>
-							<label class="block text-xs font-medium text-slate-500">Onset</label>
+							<label class="block text-xs font-medium text-slate-500 dark:text-slate-400">Onset</label>
 							<input type="date" name="onset_on" value={ profile.OnsetOn } class={ inputCls }/>
 						</div>
 						<button class="px-4 py-2.5 bg-teal-600 text-white text-sm font-medium rounded-xl shadow-sm shadow-teal-600/20 hover:bg-teal-700 active:scale-[.98] transition">Save profile</button>
@@ -63,21 +63,21 @@ templ Dashboard(profile store.CaseProfile, upcoming []store.Appointment, recent 
 		</section>
 		<section class="mb-6">
 			<div class="flex items-center justify-between mb-2">
-				<h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wide">Upcoming appointments</h2>
+				<h2 class="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Upcoming appointments</h2>
 				@btnLink("/appointments/new", "+ New")
 			</div>
 			if len(upcoming) == 0 {
-				<p class="text-sm text-slate-400">Nothing scheduled. Add an appointment to start prepping.</p>
+				<p class="text-sm text-slate-400 dark:text-slate-500">Nothing scheduled. Add an appointment to start prepping.</p>
 			} else {
 				<ul class="space-y-2">
 					for _, a := range upcoming {
 						<li>
-							<a href={ templ.SafeURL(apptURL(a.ID)) } class="block bg-white rounded-2xl border border-slate-200 p-3 hover:border-teal-300">
+							<a href={ templ.SafeURL(apptURL(a.ID)) } class="block bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-3 hover:border-teal-300 dark:hover:border-teal-700">
 								<div class="flex justify-between items-center">
 									<span class="font-medium">{ providerOr(a) }</span>
-									<span class="text-xs text-slate-500">{ humanTime(a.ScheduledAt) }</span>
+									<span class="text-xs text-slate-500 dark:text-slate-400">{ humanTime(a.ScheduledAt) }</span>
 								</div>
-								<span class="text-xs text-slate-500">{ label(a.Kind) }</span>
+								<span class="text-xs text-slate-500 dark:text-slate-400">{ label(a.Kind) }</span>
 							</a>
 						</li>
 					}
@@ -86,18 +86,18 @@ templ Dashboard(profile store.CaseProfile, upcoming []store.Appointment, recent 
 		</section>
 		<section>
 			<div class="flex items-center justify-between mb-2">
-				<h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wide">Recent research</h2>
+				<h2 class="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Recent research</h2>
 				@btnLink("/resources/new", "+ Add")
 			</div>
 			if len(recent) == 0 {
-				<p class="text-sm text-slate-400">No research saved yet.</p>
+				<p class="text-sm text-slate-400 dark:text-slate-500">No research saved yet.</p>
 			} else {
 				<ul class="space-y-2">
 					for _, r := range recent {
 						<li>
-							<a href={ templ.SafeURL(resourceURL(r.ID)) } class="block bg-white rounded-2xl border border-slate-200 p-3 hover:border-teal-300">
+							<a href={ templ.SafeURL(resourceURL(r.ID)) } class="block bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-3 hover:border-teal-300 dark:hover:border-teal-700">
 								<span class="font-medium">{ r.Title }</span>
-								<span class="ml-2 text-xs text-slate-400">{ label(r.Kind) }</span>
+								<span class="ml-2 text-xs text-slate-400 dark:text-slate-500">{ label(r.Kind) }</span>
 							</a>
 						</li>
 					}
