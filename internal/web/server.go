@@ -177,6 +177,7 @@ func (s *Server) Routes() http.Handler {
 	mux.HandleFunc("GET /resources/new", s.resourceNew)
 	mux.HandleFunc("POST /resources", s.resourceCreate)
 	mux.HandleFunc("GET /resources/{id}", s.resourceDetail)
+	mux.HandleFunc("POST /resources/{id}", s.resourceUpdate)
 	mux.HandleFunc("GET /resources/{id}/file", s.resourceFile)
 	mux.HandleFunc("POST /resources/{id}/delete", s.resourceDelete)
 	mux.HandleFunc("POST /resources/{id}/summarize", s.resourceSummarize)
