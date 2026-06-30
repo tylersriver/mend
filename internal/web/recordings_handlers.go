@@ -53,13 +53,19 @@ func (s *Server) recordingCreate(w http.ResponseWriter, r *http.Request) {
 		s.fail(w, "save audio", err)
 		return
 	}
+	// A pasted transcript skips the audio pipeline entirely — store it as done.
+	if t := strings.TrimSpace(r.FormValue("transcript")); t != "" {
+		rec.Transcript = t
+		rec.TranscriptStatus = "done"
+	}
 	id, err := s.store.CreateRecording(r.Context(), rec)
 	if err != nil {
 		s.fail(w, "create recording", err)
 		return
 	}
-	// Kick off the pipeline off the request goroutine when we have audio + a transcriber.
-	if rec.AudioPath != "" && s.transcribeEnabled() {
+	// Kick off the pipeline off the request goroutine when we have audio still
+	// awaiting transcription and a transcriber (a pasted transcript is already done).
+	if rec.TranscriptStatus == "pending" && rec.AudioPath != "" && s.transcribeEnabled() {
 		go s.processor().Process(id)
 	}
 	http.Redirect(w, r, "/recordings/"+strconv.FormatInt(id, 10), http.StatusSeeOther)
@@ -203,6 +209,26 @@ func (s *Server) recordingTranscribe(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	go s.processor().Process(id)
+	http.Redirect(w, r, "/recordings/"+strconv.FormatInt(id, 10), http.StatusSeeOther)
+}
+
+// recordingTranscript saves a transcript pasted from another source, marking the
+// recording done without touching the audio pipeline.
+func (s *Server) recordingTranscript(w http.ResponseWriter, r *http.Request) {
+	id, ok := pathID(r)
+	if !ok {
+		http.NotFound(w, r)
+		return
+	}
+	text := strings.TrimSpace(r.FormValue("transcript"))
+	if text == "" {
+		http.Error(w, "transcript is required", http.StatusBadRequest)
+		return
+	}
+	if err := s.store.SaveTranscript(r.Context(), id, text, 0); err != nil {
+		s.fail(w, "save transcript", err)
+		return
+	}
 	http.Redirect(w, r, "/recordings/"+strconv.FormatInt(id, 10), http.StatusSeeOther)
 }
 

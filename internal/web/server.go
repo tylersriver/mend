@@ -172,6 +172,7 @@ func (s *Server) Routes() http.Handler {
 	mux.HandleFunc("GET /recordings/{id}/status", s.recordingStatus)
 	mux.HandleFunc("GET /recordings/{id}/audio", s.recordingAudio)
 	mux.HandleFunc("POST /recordings/{id}/transcribe", s.recordingTranscribe)
+	mux.HandleFunc("POST /recordings/{id}/transcript", s.recordingTranscript)
 	mux.HandleFunc("POST /recordings/{id}/summarize", s.recordingSummarize)
 	mux.HandleFunc("POST /recordings/{id}/audio/delete", s.recordingAudioDelete)
 	mux.HandleFunc("POST /recordings/{id}/delete", s.recordingDelete)
