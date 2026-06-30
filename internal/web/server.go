@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"runtime/debug"
 	"strconv"
+	"strings"
 	"sync"
 	"time"
 
@@ -65,8 +66,9 @@ func (s *Server) transcribeEnabled() bool {
 // effectiveAI is the resolved config used to build the clients: a DB setting wins
 // over the env default, which wins over nothing.
 type effectiveAI struct {
-	anthropicKey      string
+	aiKey             string
 	aiModel           string
+	aiBaseURL         string
 	transcribeKey     string
 	transcribeBaseURL string
 	transcribeModel   string
@@ -74,12 +76,21 @@ type effectiveAI struct {
 
 func (s *Server) effective(set store.Settings) effectiveAI {
 	return effectiveAI{
-		anthropicKey:      orStr(set.AnthropicAPIKey, s.env.APIKey),
+		aiKey:             orStr(set.AnthropicAPIKey, s.env.APIKey),
 		aiModel:           orStr(set.AIModel, s.env.AIModel),
+		aiBaseURL:         orStr(set.AIBaseURL, s.env.AIBaseURL),
 		transcribeKey:     orStr(set.TranscribeAPIKey, s.env.TranscribeAPIKey),
 		transcribeBaseURL: orStr(set.TranscribeBaseURL, s.env.TranscribeBaseURL),
 		transcribeModel:   orStr(set.TranscribeModel, s.env.TranscribeModel),
 	}
+}
+
+// openAICompatible reports whether an AI base URL should use the OpenAI
+// /chat/completions dialect (Groq, OpenAI, Together, …) rather than the default
+// Anthropic Messages API. An empty or Anthropic base URL means Anthropic.
+func openAICompatible(baseURL string) bool {
+	u := strings.TrimSpace(baseURL)
+	return u != "" && !strings.Contains(u, "anthropic.com")
 }
 
 // reconfigure rebuilds the AI service and transcription pipeline from the current
@@ -92,8 +103,14 @@ func (s *Server) reconfigure(ctx context.Context) error {
 	eff := s.effective(set)
 
 	var aiSvc *ai.Service
-	if eff.anthropicKey != "" {
-		aiSvc = ai.NewService(s.store, ai.New(eff.anthropicKey, eff.aiModel))
+	aiProvider := "anthropic"
+	if eff.aiKey != "" {
+		if openAICompatible(eff.aiBaseURL) {
+			aiProvider = "openai-compatible"
+			aiSvc = ai.NewService(s.store, ai.NewOpenAI(eff.aiKey, eff.aiBaseURL, eff.aiModel))
+		} else {
+			aiSvc = ai.NewService(s.store, ai.New(eff.aiKey, eff.aiModel))
+		}
 	}
 	var tr transcribe.Transcriber
 	if eff.transcribeKey != "" {
@@ -105,8 +122,8 @@ func (s *Server) reconfigure(ctx context.Context) error {
 	s.proc = recordings.NewProcessor(s.store, tr, aiSvc)
 	s.mu.Unlock()
 
-	log.Printf("config: ai=%t transcription=%t (ai_model=%s, transcribe_base=%s, transcribe_model=%s)",
-		aiSvc != nil, tr != nil, eff.aiModel, eff.transcribeBaseURL, eff.transcribeModel)
+	log.Printf("config: ai=%t (%s, model=%s) transcription=%t (transcribe_base=%s, transcribe_model=%s)",
+		aiSvc != nil, aiProvider, eff.aiModel, tr != nil, eff.transcribeBaseURL, eff.transcribeModel)
 
 	// If transcription is (now) enabled, pick up any recordings stuck in 'pending'
 	// — e.g. uploaded before the key was configured. The claim in Process keeps

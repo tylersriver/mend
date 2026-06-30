@@ -46,6 +46,15 @@ func providerOr(a store.Appointment) string {
 
 func itoa(id int64) string { return strconv.FormatInt(id, 10) }
 
+// aiBaseURLHint shows the effective default for the AI base URL field: the env
+// override if one is set, otherwise the implicit Anthropic endpoint.
+func aiBaseURLHint(envDefault string) string {
+	if envDefault != "" {
+		return envDefault
+	}
+	return "https://api.anthropic.com (default)"
+}
+
 // keyPlaceholder hints at a secret field's state without revealing the secret.
 func keyPlaceholder(dbValue string, envSet bool) string {
 	switch {

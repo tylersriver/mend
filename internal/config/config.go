@@ -12,8 +12,9 @@ type Config struct {
 	Addr    string // listen address, e.g. ":8080"
 	DBPath  string // SQLite file path
 	DataDir string // on-disk blob storage (uploads, recordings)
-	APIKey  string // ANTHROPIC_API_KEY — never stored in the DB
-	AIModel string // Anthropic model id used for care-prep flows
+	APIKey    string // AI API key (ANTHROPIC_API_KEY) used for care-prep flows
+	AIModel   string // model id used for care-prep flows
+	AIBaseURL string // empty = Anthropic Messages API; else an OpenAI-compatible base (e.g. Groq)
 
 	// Transcription (a Whisper-class API, kept separate from the Anthropic path).
 	// Provider-agnostic: any OpenAI-compatible /audio/transcriptions endpoint works.
@@ -34,8 +35,9 @@ func Load(args []string) *Config {
 		Addr:    envOr("ADDR", defaultAddr()),
 		DBPath:  envOr("DB_PATH", "data/mend.db"),
 		DataDir: envOr("DATA_DIR", "data"),
-		APIKey:  os.Getenv("ANTHROPIC_API_KEY"),
-		AIModel: envOr("AI_MODEL", "claude-opus-4-8"),
+		APIKey:    os.Getenv("ANTHROPIC_API_KEY"),
+		AIModel:   envOr("AI_MODEL", "claude-opus-4-8"),
+		AIBaseURL: os.Getenv("AI_BASE_URL"),
 
 		TranscribeAPIKey:  os.Getenv("TRANSCRIBE_API_KEY"),
 		TranscribeBaseURL: envOr("TRANSCRIBE_BASE_URL", "https://api.openai.com/v1"),

@@ -1,5 +1,6 @@
-// Package ai is a minimal, dependency-free client for the Anthropic Messages API
-// plus the care-prep flows the app needs. Single provider, one code path.
+// Package ai is a minimal, dependency-free client for the care-prep flows the app
+// needs. It speaks the Anthropic Messages API by default, or any OpenAI-compatible
+// /chat/completions endpoint (e.g. Groq) — see openai.go. Both satisfy Completer.
 package ai
 
 import (
@@ -66,6 +67,9 @@ type response struct {
 	} `json:"content"`
 	StopReason string `json:"stop_reason"`
 }
+
+// ModelID reports the model this client is configured to use.
+func (c *Client) ModelID() string { return c.Model }
 
 // Complete sends one request and returns the concatenated text content.
 func (c *Client) Complete(ctx context.Context, system []SystemBlock, msgs []Message, maxTokens int) (string, error) {
