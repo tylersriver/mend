@@ -7,9 +7,9 @@ import "github.com/tylersriver/mend/internal/store"
 templ AIDocEdit(profile store.CaseProfile, d store.AIDoc) {
 	@Layout("Edit "+docTitle(d), profile) {
 		<div class="flex items-center justify-between mb-4">
-			<h1 class="text-xl font-semibold text-slate-900">{ docTitle(d) }</h1>
+			<h1 class="text-xl font-semibold text-slate-900 dark:text-slate-100">{ docTitle(d) }</h1>
 			if backURL(d) != "" {
-				<a href={ templ.SafeURL(backURL(d)) } class="text-sm text-teal-700 underline">← Back</a>
+				<a href={ templ.SafeURL(backURL(d)) } class="text-sm text-teal-700 dark:text-teal-400 underline">← Back</a>
 			}
 		</div>
 		<div class="grid gap-4">
@@ -20,7 +20,7 @@ templ AIDocEdit(profile store.CaseProfile, d store.AIDoc) {
 				</form>
 			}
 			<div>
-				<h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-2">Preview</h2>
+				<h2 class="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-2">Preview</h2>
 				@card() {
 					<div class="prose prose-sm max-w-none">
 						@Markdown(d.Content)

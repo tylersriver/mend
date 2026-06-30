@@ -88,7 +88,7 @@ func RecordingList(profile store.CaseProfile, recs []store.Recording, transcribe
 				return templ_7745c5c3_Err
 			}
 			if len(recs) == 0 {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "<p class=\"text-sm text-slate-400\">No recordings yet. Record or upload an appointment to get a transcript, highlights, and a task list.</p>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "<p class=\"text-sm text-slate-400 dark:text-slate-500\">No recordings yet. Record or upload an appointment to get a transcript, highlights, and a task list.</p>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -111,7 +111,7 @@ func RecordingList(profile store.CaseProfile, recs []store.Recording, transcribe
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "\" class=\"block bg-white rounded-2xl border border-slate-200 p-3 hover:border-teal-300\"><div class=\"flex justify-between items-center\"><span class=\"font-medium\">")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "\" class=\"block bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-3 hover:border-teal-300 dark:hover:border-teal-700\"><div class=\"flex justify-between items-center\"><span class=\"font-medium\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -159,14 +159,14 @@ func RecordingList(profile store.CaseProfile, recs []store.Recording, transcribe
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "</span></div><span class=\"text-xs text-slate-500\">")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "</span></div><span class=\"text-xs text-slate-500 dark:text-slate-400\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 					var templ_7745c5c3_Var9 string
 					templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(humanTime(r.CreatedAt))
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/recordings.templ`, Line: 26, Col: 68}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/recordings.templ`, Line: 26, Col: 88}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
 					if templ_7745c5c3_Err != nil {
@@ -259,7 +259,7 @@ func RecordingForm(profile store.CaseProfile, appts []store.Appointment, selecte
 					}()
 				}
 				ctx = templ.InitializeContext(ctx)
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "<form method=\"post\" action=\"/recordings\" enctype=\"multipart/form-data\" class=\"space-y-4\"><div><label class=\"block text-xs font-medium text-slate-500\">Link to appointment</label> ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "<form method=\"post\" action=\"/recordings\" enctype=\"multipart/form-data\" class=\"space-y-4\"><div><label class=\"block text-xs font-medium text-slate-500 dark:text-slate-400\">Link to appointment</label> ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -350,7 +350,7 @@ func RecordingForm(profile store.CaseProfile, appts []store.Appointment, selecte
 						}
 					}
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 25, "</select></div><!-- In-browser recorder (MediaRecorder). Falls back to the file input below. --><div class=\"rounded-xl border border-slate-200 p-3\"><div class=\"flex items-center gap-3\"><button type=\"button\" id=\"rec-toggle\" class=\"px-3 py-2 bg-rose-600 text-white text-sm rounded-xl hover:bg-rose-700\">● Record</button> <span id=\"rec-timer\" class=\"text-sm text-slate-500 tabular-nums\">0:00</span> <audio id=\"rec-preview\" controls class=\"hidden ml-auto\"></audio></div><p id=\"rec-msg\" class=\"text-xs text-slate-400 mt-2\">Tap Record to capture audio. It will attach below automatically.</p></div><div><label class=\"block text-xs font-medium text-slate-500\">Or upload an audio file</label> ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 25, "</select></div><!-- In-browser recorder (MediaRecorder). Falls back to the file input below. --><div class=\"rounded-xl border border-slate-200 dark:border-slate-800 p-3\"><div class=\"flex items-center gap-3\"><button type=\"button\" id=\"rec-toggle\" class=\"px-3 py-2 bg-rose-600 text-white text-sm rounded-xl hover:bg-rose-700\">● Record</button> <span id=\"rec-timer\" class=\"text-sm text-slate-500 dark:text-slate-400 tabular-nums\">0:00</span> <audio id=\"rec-preview\" controls class=\"hidden ml-auto\"></audio></div><p id=\"rec-msg\" class=\"text-xs text-slate-400 dark:text-slate-500 mt-2\">Tap Record to capture audio. It will attach below automatically.</p></div><div><label class=\"block text-xs font-medium text-slate-500 dark:text-slate-400\">Or upload an audio file</label> ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -377,7 +377,7 @@ func RecordingForm(profile store.CaseProfile, appts []store.Appointment, selecte
 					return templ_7745c5c3_Err
 				}
 				if transcribeEnabled {
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 28, "<p class=\"text-xs text-slate-400\">After saving, transcription runs automatically and the page will update.</p>")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 28, "<p class=\"text-xs text-slate-400 dark:text-slate-500\">After saving, transcription runs automatically and the page will update.</p>")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -392,7 +392,7 @@ func RecordingForm(profile store.CaseProfile, appts []store.Appointment, selecte
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 30, " <p class=\"text-xs text-slate-400 mt-3\">Recording your own visit is legal in one-party-consent states, but a quick \"mind if I record this for my notes?\" is the courteous habit. Audio is the most sensitive data here — you can delete the audio once a transcript exists.</p>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 30, " <p class=\"text-xs text-slate-400 dark:text-slate-500 mt-3\">Recording your own visit is legal in one-party-consent states, but a quick \"mind if I record this for my notes?\" is the courteous habit. Audio is the most sensitive data here — you can delete the audio once a transcript exists.</p>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -443,27 +443,27 @@ func RecordingDetail(profile store.CaseProfile, r store.Recording, docs []store.
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 31, "<div class=\"flex items-center justify-between mb-4\"><div><h1 class=\"text-xl font-semibold text-slate-900\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 31, "<div class=\"flex items-center justify-between mb-4\"><div><h1 class=\"text-xl font-semibold text-slate-900 dark:text-slate-100\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var24 string
 			templ_7745c5c3_Var24, templ_7745c5c3_Err = templ.JoinStringErrs(recordingLabel(r))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/recordings.templ`, Line: 87, Col: 72}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/recordings.templ`, Line: 87, Col: 92}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var24))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 32, "</h1><p class=\"text-sm text-slate-500\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 32, "</h1><p class=\"text-sm text-slate-500 dark:text-slate-400\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var25 string
 			templ_7745c5c3_Var25, templ_7745c5c3_Err = templ.JoinStringErrs(humanTime(r.CreatedAt))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/recordings.templ`, Line: 88, Col: 62}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/recordings.templ`, Line: 88, Col: 82}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var25))
 			if templ_7745c5c3_Err != nil {
@@ -622,19 +622,19 @@ func RecordingStatus(r store.Recording, docs []store.AIDoc, transcribeEnabled, a
 			return templ_7745c5c3_Err
 		}
 		if r.TranscriptStatus == "processing" {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 46, "<span class=\"text-sm text-slate-400\">Transcribing… this can take a minute.</span> ")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 46, "<span class=\"text-sm text-slate-400 dark:text-slate-500\">Transcribing… this can take a minute.</span> ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
 		if r.TranscriptStatus == "pending" && transcribeEnabled {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 47, "<span class=\"text-sm text-slate-400\">Queued…</span> ")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 47, "<span class=\"text-sm text-slate-400 dark:text-slate-500\">Queued…</span> ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
 		if r.TranscriptStatus == "pending" && !transcribeEnabled {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 48, "<span class=\"text-sm text-slate-400\">Transcription not configured.</span>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 48, "<span class=\"text-sm text-slate-400 dark:text-slate-500\">Transcription not configured.</span>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -677,7 +677,7 @@ func RecordingStatus(r store.Recording, docs []store.AIDoc, transcribeEnabled, a
 			}
 		}
 		if r.Transcript != "" {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 54, "<section class=\"mb-6\"><h2 class=\"text-sm font-semibold text-slate-500 uppercase tracking-wide mb-2\">Transcript</h2>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 54, "<section class=\"mb-6\"><h2 class=\"text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-2\">Transcript</h2>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -716,7 +716,7 @@ func RecordingStatus(r store.Recording, docs []store.AIDoc, transcribeEnabled, a
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 57, "</section><section><div class=\"flex items-center justify-between mb-2\"><h2 class=\"text-sm font-semibold text-slate-500 uppercase tracking-wide\">Highlights & tasks</h2>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 57, "</section><section><div class=\"flex items-center justify-between mb-2\"><h2 class=\"text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide\">Highlights & tasks</h2>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -745,12 +745,12 @@ func RecordingStatus(r store.Recording, docs []store.AIDoc, transcribeEnabled, a
 			}
 			if len(docs) == 0 {
 				if aiEnabled {
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 61, "<p class=\"text-sm text-slate-400\">No AI documents yet — generate highlights and a task list from this transcript.</p>")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 61, "<p class=\"text-sm text-slate-400 dark:text-slate-500\">No AI documents yet — generate highlights and a task list from this transcript.</p>")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 				} else {
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 62, "<p class=\"text-sm text-slate-400\">Set ANTHROPIC_API_KEY to generate highlights and tasks.</p>")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 62, "<p class=\"text-sm text-slate-400 dark:text-slate-500\">Set ANTHROPIC_API_KEY to generate highlights and tasks.</p>")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}

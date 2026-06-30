@@ -109,7 +109,7 @@ func SettingsPage(profile store.CaseProfile, set store.Settings, st SettingsStat
 					}()
 				}
 				ctx = templ.InitializeContext(ctx)
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "<h2 class=\"text-sm font-semibold text-slate-500 uppercase tracking-wide mb-3\">AI &amp; transcription</h2><div class=\"flex gap-2 mb-4 text-xs\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "<h2 class=\"text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-3\">AI &amp; transcription</h2><div class=\"flex gap-2 mb-4 text-xs\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -121,7 +121,7 @@ func SettingsPage(profile store.CaseProfile, set store.Settings, st SettingsStat
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "</div><form method=\"post\" action=\"/settings\" class=\"space-y-4\"><div><label class=\"block text-xs font-medium text-slate-500\">Anthropic API key</label> ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "</div><form method=\"post\" action=\"/settings\" class=\"space-y-4\"><div><label class=\"block text-xs font-medium text-slate-500 dark:text-slate-400\">Anthropic API key</label> ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -156,7 +156,7 @@ func SettingsPage(profile store.CaseProfile, set store.Settings, st SettingsStat
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "\"> <label class=\"inline-flex items-center gap-1 mt-1 text-xs text-slate-500\"><input type=\"checkbox\" name=\"clear_anthropic\" value=\"1\"> clear saved key</label></div><div><label class=\"block text-xs font-medium text-slate-500\">AI model</label> ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "\"> <label class=\"inline-flex items-center gap-1 mt-1 text-xs text-slate-500 dark:text-slate-400\"><input type=\"checkbox\" name=\"clear_anthropic\" value=\"1\"> clear saved key</label></div><div><label class=\"block text-xs font-medium text-slate-500 dark:text-slate-400\">AI model</label> ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -204,7 +204,7 @@ func SettingsPage(profile store.CaseProfile, set store.Settings, st SettingsStat
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "\"></div><hr class=\"border-slate-100\"><div><label class=\"block text-xs font-medium text-slate-500\">Transcription API key</label> ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "\"></div><hr class=\"border-slate-100 dark:border-slate-800\"><div><label class=\"block text-xs font-medium text-slate-500 dark:text-slate-400\">Transcription API key</label> ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -239,7 +239,7 @@ func SettingsPage(profile store.CaseProfile, set store.Settings, st SettingsStat
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "\"> <label class=\"inline-flex items-center gap-1 mt-1 text-xs text-slate-500\"><input type=\"checkbox\" name=\"clear_transcribe\" value=\"1\"> clear saved key</label></div><div class=\"grid grid-cols-1 sm:grid-cols-2 gap-3\"><div class=\"flex-1 min-w-0\"><label class=\"block text-xs font-medium text-slate-500\">Transcription base URL</label> ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "\"> <label class=\"inline-flex items-center gap-1 mt-1 text-xs text-slate-500 dark:text-slate-400\"><input type=\"checkbox\" name=\"clear_transcribe\" value=\"1\"> clear saved key</label></div><div class=\"grid grid-cols-1 sm:grid-cols-2 gap-3\"><div class=\"flex-1 min-w-0\"><label class=\"block text-xs font-medium text-slate-500 dark:text-slate-400\">Transcription base URL</label> ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -287,7 +287,7 @@ func SettingsPage(profile store.CaseProfile, set store.Settings, st SettingsStat
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, "\"></div><div class=\"flex-1 min-w-0\"><label class=\"block text-xs font-medium text-slate-500\">Transcription model</label> ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, "\"></div><div class=\"flex-1 min-w-0\"><label class=\"block text-xs font-medium text-slate-500 dark:text-slate-400\">Transcription model</label> ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -335,7 +335,7 @@ func SettingsPage(profile store.CaseProfile, set store.Settings, st SettingsStat
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 24, "\"></div></div><button class=\"px-4 py-2.5 bg-teal-600 text-white text-sm font-medium rounded-xl shadow-sm shadow-teal-600/20 hover:bg-teal-700 active:scale-[.98] transition\">Save</button></form><p class=\"text-xs text-slate-400 mt-3\">Keys are stored in your SQLite database (not echoed back here). Leave a key field blank to keep the saved value; environment variables act as a fallback.</p>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 24, "\"></div></div><button class=\"px-4 py-2.5 bg-teal-600 text-white text-sm font-medium rounded-xl shadow-sm shadow-teal-600/20 hover:bg-teal-700 active:scale-[.98] transition\">Save</button></form><p class=\"text-xs text-slate-400 dark:text-slate-500 mt-3\">Keys are stored in your SQLite database (not echoed back here). Leave a key field blank to keep the saved value; environment variables act as a fallback.</p>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -361,12 +361,12 @@ func SettingsPage(profile store.CaseProfile, set store.Settings, st SettingsStat
 					}()
 				}
 				ctx = templ.InitializeContext(ctx)
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 26, "<h2 class=\"text-sm font-semibold text-slate-500 uppercase tracking-wide mb-2\">Access</h2>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 26, "<h2 class=\"text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-2\">Access</h2>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				if st.AuthEnabled {
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 27, "<p class=\"text-sm text-slate-600 mb-3\">Login is required. Set via the <code>AUTH_PASSWORD</code> environment variable.</p><form method=\"post\" action=\"/logout\"><button class=\"px-4 py-2.5 bg-slate-100 text-slate-700 text-sm font-medium rounded-xl hover:bg-slate-200 active:scale-[.98] transition\">Log out</button></form>")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 27, "<p class=\"text-sm text-slate-600 dark:text-slate-300 mb-3\">Login is required. Set via the <code>AUTH_PASSWORD</code> environment variable.</p><form method=\"post\" action=\"/logout\"><button class=\"px-4 py-2.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-sm font-medium rounded-xl hover:bg-slate-200 dark:hover:bg-slate-700 active:scale-[.98] transition\">Log out</button></form>")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -436,14 +436,14 @@ func statusPill(label string, on bool) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		} else {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 31, "<span class=\"px-2 py-0.5 rounded-full bg-slate-100 text-slate-500\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 31, "<span class=\"px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var26 string
 			templ_7745c5c3_Var26, templ_7745c5c3_Err = templ.JoinStringErrs(label)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/settings.templ`, Line: 95, Col: 76}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/settings.templ`, Line: 95, Col: 114}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var26))
 			if templ_7745c5c3_Err != nil {

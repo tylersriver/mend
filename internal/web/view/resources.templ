@@ -10,18 +10,18 @@ templ ResourceList(profile store.CaseProfile, resources []store.Resource) {
 			@btnLink("/resources/new", "+ Add")
 		}
 		if len(resources) == 0 {
-			<p class="text-sm text-slate-400">No research saved. Add articles, videos, or files to build your case file.</p>
+			<p class="text-sm text-slate-400 dark:text-slate-500">No research saved. Add articles, videos, or files to build your case file.</p>
 		} else {
 			<ul class="space-y-2">
 				for _, r := range resources {
 					<li>
-						<a href={ templ.SafeURL(resourceURL(r.ID)) } class="block bg-white rounded-2xl border border-slate-200 p-3 hover:border-teal-300">
+						<a href={ templ.SafeURL(resourceURL(r.ID)) } class="block bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-3 hover:border-teal-300 dark:hover:border-teal-700">
 							<div class="flex justify-between items-center">
 								<span class="font-medium">{ r.Title }</span>
-								<span class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">{ label(r.Kind) }</span>
+								<span class="text-xs px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">{ label(r.Kind) }</span>
 							</div>
 							if r.Summary != "" {
-								<p class="text-xs text-slate-500 mt-1 line-clamp-2">{ r.Summary }</p>
+								<p class="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2">{ r.Summary }</p>
 							}
 						</a>
 					</li>
@@ -38,7 +38,7 @@ templ ResourceForm(profile store.CaseProfile) {
 		@card() {
 			<form method="post" action="/resources" enctype="multipart/form-data" class="space-y-4">
 				<div>
-					<label class="block text-xs font-medium text-slate-500">Type</label>
+					<label class="block text-xs font-medium text-slate-500 dark:text-slate-400">Type</label>
 					<select name="kind" class={ inputCls }>
 						for _, k := range resourceKinds {
 							<option value={ k }>{ label(k) }</option>
@@ -46,23 +46,23 @@ templ ResourceForm(profile store.CaseProfile) {
 					</select>
 				</div>
 				<div>
-					<label class="block text-xs font-medium text-slate-500">Title</label>
+					<label class="block text-xs font-medium text-slate-500 dark:text-slate-400">Title</label>
 					<input name="title" required class={ inputCls }/>
 				</div>
 				<div>
-					<label class="block text-xs font-medium text-slate-500">URL <span class="text-slate-400">(for link/video)</span></label>
+					<label class="block text-xs font-medium text-slate-500 dark:text-slate-400">URL <span class="text-slate-400 dark:text-slate-500">(for link/video)</span></label>
 					<input name="url" type="url" class={ inputCls }/>
 				</div>
 				<div>
-					<label class="block text-xs font-medium text-slate-500">File <span class="text-slate-400">(for file)</span></label>
+					<label class="block text-xs font-medium text-slate-500 dark:text-slate-400">File <span class="text-slate-400 dark:text-slate-500">(for file)</span></label>
 					<input name="file" type="file" class={ inputCls }/>
 				</div>
 				<div>
-					<label class="block text-xs font-medium text-slate-500">Source</label>
+					<label class="block text-xs font-medium text-slate-500 dark:text-slate-400">Source</label>
 					<input name="source" placeholder="youtube · pubmed · clinic · reddit" class={ inputCls }/>
 				</div>
 				<div>
-					<label class="block text-xs font-medium text-slate-500">Notes / summary</label>
+					<label class="block text-xs font-medium text-slate-500 dark:text-slate-400">Notes / summary</label>
 					<textarea name="summary" rows="4" class={ inputCls } placeholder="Paste the abstract or your notes; the AI can condense this later."></textarea>
 				</div>
 				<button class="px-4 py-2.5 bg-teal-600 text-white text-sm font-medium rounded-xl shadow-sm shadow-teal-600/20 hover:bg-teal-700 active:scale-[.98] transition">Save</button>
@@ -75,22 +75,22 @@ templ ResourceDetail(profile store.CaseProfile, r store.Resource, aiEnabled bool
 	@Layout(r.Title, profile) {
 		<div class="flex items-center justify-between mb-4">
 			<div>
-				<h1 class="text-xl font-semibold text-slate-900">{ r.Title }</h1>
-				<p class="text-sm text-slate-500">{ label(r.Kind) }{ sourceSuffix(r) }</p>
+				<h1 class="text-xl font-semibold text-slate-900 dark:text-slate-100">{ r.Title }</h1>
+				<p class="text-sm text-slate-500 dark:text-slate-400">{ label(r.Kind) }{ sourceSuffix(r) }</p>
 			</div>
 			<form method="post" action={ templ.SafeURL(resourceURL(r.ID) + "/delete") } onsubmit="return confirm('Delete this resource?')">
 				<button class="text-xs text-red-600 underline">Delete</button>
 			</form>
 		</div>
 		if r.URL != "" {
-			<p class="mb-4"><a href={ templ.SafeURL(r.URL) } target="_blank" rel="noopener" class="text-teal-700 underline break-all">{ r.URL }</a></p>
+			<p class="mb-4"><a href={ templ.SafeURL(r.URL) } target="_blank" rel="noopener" class="text-teal-700 dark:text-teal-400 underline break-all">{ r.URL }</a></p>
 		}
 		if r.FilePath != "" {
-			<p class="mb-4"><a href={ templ.SafeURL(resourceURL(r.ID) + "/file") } class="text-teal-700 underline">Download file</a></p>
+			<p class="mb-4"><a href={ templ.SafeURL(resourceURL(r.ID) + "/file") } class="text-teal-700 dark:text-teal-400 underline">Download file</a></p>
 		}
 		<section>
 			<div class="flex items-center justify-between mb-2">
-				<h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wide">Summary</h2>
+				<h2 class="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Summary</h2>
 				if aiEnabled {
 					<button
 						hx-post={ resourceURL(r.ID) + "/summarize" }
@@ -101,7 +101,7 @@ templ ResourceDetail(profile store.CaseProfile, r store.Resource, aiEnabled bool
 					>AI summarize</button>
 				}
 			</div>
-			<div id="sum-spin" class="htmx-indicator text-sm text-slate-400 mb-2">Summarizing…</div>
+			<div id="sum-spin" class="htmx-indicator text-sm text-slate-400 dark:text-slate-500 mb-2">Summarizing…</div>
 			@card() {
 				<div id="summary-body" class="prose prose-sm max-w-none">
 					@SummaryBody(r.Summary)
@@ -114,7 +114,7 @@ templ ResourceDetail(profile store.CaseProfile, r store.Resource, aiEnabled bool
 // SummaryBody is the swappable summary region (returned standalone after AI summarize).
 templ SummaryBody(summary string) {
 	if summary == "" {
-		<p class="text-sm text-slate-400">No summary yet.</p>
+		<p class="text-sm text-slate-400 dark:text-slate-500">No summary yet.</p>
 	} else {
 		@Markdown(summary)
 	}
