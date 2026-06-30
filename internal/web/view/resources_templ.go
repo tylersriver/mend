@@ -399,7 +399,7 @@ func ResourceForm(profile store.CaseProfile) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 29, "\" placeholder=\"Paste the abstract or your notes; the AI can condense this later.\"></textarea></div><button class=\"px-4 py-2.5 bg-teal-600 text-white text-sm font-medium rounded-xl shadow-sm shadow-teal-600/20 hover:bg-teal-700 active:scale-[.98] transition\">Save</button></form>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 29, "\" placeholder=\"Paste the abstract or your notes; the AI can condense this later. For a link or YouTube video you can leave this blank — AI summarize reads the page or transcript.\"></textarea></div><button class=\"px-4 py-2.5 bg-teal-600 text-white text-sm font-medium rounded-xl shadow-sm shadow-teal-600/20 hover:bg-teal-700 active:scale-[.98] transition\">Save</button></form>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
