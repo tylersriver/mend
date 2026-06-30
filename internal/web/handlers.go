@@ -65,7 +65,7 @@ func (s *Server) resourceNew(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) resourceCreate(w http.ResponseWriter, r *http.Request) {
-	if err := r.ParseMultipartForm(32 << 20); err != nil && err != http.ErrNotMultipart {
+	if err := r.ParseMultipartForm(8 << 20); err != nil && err != http.ErrNotMultipart {
 		s.fail(w, "parse form", err)
 		return
 	}
