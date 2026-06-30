@@ -117,13 +117,24 @@ func humanTime(s string) string {
 	if s == "" {
 		return ""
 	}
-	for _, layout := range []string{"2006-01-02 15:04:05", time.RFC3339, "2006-01-02T15:04", "2006-01-02"} {
-		if t, err := time.Parse(layout, s); err == nil {
-			if t.Hour() == 0 && t.Minute() == 0 {
-				return t.Format("Mon Jan 2, 2006")
-			}
-			return t.Format("Mon Jan 2, 2006 · 3:04 PM")
-		}
+	const out = "Mon Jan 2, 2006 · 3:04 PM"
+	// SQLite datetime('now') stamps are UTC ("2006-01-02 15:04:05"); render them in
+	// the server's local zone (set via the TZ env var; defaults to UTC).
+	if t, err := time.ParseInLocation("2006-01-02 15:04:05", s, time.UTC); err == nil {
+		return t.In(time.Local).Format(out)
+	}
+	// RFC3339 carries its own offset — convert to local for display.
+	if t, err := time.Parse(time.RFC3339, s); err == nil {
+		return t.In(time.Local).Format(out)
+	}
+	// Form-entered "datetime-local" values are wall-clock with no zone; the user
+	// typed them in their own time, so keep them as-is (no shift).
+	if t, err := time.ParseInLocation("2006-01-02T15:04", s, time.Local); err == nil {
+		return t.Format(out)
+	}
+	// Date-only.
+	if t, err := time.Parse("2006-01-02", s); err == nil {
+		return t.Format("Mon Jan 2, 2006")
 	}
 	return s
 }

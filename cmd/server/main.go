@@ -13,6 +13,10 @@ import (
 	"syscall"
 	"time"
 
+	// Embed the IANA timezone database so named zones (e.g. TZ=America/Chicago)
+	// resolve even on the scratch image, which has no /usr/share/zoneinfo.
+	_ "time/tzdata"
+
 	"github.com/tylersriver/mend/internal/config"
 	"github.com/tylersriver/mend/internal/db"
 	"github.com/tylersriver/mend/internal/store"
@@ -81,6 +85,7 @@ func main() {
 		close(idle)
 	}()
 
+	log.Printf("timezone: %s (set TZ to change; default UTC)", time.Now().Format("MST -07:00"))
 	log.Printf("mend listening on %s (db=%s data=%s)", cfg.Addr, cfg.DBPath, cfg.DataDir)
 	if err := httpSrv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 		log.Fatalf("serve: %v", err)

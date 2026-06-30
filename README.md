@@ -91,7 +91,9 @@ The templ views are compiled to committed `*_templ.go` files, so a plain
 with `go run github.com/a-h/templ/cmd/templ@latest generate`.
 
 Config (env, with `-flag` overrides): `PORT` or `ADDR` (default `:8080`), `DB_PATH`
-(`data/mend.db`), `DATA_DIR` (`data`), `AI_MODEL` (`claude-opus-4-8`).
+(`data/mend.db`), `DATA_DIR` (`data`), `AI_MODEL` (`claude-opus-4-8`), `TZ` (display
+timezone, e.g. `America/Chicago`; defaults to UTC). Auto-stamped "created" times are
+stored in UTC and rendered in `TZ`; times you type into a picker are kept as entered.
 Transcription (OpenAI-compatible): `TRANSCRIBE_API_KEY`, `TRANSCRIBE_BASE_URL`
 (default `https://api.openai.com/v1`), `TRANSCRIBE_MODEL` (default `whisper-1`).
 Auth: `AUTH_PASSWORD` (enables login), `SESSION_SECRET` (optional; stabilizes
