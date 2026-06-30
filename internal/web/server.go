@@ -6,10 +6,13 @@ package web
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
+	"runtime/debug"
 	"strconv"
 	"sync"
+	"time"
 
 	"github.com/a-h/templ"
 
@@ -223,9 +226,59 @@ func pathID(r *http.Request) (int64, bool) {
 	return id, true
 }
 
+// statusWriter captures the response status and byte count for access logging.
+type statusWriter struct {
+	http.ResponseWriter
+	status int
+	bytes  int
+}
+
+func (w *statusWriter) WriteHeader(code int) {
+	w.status = code
+	w.ResponseWriter.WriteHeader(code)
+}
+
+func (w *statusWriter) Write(b []byte) (int, error) {
+	if w.status == 0 {
+		w.status = http.StatusOK
+	}
+	n, err := w.ResponseWriter.Write(b)
+	w.bytes += n
+	return n, err
+}
+
+// Flush passes through so htmx/streaming responses keep working when wrapped.
+func (w *statusWriter) Flush() {
+	if f, ok := w.ResponseWriter.(http.Flusher); ok {
+		f.Flush()
+	}
+}
+
+// logRequests logs each request's method, path, status, size, and duration, and
+// recovers panics (logging a stack) so a crash in one handler can't take the
+// process down silently. The completion line is the diagnostic signal: uploads
+// log their start in saveAudio, so a "recordings: upload ..." with no matching
+// completion line means the request died mid-flight (e.g. an OOM kill).
 func logRequests(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		log.Printf("%s %s", r.Method, r.URL.Path)
-		next.ServeHTTP(w, r)
+		start := time.Now()
+		sw := &statusWriter{ResponseWriter: w}
+
+		defer func() {
+			if rec := recover(); rec != nil {
+				log.Printf("PANIC %s %s: %v\n%s", r.Method, r.URL.Path, rec, debug.Stack())
+				if sw.status == 0 {
+					http.Error(sw, "internal error", http.StatusInternalServerError)
+				}
+			}
+			extra := ""
+			if r.ContentLength > 0 {
+				extra = fmt.Sprintf(" in=%dB", r.ContentLength)
+			}
+			log.Printf("%s %s -> %d %dB%s %s",
+				r.Method, r.URL.Path, sw.status, sw.bytes, extra, time.Since(start).Round(time.Millisecond))
+		}()
+
+		next.ServeHTTP(sw, r)
 	})
 }

@@ -1,6 +1,7 @@
 package web
 
 import (
+	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -67,27 +68,31 @@ func (s *Server) recordingCreate(w http.ResponseWriter, r *http.Request) {
 func (s *Server) saveAudio(r *http.Request, rec *store.Recording) error {
 	file, hdr, err := r.FormFile("audio")
 	if err == http.ErrMissingFile {
+		log.Printf("recordings: no audio file attached (empty upload)")
 		return nil // allow a recording with no audio yet
 	}
 	if err != nil {
-		return err
+		return fmt.Errorf("read form file: %w", err)
 	}
 	defer file.Close()
+	log.Printf("recordings: upload %q type=%q size=%dB", hdr.Filename, hdr.Header.Get("Content-Type"), hdr.Size)
 
 	dir := filepath.Join(s.dataDir, "recordings")
 	if err := os.MkdirAll(dir, 0o755); err != nil {
-		return err
+		return fmt.Errorf("mkdir %s: %w", dir, err)
 	}
 	name := strconv.FormatInt(time.Now().UnixNano(), 10) + "_" + filepath.Base(hdr.Filename)
 	dst := filepath.Join(dir, name)
 	out, err := os.Create(dst)
 	if err != nil {
-		return err
+		return fmt.Errorf("create %s: %w", dst, err)
 	}
 	defer out.Close()
-	if _, err := io.Copy(out, file); err != nil {
-		return err
+	n, err := io.Copy(out, file)
+	if err != nil {
+		return fmt.Errorf("write %s (%dB written): %w", dst, n, err)
 	}
+	log.Printf("recordings: saved %s (%dB)", dst, n)
 	rec.AudioPath = dst
 	return nil
 }
