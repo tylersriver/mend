@@ -81,7 +81,7 @@ func main() {
 		close(idle)
 	}()
 
-	log.Printf("mend listening on %s (db %s)", cfg.Addr, cfg.DBPath)
+	log.Printf("mend listening on %s (db=%s data=%s)", cfg.Addr, cfg.DBPath, cfg.DataDir)
 	if err := httpSrv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 		log.Fatalf("serve: %v", err)
 	}
