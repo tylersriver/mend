@@ -156,6 +156,31 @@ func (s *Server) resourceFile(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, res.FilePath)
 }
 
+// resourceUpdate saves edits to a resource's title, source, URL, and notes/summary.
+func (s *Server) resourceUpdate(w http.ResponseWriter, r *http.Request) {
+	id, ok := pathID(r)
+	if !ok {
+		http.NotFound(w, r)
+		return
+	}
+	res, err := s.store.Resource(r.Context(), id)
+	if err != nil {
+		http.NotFound(w, r)
+		return
+	}
+	if t := strings.TrimSpace(r.FormValue("title")); t != "" {
+		res.Title = t
+	}
+	res.URL = strings.TrimSpace(r.FormValue("url"))
+	res.Source = strings.TrimSpace(r.FormValue("source"))
+	res.Summary = strings.TrimSpace(r.FormValue("summary"))
+	if err := s.store.UpdateResource(r.Context(), res); err != nil {
+		s.fail(w, "update resource", err)
+		return
+	}
+	http.Redirect(w, r, resourceURLpath(id), http.StatusSeeOther)
+}
+
 func (s *Server) resourceDelete(w http.ResponseWriter, r *http.Request) {
 	id, ok := pathID(r)
 	if !ok {
@@ -168,6 +193,8 @@ func (s *Server) resourceDelete(w http.ResponseWriter, r *http.Request) {
 	}
 	http.Redirect(w, r, "/resources", http.StatusSeeOther)
 }
+
+func resourceURLpath(id int64) string { return "/resources/" + strconv.FormatInt(id, 10) }
 
 // resourceSummarize runs the AI summary flow and swaps in the updated summary.
 func (s *Server) resourceSummarize(w http.ResponseWriter, r *http.Request) {
@@ -196,7 +223,7 @@ func (s *Server) resourceSummarize(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	res, _ = s.store.Resource(r.Context(), id)
-	s.render(w, r, view.SummaryBody(res.Summary))
+	s.render(w, r, view.SummaryUpdated(res.Summary))
 }
 
 // researchClient fetches resource URLs for AI summarization (video transcripts,

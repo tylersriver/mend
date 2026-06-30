@@ -171,6 +171,16 @@ func (s *Store) CreateResource(ctx context.Context, r Resource) (int64, error) {
 	return res.LastInsertId()
 }
 
+// UpdateResource edits the user-facing fields of a resource (title, source, URL,
+// and the notes/summary). File/mime/size are managed at upload time, not here.
+func (s *Store) UpdateResource(ctx context.Context, r Resource) error {
+	_, err := s.db.ExecContext(ctx, `
+		UPDATE resources SET title = ?, url = ?, source = ?, summary = ?
+		WHERE id = ?`,
+		r.Title, nullify(r.URL), nullify(r.Source), nullify(r.Summary), r.ID)
+	return err
+}
+
 func (s *Store) DeleteResource(ctx context.Context, id int64) error {
 	_, err := s.db.ExecContext(ctx, `DELETE FROM resources WHERE id = ?`, id)
 	return err
