@@ -109,12 +109,22 @@ func (s *Server) recordingDetail(w http.ResponseWriter, r *http.Request) {
 		http.NotFound(w, r)
 		return
 	}
+	s.maybeStartTranscription(rec)
 	docs, err := s.store.AIDocsForSource(r.Context(), "recording", id)
 	if err != nil {
 		s.fail(w, "load ai docs", err)
 		return
 	}
 	s.render(w, r, view.RecordingDetail(s.profile(r.Context()), rec, docs, s.transcribeEnabled(), s.aiEnabled()))
+}
+
+// maybeStartTranscription kicks the pipeline for a recording that's still pending
+// with audio, whenever transcription is enabled. Safe to call on every view: the
+// atomic claim in Process means only the first kick actually runs.
+func (s *Server) maybeStartTranscription(rec store.Recording) {
+	if rec.TranscriptStatus == "pending" && rec.AudioPath != "" && s.transcribeEnabled() {
+		go s.processor().Process(rec.ID)
+	}
 }
 
 // recordingStatus returns just the live status region (htmx polls this).
@@ -129,6 +139,7 @@ func (s *Server) recordingStatus(w http.ResponseWriter, r *http.Request) {
 		http.NotFound(w, r)
 		return
 	}
+	s.maybeStartTranscription(rec)
 	docs, err := s.store.AIDocsForSource(r.Context(), "recording", id)
 	if err != nil {
 		s.fail(w, "load ai docs", err)

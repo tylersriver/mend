@@ -36,6 +36,19 @@ func (p *Processor) Process(recID int64) {
 	ctx, cancel := context.WithTimeout(context.Background(), 6*time.Minute)
 	defer cancel()
 
+	// Atomically claim the job (pending → processing). If we didn't win the
+	// claim, another goroutine is already handling it (or it isn't pending), so
+	// bail — this is what makes Process safe to kick from upload, the status
+	// poll, and the re-queue without ever transcribing twice.
+	claimed, err := p.store.ClaimTranscription(ctx, recID)
+	if err != nil {
+		log.Printf("recordings: claim %d: %v", recID, err)
+		return
+	}
+	if !claimed {
+		return
+	}
+
 	rec, err := p.store.GetRecording(ctx, recID)
 	if err != nil {
 		log.Printf("recordings: load %d: %v", recID, err)
@@ -47,10 +60,7 @@ func (p *Processor) Process(recID int64) {
 		return
 	}
 
-	if err := p.store.SetTranscriptStatus(ctx, recID, "processing"); err != nil {
-		log.Printf("recordings: mark processing %d: %v", recID, err)
-	}
-
+	log.Printf("recordings: transcribing %d (%s)", recID, rec.AudioPath)
 	text, err := p.transcriber.Transcribe(ctx, rec.AudioPath)
 	if err != nil {
 		log.Printf("recordings: transcribe %d: %v", recID, err)

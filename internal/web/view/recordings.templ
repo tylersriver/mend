@@ -116,8 +116,11 @@ templ RecordingStatus(r store.Recording, docs []store.AIDoc, transcribeEnabled, 
 	>
 		<div class="flex items-center gap-2 mb-3">
 			<span class={ "text-xs px-2 py-0.5 rounded-full " + recStatusClasses(r.TranscriptStatus) }>{ label(r.TranscriptStatus) }</span>
-			if recActive(r.TranscriptStatus) && transcribeEnabled {
+			if r.TranscriptStatus == "processing" {
 				<span class="text-sm text-slate-400">Transcribing… this can take a minute.</span>
+			}
+			if r.TranscriptStatus == "pending" && transcribeEnabled {
+				<span class="text-sm text-slate-400">Queued…</span>
 			}
 			if r.TranscriptStatus == "pending" && !transcribeEnabled {
 				<span class="text-sm text-slate-400">Transcription not configured.</span>
