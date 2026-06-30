@@ -2,6 +2,7 @@ package view
 
 import (
 	"bytes"
+	"net/url"
 	"strconv"
 	"strings"
 	"time"
@@ -10,6 +11,12 @@ import (
 	"github.com/tylersriver/mend/internal/store"
 	"github.com/yuin/goldmark"
 )
+
+// mapsURL builds a universal Google Maps search link for an address (opens Apple
+// Maps / the maps app on most phones).
+func mapsURL(addr string) string {
+	return "https://www.google.com/maps/search/?api=1&query=" + url.QueryEscape(addr)
+}
 
 // inputCls is the shared Tailwind class set for text inputs/textareas/selects.
 // min-w-0 + max-w-full keep native date/datetime/select controls from overflowing

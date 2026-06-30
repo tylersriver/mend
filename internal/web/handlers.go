@@ -256,6 +256,7 @@ func (s *Server) appointmentCreate(w http.ResponseWriter, r *http.Request) {
 		ProviderID:  providerID,
 		Kind:        r.FormValue("kind"),
 		ScheduledAt: strings.TrimSpace(r.FormValue("scheduled_at")),
+		Location:    strings.TrimSpace(r.FormValue("location")),
 		Status:      "upcoming",
 	}
 	if a.ScheduledAt == "" {
@@ -306,6 +307,7 @@ func (s *Server) appointmentUpdate(w http.ResponseWriter, r *http.Request) {
 		Outcome:    strings.TrimSpace(r.FormValue("outcome")),
 		Status:     r.FormValue("status"),
 		FollowUpOn: strings.TrimSpace(r.FormValue("follow_up_on")),
+		Location:   strings.TrimSpace(r.FormValue("location")),
 	}
 	if err := s.store.UpdateAppointment(r.Context(), a); err != nil {
 		s.fail(w, "update appointment", err)

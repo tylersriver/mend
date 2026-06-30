@@ -59,6 +59,7 @@ type Appointment struct {
 	PrepNotes    string
 	Outcome      string
 	FollowUpOn   string
+	Location     string
 	CreatedAt    string
 }
 
@@ -212,12 +213,12 @@ func (s *Store) CreateProvider(ctx context.Context, p Provider) (int64, error) {
 
 const apptCols = `a.id, COALESCE(a.provider_id,0), COALESCE(p.name,''), a.kind,
 	a.scheduled_at, a.status, COALESCE(a.prep_notes,''), COALESCE(a.outcome,''),
-	COALESCE(a.follow_up_on,''), a.created_at`
+	COALESCE(a.follow_up_on,''), COALESCE(a.location,''), a.created_at`
 
 func scanAppt(sc interface{ Scan(...any) error }) (Appointment, error) {
 	var a Appointment
 	err := sc.Scan(&a.ID, &a.ProviderID, &a.ProviderName, &a.Kind, &a.ScheduledAt,
-		&a.Status, &a.PrepNotes, &a.Outcome, &a.FollowUpOn, &a.CreatedAt)
+		&a.Status, &a.PrepNotes, &a.Outcome, &a.FollowUpOn, &a.Location, &a.CreatedAt)
 	return a, err
 }
 
@@ -271,23 +272,23 @@ func (s *Store) GetAppointment(ctx context.Context, id int64) (Appointment, erro
 
 func (s *Store) CreateAppointment(ctx context.Context, a Appointment) (int64, error) {
 	res, err := s.db.ExecContext(ctx, `
-		INSERT INTO appointments (provider_id, kind, scheduled_at, status, prep_notes, outcome, follow_up_on)
-		VALUES (?, ?, ?, ?, ?, ?, ?)`,
+		INSERT INTO appointments (provider_id, kind, scheduled_at, status, prep_notes, outcome, follow_up_on, location)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
 		nullZero(a.ProviderID), a.Kind, a.ScheduledAt, statusOr(a.Status),
-		nullify(a.PrepNotes), nullify(a.Outcome), nullify(a.FollowUpOn))
+		nullify(a.PrepNotes), nullify(a.Outcome), nullify(a.FollowUpOn), nullify(a.Location))
 	if err != nil {
 		return 0, err
 	}
 	return res.LastInsertId()
 }
 
-// UpdateAppointment saves the editable fields (prep, outcome, status, follow-up).
+// UpdateAppointment saves the editable fields (prep, outcome, status, follow-up, location).
 func (s *Store) UpdateAppointment(ctx context.Context, a Appointment) error {
 	_, err := s.db.ExecContext(ctx, `
 		UPDATE appointments
-		SET prep_notes = ?, outcome = ?, status = ?, follow_up_on = ?
+		SET prep_notes = ?, outcome = ?, status = ?, follow_up_on = ?, location = ?
 		WHERE id = ?`,
-		nullify(a.PrepNotes), nullify(a.Outcome), statusOr(a.Status), nullify(a.FollowUpOn), a.ID)
+		nullify(a.PrepNotes), nullify(a.Outcome), statusOr(a.Status), nullify(a.FollowUpOn), nullify(a.Location), a.ID)
 	return err
 }
 
