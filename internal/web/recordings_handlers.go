@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/tylersriver/mend/internal/store"
@@ -147,7 +148,33 @@ func (s *Server) recordingAudio(w http.ResponseWriter, r *http.Request) {
 		http.NotFound(w, r)
 		return
 	}
+	// ServeFile would otherwise sniff many audio containers (m4a/mp4/webm) as
+	// application/octet-stream, which Safari refuses to play. Set an explicit
+	// audio type from the extension; ServeContent honors a pre-set Content-Type.
+	if ct := audioContentType(rec.AudioPath); ct != "" {
+		w.Header().Set("Content-Type", ct)
+	}
 	http.ServeFile(w, r, rec.AudioPath)
+}
+
+// audioContentType maps a saved audio file's extension to a playable MIME type.
+func audioContentType(path string) string {
+	switch strings.ToLower(filepath.Ext(path)) {
+	case ".m4a", ".mp4", ".aac", ".m4b":
+		return "audio/mp4"
+	case ".webm":
+		return "audio/webm"
+	case ".ogg", ".oga", ".opus":
+		return "audio/ogg"
+	case ".wav":
+		return "audio/wav"
+	case ".mp3":
+		return "audio/mpeg"
+	case ".caf":
+		return "audio/x-caf"
+	default:
+		return "" // let ServeFile detect
+	}
 }
 
 func (s *Server) recordingTranscribe(w http.ResponseWriter, r *http.Request) {
