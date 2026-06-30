@@ -20,6 +20,7 @@ func (s *Server) settingsPage(w http.ResponseWriter, r *http.Request) {
 		EnvAIKey:                 s.env.APIKey != "",
 		EnvTranscribeKey:         s.env.TranscribeAPIKey != "",
 		AIModelDefault:           s.env.AIModel,
+		AIBaseURLDefault:         s.env.AIBaseURL,
 		TranscribeBaseURLDefault: s.env.TranscribeBaseURL,
 		TranscribeModelDefault:   s.env.TranscribeModel,
 		Saved:                    r.URL.Query().Get("saved") == "1",
@@ -49,6 +50,7 @@ func (s *Server) updateSettings(w http.ResponseWriter, r *http.Request) {
 
 	// Non-secret fields are set verbatim; blank means "fall back to the env default".
 	set.AIModel = strings.TrimSpace(r.FormValue("ai_model"))
+	set.AIBaseURL = strings.TrimSpace(r.FormValue("ai_base_url"))
 	set.TranscribeBaseURL = strings.TrimSpace(r.FormValue("transcribe_base_url"))
 	set.TranscribeModel = strings.TrimSpace(r.FormValue("transcribe_model"))
 

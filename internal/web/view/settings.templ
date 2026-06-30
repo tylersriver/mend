@@ -8,9 +8,10 @@ type SettingsStatus struct {
 	AIEnabled                bool
 	TranscribeEnabled        bool
 	AuthEnabled              bool
-	EnvAIKey                 bool // an Anthropic key is provided via env (fallback)
+	EnvAIKey                 bool // an AI key is provided via env (fallback)
 	EnvTranscribeKey         bool
 	AIModelDefault           string
+	AIBaseURLDefault         string
 	TranscribeBaseURLDefault string
 	TranscribeModelDefault   string
 	Saved                    bool
@@ -34,17 +35,29 @@ templ SettingsPage(profile store.CaseProfile, set store.Settings, st SettingsSta
 				</div>
 				<form method="post" action="/settings" class="space-y-4">
 					<div>
-						<label class="block text-xs font-medium text-slate-500 dark:text-slate-400">Anthropic API key</label>
+						<label class="block text-xs font-medium text-slate-500 dark:text-slate-400">AI API key</label>
 						<input type="password" name="anthropic_api_key" autocomplete="off"
 							placeholder={ keyPlaceholder(set.AnthropicAPIKey, st.EnvAIKey) } class={ inputCls }/>
 						<label class="inline-flex items-center gap-1 mt-1 text-xs text-slate-500 dark:text-slate-400">
 							<input type="checkbox" name="clear_anthropic" value="1"/> clear saved key
 						</label>
 					</div>
-					<div>
-						<label class="block text-xs font-medium text-slate-500 dark:text-slate-400">AI model</label>
-						<input name="ai_model" value={ set.AIModel } placeholder={ st.AIModelDefault } class={ inputCls }/>
+					<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+						<div class="flex-1 min-w-0">
+							<label class="block text-xs font-medium text-slate-500 dark:text-slate-400">AI base URL</label>
+							<input name="ai_base_url" value={ set.AIBaseURL } placeholder={ aiBaseURLHint(st.AIBaseURLDefault) } class={ inputCls }/>
+						</div>
+						<div class="flex-1 min-w-0">
+							<label class="block text-xs font-medium text-slate-500 dark:text-slate-400">AI model</label>
+							<input name="ai_model" value={ set.AIModel } placeholder={ st.AIModelDefault } class={ inputCls }/>
+						</div>
 					</div>
+					<p class="text-xs text-slate-400 dark:text-slate-500">
+						Leave the base URL blank for Anthropic. To use Groq, set it to
+						<code>https://api.groq.com/openai/v1</code> with a Groq API key and a Groq
+						model (e.g. <code>llama-3.3-70b-versatile</code>). Any OpenAI-compatible
+						<code>/chat/completions</code> endpoint works.
+					</p>
 					<hr class="border-slate-100 dark:border-slate-800"/>
 					<div>
 						<label class="block text-xs font-medium text-slate-500 dark:text-slate-400">Transcription API key</label>

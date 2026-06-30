@@ -58,14 +58,20 @@ type AIDoc struct {
 	SourceID   int64
 }
 
-// Service wires a Repo to an AI client. Use two clients if you want a strong
-// model for reasoning and a cheaper one for summarization.
-type Service struct {
-	repo Repo
-	ai   *Client
+// Completer is the provider surface the flows call. Both the Anthropic Client and
+// the OpenAIClient (Groq and friends) implement it, so the flows are provider-agnostic.
+type Completer interface {
+	Complete(ctx context.Context, system []SystemBlock, msgs []Message, maxTokens int) (string, error)
+	ModelID() string
 }
 
-func NewService(repo Repo, client *Client) *Service {
+// Service wires a Repo to an AI client.
+type Service struct {
+	repo Repo
+	ai   Completer
+}
+
+func NewService(repo Repo, client Completer) *Service {
 	return &Service{repo: repo, ai: client}
 }
 
@@ -105,7 +111,7 @@ func (s *Service) DoctorQuestions(ctx context.Context, apptID int64) (int64, err
 		return 0, err
 	}
 	return s.repo.SaveAIDoc(ctx, AIDoc{
-		DocType: "doctor_questions", Content: out, Model: s.ai.Model,
+		DocType: "doctor_questions", Content: out, Model: s.ai.ModelID(),
 		SourceKind: "appointment", SourceID: appt.ID,
 	})
 }
@@ -122,7 +128,7 @@ func (s *Service) DraftPlan(ctx context.Context) (int64, error) {
 		return 0, err
 	}
 	return s.repo.SaveAIDoc(ctx, AIDoc{
-		DocType: "plan", Content: out, Model: s.ai.Model, SourceKind: "manual",
+		DocType: "plan", Content: out, Model: s.ai.ModelID(), SourceKind: "manual",
 	})
 }
 
@@ -139,7 +145,7 @@ func (s *Service) SummarizeTranscript(ctx context.Context, recordingID int64) (h
 		return 0, 0, err
 	}
 	highlights, err = s.repo.SaveAIDoc(ctx, AIDoc{
-		DocType: "highlights", Content: hl, Model: s.ai.Model,
+		DocType: "highlights", Content: hl, Model: s.ai.ModelID(),
 		SourceKind: "recording", SourceID: rec.ID,
 	})
 	if err != nil {
@@ -154,7 +160,7 @@ func (s *Service) SummarizeTranscript(ctx context.Context, recordingID int64) (h
 		return highlights, 0, err
 	}
 	tasks, err = s.repo.SaveAIDoc(ctx, AIDoc{
-		DocType: "tasks", Content: tl, Model: s.ai.Model,
+		DocType: "tasks", Content: tl, Model: s.ai.ModelID(),
 		SourceKind: "recording", SourceID: rec.ID,
 	})
 	return highlights, tasks, err

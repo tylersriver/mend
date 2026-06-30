@@ -7,6 +7,7 @@ import "context"
 type Settings struct {
 	AnthropicAPIKey   string
 	AIModel           string
+	AIBaseURL         string // empty = Anthropic; else an OpenAI-compatible base (e.g. Groq)
 	TranscribeAPIKey  string
 	TranscribeBaseURL string
 	TranscribeModel   string
@@ -16,10 +17,10 @@ type Settings struct {
 func (s *Store) Settings(ctx context.Context) (Settings, error) {
 	var set Settings
 	err := s.db.QueryRowContext(ctx, `
-		SELECT anthropic_api_key, ai_model, transcribe_api_key,
+		SELECT anthropic_api_key, ai_model, ai_base_url, transcribe_api_key,
 		       transcribe_base_url, transcribe_model, updated_at
 		FROM app_settings WHERE id = 1`).
-		Scan(&set.AnthropicAPIKey, &set.AIModel, &set.TranscribeAPIKey,
+		Scan(&set.AnthropicAPIKey, &set.AIModel, &set.AIBaseURL, &set.TranscribeAPIKey,
 			&set.TranscribeBaseURL, &set.TranscribeModel, &set.UpdatedAt)
 	return set, err
 }
@@ -27,10 +28,10 @@ func (s *Store) Settings(ctx context.Context) (Settings, error) {
 func (s *Store) UpdateSettings(ctx context.Context, set Settings) error {
 	_, err := s.db.ExecContext(ctx, `
 		UPDATE app_settings
-		SET anthropic_api_key = ?, ai_model = ?, transcribe_api_key = ?,
+		SET anthropic_api_key = ?, ai_model = ?, ai_base_url = ?, transcribe_api_key = ?,
 		    transcribe_base_url = ?, transcribe_model = ?, updated_at = datetime('now')
 		WHERE id = 1`,
-		set.AnthropicAPIKey, set.AIModel, set.TranscribeAPIKey,
+		set.AnthropicAPIKey, set.AIModel, set.AIBaseURL, set.TranscribeAPIKey,
 		set.TranscribeBaseURL, set.TranscribeModel)
 	return err
 }
