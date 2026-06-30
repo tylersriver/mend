@@ -19,7 +19,9 @@ templ Layout(title string, profile store.CaseProfile) {
 			<link rel="apple-touch-icon" href="/apple-touch-icon.png"/>
 			<meta name="apple-mobile-web-app-capable" content="yes"/>
 			<meta name="apple-mobile-web-app-title" content="mend"/>
-			<meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+			<!-- translucent status bar (white glyphs) so the app goes edge-to-edge; the
+			     themed <html> background fills behind it and the header pads the inset. -->
+			<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 			<!-- Apply the saved theme before paint (no flash) and expose the toggle. -->
 			<script>
 				(function () {
@@ -49,6 +51,11 @@ templ Layout(title string, profile store.CaseProfile) {
 				};
 			</script>
 			<style>
+				/* The iOS standalone PWA paints the status-bar / safe-area region with the
+				   <html> root background (not <body>), so set it here too — otherwise a
+				   white bar shows above the dark app. */
+				html { background-color: #f5f5f7; }
+				html.dark { background-color: #020617; }
 				/* iOS Safari gives date/time inputs an intrinsic min-width that beats
 				   width:100%, overflowing their container. Strip the native appearance
 				   and min-width so they honor the box. */
@@ -79,7 +86,7 @@ templ Layout(title string, profile store.CaseProfile) {
 			</script>
 		</head>
 		<body class="min-h-screen flex flex-col bg-[#f5f5f7] dark:bg-slate-950 text-slate-800 dark:text-slate-200 font-sans antialiased">
-			<header class="sticky top-0 z-30 bg-white/75 dark:bg-slate-900/75 backdrop-blur-xl border-b border-slate-200/70 dark:border-slate-800">
+			<header class="sticky top-0 z-30 bg-white/75 dark:bg-slate-900/75 backdrop-blur-xl border-b border-slate-200/70 dark:border-slate-800 pt-[env(safe-area-inset-top)]">
 				<!-- peer checkbox drives the mobile menu with no JS -->
 				<input type="checkbox" id="nav-toggle" class="peer hidden"/>
 				<div class="max-w-3xl mx-auto px-4 h-14 flex items-center justify-between gap-3">
