@@ -377,6 +377,43 @@ func (s *Store) SetTranscriptStatus(ctx context.Context, id int64, status string
 	return err
 }
 
+// ClaimTranscription atomically moves a recording from 'pending' to 'processing'.
+// It returns true only for the caller that won the transition, so a recording can
+// be auto-kicked from multiple places (upload, status poll, re-queue) without ever
+// running the transcription twice.
+func (s *Store) ClaimTranscription(ctx context.Context, id int64) (bool, error) {
+	res, err := s.db.ExecContext(ctx,
+		`UPDATE recordings SET transcript_status = 'processing'
+		 WHERE id = ? AND transcript_status = 'pending'`, id)
+	if err != nil {
+		return false, err
+	}
+	n, err := res.RowsAffected()
+	return n == 1, err
+}
+
+// PendingTranscriptionIDs lists recordings that have audio but no transcript yet —
+// used to re-queue work after transcription is (re)configured.
+func (s *Store) PendingTranscriptionIDs(ctx context.Context) ([]int64, error) {
+	rows, err := s.db.QueryContext(ctx, `
+		SELECT id FROM recordings
+		WHERE transcript_status = 'pending' AND audio_path IS NOT NULL AND audio_path <> ''
+		ORDER BY id`)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var out []int64
+	for rows.Next() {
+		var id int64
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		out = append(out, id)
+	}
+	return out, rows.Err()
+}
+
 // SaveTranscript stores the transcript text and marks the recording done.
 func (s *Store) SaveTranscript(ctx context.Context, id int64, transcript string, durationSec int64) error {
 	_, err := s.db.ExecContext(ctx, `

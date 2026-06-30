@@ -621,24 +621,30 @@ func RecordingStatus(r store.Recording, docs []store.AIDoc, transcribeEnabled, a
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		if recActive(r.TranscriptStatus) && transcribeEnabled {
+		if r.TranscriptStatus == "processing" {
 			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 46, "<span class=\"text-sm text-slate-400\">Transcribing… this can take a minute.</span> ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		if r.TranscriptStatus == "pending" && !transcribeEnabled {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 47, "<span class=\"text-sm text-slate-400\">Transcription not configured.</span>")
+		if r.TranscriptStatus == "pending" && transcribeEnabled {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 47, "<span class=\"text-sm text-slate-400\">Queued…</span> ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 48, "</div>")
+		if r.TranscriptStatus == "pending" && !transcribeEnabled {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 48, "<span class=\"text-sm text-slate-400\">Transcription not configured.</span>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 49, "</div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		if r.TranscriptStatus == "failed" {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 49, "<div class=\"mb-3\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 50, "<div class=\"mb-3\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -646,32 +652,32 @@ func RecordingStatus(r store.Recording, docs []store.AIDoc, transcribeEnabled, a
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 50, "</div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 51, "</div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
 		if transcribeEnabled && (r.TranscriptStatus == "failed" || (r.TranscriptStatus == "pending" && r.AudioPath != "")) {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 51, "<form method=\"post\" action=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 52, "<form method=\"post\" action=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var34 templ.SafeURL
 			templ_7745c5c3_Var34, templ_7745c5c3_Err = templ.JoinURLErrs(templ.SafeURL(recordingURL(r.ID) + "/transcribe"))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/recordings.templ`, Line: 132, Col: 81}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/recordings.templ`, Line: 135, Col: 81}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var34))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 52, "\" class=\"mb-4\"><button class=\"px-4 py-2.5 bg-teal-600 text-white text-sm font-medium rounded-xl shadow-sm shadow-teal-600/20 hover:bg-teal-700 active:scale-[.98] transition\">Transcribe now</button></form>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 53, "\" class=\"mb-4\"><button class=\"px-4 py-2.5 bg-teal-600 text-white text-sm font-medium rounded-xl shadow-sm shadow-teal-600/20 hover:bg-teal-700 active:scale-[.98] transition\">Transcribe now</button></form>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
 		if r.Transcript != "" {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 53, "<section class=\"mb-6\"><h2 class=\"text-sm font-semibold text-slate-500 uppercase tracking-wide mb-2\">Transcript</h2>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 54, "<section class=\"mb-6\"><h2 class=\"text-sm font-semibold text-slate-500 uppercase tracking-wide mb-2\">Transcript</h2>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -687,20 +693,20 @@ func RecordingStatus(r store.Recording, docs []store.AIDoc, transcribeEnabled, a
 					}()
 				}
 				ctx = templ.InitializeContext(ctx)
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 54, "<p class=\"whitespace-pre-wrap text-sm leading-relaxed\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 55, "<p class=\"whitespace-pre-wrap text-sm leading-relaxed\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var36 string
 				templ_7745c5c3_Var36, templ_7745c5c3_Err = templ.JoinStringErrs(r.Transcript)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/recordings.templ`, Line: 140, Col: 74}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/recordings.templ`, Line: 143, Col: 74}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var36))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 55, "</p>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 56, "</p>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -710,47 +716,47 @@ func RecordingStatus(r store.Recording, docs []store.AIDoc, transcribeEnabled, a
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 56, "</section><section><div class=\"flex items-center justify-between mb-2\"><h2 class=\"text-sm font-semibold text-slate-500 uppercase tracking-wide\">Highlights & tasks</h2>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 57, "</section><section><div class=\"flex items-center justify-between mb-2\"><h2 class=\"text-sm font-semibold text-slate-500 uppercase tracking-wide\">Highlights & tasks</h2>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			if aiEnabled && len(docs) == 0 {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 57, "<form method=\"post\" action=\"")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 58, "<form method=\"post\" action=\"")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var37 templ.SafeURL
 				templ_7745c5c3_Var37, templ_7745c5c3_Err = templ.JoinURLErrs(templ.SafeURL(recordingURL(r.ID) + "/summarize"))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/recordings.templ`, Line: 147, Col: 83}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/recordings.templ`, Line: 150, Col: 83}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var37))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 58, "\"><button class=\"px-4 py-2.5 bg-teal-600 text-white text-sm font-medium rounded-xl shadow-sm shadow-teal-600/20 hover:bg-teal-700 active:scale-[.98] transition\">Generate</button></form>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 59, "\"><button class=\"px-4 py-2.5 bg-teal-600 text-white text-sm font-medium rounded-xl shadow-sm shadow-teal-600/20 hover:bg-teal-700 active:scale-[.98] transition\">Generate</button></form>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 59, "</div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 60, "</div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			if len(docs) == 0 {
 				if aiEnabled {
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 60, "<p class=\"text-sm text-slate-400\">No AI documents yet — generate highlights and a task list from this transcript.</p>")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 61, "<p class=\"text-sm text-slate-400\">No AI documents yet — generate highlights and a task list from this transcript.</p>")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 				} else {
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 61, "<p class=\"text-sm text-slate-400\">Set ANTHROPIC_API_KEY to generate highlights and tasks.</p>")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 62, "<p class=\"text-sm text-slate-400\">Set ANTHROPIC_API_KEY to generate highlights and tasks.</p>")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 				}
 			} else {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 62, "<div class=\"space-y-3\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 63, "<div class=\"space-y-3\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -760,17 +766,17 @@ func RecordingStatus(r store.Recording, docs []store.AIDoc, transcribeEnabled, a
 						return templ_7745c5c3_Err
 					}
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 63, "</div>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 64, "</div>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 64, "</section>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 65, "</section>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 65, "</div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 66, "</div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -800,7 +806,7 @@ func recorderScript() templ.Component {
 			templ_7745c5c3_Var38 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 66, "<script>\n\t\t(function () {\n\t\t\tconst toggle = document.getElementById('rec-toggle');\n\t\t\tif (!toggle || !navigator.mediaDevices || !window.MediaRecorder) {\n\t\t\t\tif (toggle) { toggle.disabled = true; }\n\t\t\t\tconst msg = document.getElementById('rec-msg');\n\t\t\t\tif (msg) { msg.textContent = 'In-browser recording is unavailable here — upload a file instead.'; }\n\t\t\t\treturn;\n\t\t\t}\n\t\t\tconst timer = document.getElementById('rec-timer');\n\t\t\tconst preview = document.getElementById('rec-preview');\n\t\t\tconst fileInput = document.getElementById('audio-input');\n\t\t\tconst durationInput = document.getElementById('duration-input');\n\t\t\tlet recorder, chunks = [], startedAt = 0, tick, wakeLock = null;\n\n\t\t\tfunction fmt(s) {\n\t\t\t\tconst m = Math.floor(s / 60), r = s % 60;\n\t\t\t\treturn m + ':' + String(r).padStart(2, '0');\n\t\t\t}\n\n\t\t\tasync function start() {\n\t\t\t\tconst stream = await navigator.mediaDevices.getUserMedia({ audio: true });\n\t\t\t\trecorder = new MediaRecorder(stream);\n\t\t\t\tchunks = [];\n\t\t\t\trecorder.ondataavailable = e => { if (e.data.size) chunks.push(e.data); };\n\t\t\t\trecorder.onstop = () => {\n\t\t\t\t\tconst blob = new Blob(chunks, { type: recorder.mimeType || 'audio/webm' });\n\t\t\t\t\tconst ext = (blob.type.split('/')[1] || 'webm').split(';')[0];\n\t\t\t\t\tconst file = new File([blob], 'recording.' + ext, { type: blob.type });\n\t\t\t\t\tconst dt = new DataTransfer();\n\t\t\t\t\tdt.items.add(file);\n\t\t\t\t\tfileInput.files = dt.files;\n\t\t\t\t\tpreview.src = URL.createObjectURL(blob);\n\t\t\t\t\tpreview.classList.remove('hidden');\n\t\t\t\t\tdurationInput.value = Math.round((Date.now() - startedAt) / 1000);\n\t\t\t\t\tstream.getTracks().forEach(t => t.stop());\n\t\t\t\t\tif (wakeLock) { wakeLock.release().catch(() => {}); wakeLock = null; }\n\t\t\t\t};\n\t\t\t\trecorder.start();\n\t\t\t\tstartedAt = Date.now();\n\t\t\t\ttick = setInterval(() => { timer.textContent = fmt(Math.round((Date.now() - startedAt) / 1000)); }, 500);\n\t\t\t\ttry { wakeLock = await navigator.wakeLock.request('screen'); } catch (e) {}\n\t\t\t\ttoggle.textContent = '■ Stop';\n\t\t\t\ttoggle.classList.replace('bg-rose-600', 'bg-slate-700');\n\t\t\t\tdocument.getElementById('rec-msg').textContent = 'Recording… tap Stop when done.';\n\t\t\t}\n\n\t\t\tfunction stop() {\n\t\t\t\tif (recorder && recorder.state !== 'inactive') recorder.stop();\n\t\t\t\tclearInterval(tick);\n\t\t\t\ttoggle.textContent = '● Record';\n\t\t\t\ttoggle.classList.replace('bg-slate-700', 'bg-rose-600');\n\t\t\t\tdocument.getElementById('rec-msg').textContent = 'Captured. It will attach when you save.';\n\t\t\t}\n\n\t\t\ttoggle.addEventListener('click', () => {\n\t\t\t\tif (!recorder || recorder.state === 'inactive') {\n\t\t\t\t\tstart().catch(err => { document.getElementById('rec-msg').textContent = 'Mic error: ' + err.message; });\n\t\t\t\t} else {\n\t\t\t\t\tstop();\n\t\t\t\t}\n\t\t\t});\n\t\t})();\n\t</script>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 67, "<script>\n\t\t(function () {\n\t\t\tconst toggle = document.getElementById('rec-toggle');\n\t\t\tif (!toggle || !navigator.mediaDevices || !window.MediaRecorder) {\n\t\t\t\tif (toggle) { toggle.disabled = true; }\n\t\t\t\tconst msg = document.getElementById('rec-msg');\n\t\t\t\tif (msg) { msg.textContent = 'In-browser recording is unavailable here — upload a file instead.'; }\n\t\t\t\treturn;\n\t\t\t}\n\t\t\tconst timer = document.getElementById('rec-timer');\n\t\t\tconst preview = document.getElementById('rec-preview');\n\t\t\tconst fileInput = document.getElementById('audio-input');\n\t\t\tconst durationInput = document.getElementById('duration-input');\n\t\t\tlet recorder, chunks = [], startedAt = 0, tick, wakeLock = null;\n\n\t\t\tfunction fmt(s) {\n\t\t\t\tconst m = Math.floor(s / 60), r = s % 60;\n\t\t\t\treturn m + ':' + String(r).padStart(2, '0');\n\t\t\t}\n\n\t\t\tasync function start() {\n\t\t\t\tconst stream = await navigator.mediaDevices.getUserMedia({ audio: true });\n\t\t\t\trecorder = new MediaRecorder(stream);\n\t\t\t\tchunks = [];\n\t\t\t\trecorder.ondataavailable = e => { if (e.data.size) chunks.push(e.data); };\n\t\t\t\trecorder.onstop = () => {\n\t\t\t\t\tconst blob = new Blob(chunks, { type: recorder.mimeType || 'audio/webm' });\n\t\t\t\t\tconst ext = (blob.type.split('/')[1] || 'webm').split(';')[0];\n\t\t\t\t\tconst file = new File([blob], 'recording.' + ext, { type: blob.type });\n\t\t\t\t\tconst dt = new DataTransfer();\n\t\t\t\t\tdt.items.add(file);\n\t\t\t\t\tfileInput.files = dt.files;\n\t\t\t\t\tpreview.src = URL.createObjectURL(blob);\n\t\t\t\t\tpreview.classList.remove('hidden');\n\t\t\t\t\tdurationInput.value = Math.round((Date.now() - startedAt) / 1000);\n\t\t\t\t\tstream.getTracks().forEach(t => t.stop());\n\t\t\t\t\tif (wakeLock) { wakeLock.release().catch(() => {}); wakeLock = null; }\n\t\t\t\t};\n\t\t\t\trecorder.start();\n\t\t\t\tstartedAt = Date.now();\n\t\t\t\ttick = setInterval(() => { timer.textContent = fmt(Math.round((Date.now() - startedAt) / 1000)); }, 500);\n\t\t\t\ttry { wakeLock = await navigator.wakeLock.request('screen'); } catch (e) {}\n\t\t\t\ttoggle.textContent = '■ Stop';\n\t\t\t\ttoggle.classList.replace('bg-rose-600', 'bg-slate-700');\n\t\t\t\tdocument.getElementById('rec-msg').textContent = 'Recording… tap Stop when done.';\n\t\t\t}\n\n\t\t\tfunction stop() {\n\t\t\t\tif (recorder && recorder.state !== 'inactive') recorder.stop();\n\t\t\t\tclearInterval(tick);\n\t\t\t\ttoggle.textContent = '● Record';\n\t\t\t\ttoggle.classList.replace('bg-slate-700', 'bg-rose-600');\n\t\t\t\tdocument.getElementById('rec-msg').textContent = 'Captured. It will attach when you save.';\n\t\t\t}\n\n\t\t\ttoggle.addEventListener('click', () => {\n\t\t\t\tif (!recorder || recorder.state === 'inactive') {\n\t\t\t\t\tstart().catch(err => { document.getElementById('rec-msg').textContent = 'Mic error: ' + err.message; });\n\t\t\t\t} else {\n\t\t\t\t\tstop();\n\t\t\t\t}\n\t\t\t});\n\t\t})();\n\t</script>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

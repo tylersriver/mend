@@ -104,7 +104,37 @@ func (s *Server) reconfigure(ctx context.Context) error {
 	s.ai = aiSvc
 	s.proc = recordings.NewProcessor(s.store, tr, aiSvc)
 	s.mu.Unlock()
+
+	log.Printf("config: ai=%t transcription=%t (ai_model=%s, transcribe_base=%s, transcribe_model=%s)",
+		aiSvc != nil, tr != nil, eff.aiModel, eff.transcribeBaseURL, eff.transcribeModel)
+
+	// If transcription is (now) enabled, pick up any recordings stuck in 'pending'
+	// — e.g. uploaded before the key was configured. The claim in Process keeps
+	// this from double-running anything already in flight.
+	if tr != nil {
+		go s.requeuePendingTranscriptions()
+	}
 	return nil
+}
+
+// requeuePendingTranscriptions kicks the pipeline for every recording that still
+// has audio but no transcript.
+func (s *Server) requeuePendingTranscriptions() {
+	proc := s.processor()
+	if proc == nil || !proc.TranscriptionEnabled() {
+		return
+	}
+	ids, err := s.store.PendingTranscriptionIDs(context.Background())
+	if err != nil {
+		log.Printf("web: list pending transcriptions: %v", err)
+		return
+	}
+	if len(ids) > 0 {
+		log.Printf("recordings: re-queuing %d pending transcription(s)", len(ids))
+	}
+	for _, id := range ids {
+		proc.Process(id)
+	}
 }
 
 func orStr(a, b string) string {
