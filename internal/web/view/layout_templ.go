@@ -47,7 +47,7 @@ func Layout(title string, profile store.CaseProfile) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, " · mend</title><link rel=\"manifest\" href=\"/manifest.webmanifest\"><link rel=\"icon\" href=\"/static/icon-192.png\"><link rel=\"apple-touch-icon\" href=\"/apple-touch-icon.png\"><meta name=\"apple-mobile-web-app-capable\" content=\"yes\"><meta name=\"apple-mobile-web-app-title\" content=\"mend\"><meta name=\"apple-mobile-web-app-status-bar-style\" content=\"default\"><!-- Apply the saved theme before paint (no flash) and expose the toggle. --><script>\n\t\t\t\t(function () {\n\t\t\t\t\ttry {\n\t\t\t\t\t\tvar t = localStorage.getItem('theme');\n\t\t\t\t\t\tif (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {\n\t\t\t\t\t\t\tdocument.documentElement.classList.add('dark');\n\t\t\t\t\t\t}\n\t\t\t\t\t} catch (e) {}\n\t\t\t\t\twindow.__toggleTheme = function () {\n\t\t\t\t\t\tvar dark = document.documentElement.classList.toggle('dark');\n\t\t\t\t\t\ttry { localStorage.setItem('theme', dark ? 'dark' : 'light'); } catch (e) {}\n\t\t\t\t\t};\n\t\t\t\t})();\n\t\t\t</script><script src=\"https://cdn.tailwindcss.com\"></script><script>\n\t\t\t\ttailwind.config = {\n\t\t\t\t\tdarkMode: 'class',\n\t\t\t\t\ttheme: {\n\t\t\t\t\t\textend: {\n\t\t\t\t\t\t\tfontFamily: {\n\t\t\t\t\t\t\t\tsans: ['-apple-system', 'BlinkMacSystemFont', '\"SF Pro Text\"', '\"Segoe UI\"', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],\n\t\t\t\t\t\t\t},\n\t\t\t\t\t\t},\n\t\t\t\t\t},\n\t\t\t\t};\n\t\t\t</script><style>\n\t\t\t\t/* iOS Safari gives date/time inputs an intrinsic min-width that beats\n\t\t\t\t   width:100%, overflowing their container. Strip the native appearance\n\t\t\t\t   and min-width so they honor the box. */\n\t\t\t\tinput[type=\"date\"], input[type=\"datetime-local\"] {\n\t\t\t\t\t-webkit-appearance: none;\n\t\t\t\t\tappearance: none;\n\t\t\t\t\tmin-width: 0;\n\t\t\t\t\tmax-width: 100%;\n\t\t\t\t\ttext-align: left;\n\t\t\t\t}\n\t\t\t\tinput[type=\"date\"]::-webkit-date-and-time-value,\n\t\t\t\tinput[type=\"datetime-local\"]::-webkit-date-and-time-value {\n\t\t\t\t\ttext-align: left;\n\t\t\t\t}\n\t\t\t\t/* Dark date pickers: show the native calendar glyph in light-on-dark. */\n\t\t\t\t.dark input[type=\"date\"]::-webkit-calendar-picker-indicator,\n\t\t\t\t.dark input[type=\"datetime-local\"]::-webkit-calendar-picker-indicator {\n\t\t\t\t\tfilter: invert(1);\n\t\t\t\t}\n\t\t\t</style><script src=\"https://unpkg.com/htmx.org@2.0.4\"></script><script>\n\t\t\t\tif ('serviceWorker' in navigator) {\n\t\t\t\t\twindow.addEventListener('load', function () {\n\t\t\t\t\t\tnavigator.serviceWorker.register('/sw.js').catch(function () {});\n\t\t\t\t\t});\n\t\t\t\t}\n\t\t\t</script></head><body class=\"min-h-screen flex flex-col bg-[#f5f5f7] dark:bg-slate-950 text-slate-800 dark:text-slate-200 font-sans antialiased\"><header class=\"sticky top-0 z-30 bg-white/75 dark:bg-slate-900/75 backdrop-blur-xl border-b border-slate-200/70 dark:border-slate-800\"><!-- peer checkbox drives the mobile menu with no JS --><input type=\"checkbox\" id=\"nav-toggle\" class=\"peer hidden\"><div class=\"max-w-3xl mx-auto px-4 h-14 flex items-center justify-between gap-3\"><a href=\"/\" class=\"flex items-baseline gap-2 min-w-0\"><span class=\"text-lg font-semibold tracking-tight text-slate-900 dark:text-slate-100\">mend</span> ")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, " · mend</title><link rel=\"manifest\" href=\"/manifest.webmanifest\"><link rel=\"icon\" href=\"/static/icon-192.png\"><link rel=\"apple-touch-icon\" href=\"/apple-touch-icon.png\"><meta name=\"apple-mobile-web-app-capable\" content=\"yes\"><meta name=\"apple-mobile-web-app-title\" content=\"mend\"><!-- translucent status bar (white glyphs) so the app goes edge-to-edge; the\n\t\t\t     themed <html> background fills behind it and the header pads the inset. --><meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black-translucent\"><!-- Apply the saved theme before paint (no flash) and expose the toggle. --><script>\n\t\t\t\t(function () {\n\t\t\t\t\ttry {\n\t\t\t\t\t\tvar t = localStorage.getItem('theme');\n\t\t\t\t\t\tif (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {\n\t\t\t\t\t\t\tdocument.documentElement.classList.add('dark');\n\t\t\t\t\t\t}\n\t\t\t\t\t} catch (e) {}\n\t\t\t\t\twindow.__toggleTheme = function () {\n\t\t\t\t\t\tvar dark = document.documentElement.classList.toggle('dark');\n\t\t\t\t\t\ttry { localStorage.setItem('theme', dark ? 'dark' : 'light'); } catch (e) {}\n\t\t\t\t\t};\n\t\t\t\t})();\n\t\t\t</script><script src=\"https://cdn.tailwindcss.com\"></script><script>\n\t\t\t\ttailwind.config = {\n\t\t\t\t\tdarkMode: 'class',\n\t\t\t\t\ttheme: {\n\t\t\t\t\t\textend: {\n\t\t\t\t\t\t\tfontFamily: {\n\t\t\t\t\t\t\t\tsans: ['-apple-system', 'BlinkMacSystemFont', '\"SF Pro Text\"', '\"Segoe UI\"', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],\n\t\t\t\t\t\t\t},\n\t\t\t\t\t\t},\n\t\t\t\t\t},\n\t\t\t\t};\n\t\t\t</script><style>\n\t\t\t\t/* The iOS standalone PWA paints the status-bar / safe-area region with the\n\t\t\t\t   <html> root background (not <body>), so set it here too — otherwise a\n\t\t\t\t   white bar shows above the dark app. */\n\t\t\t\thtml { background-color: #f5f5f7; }\n\t\t\t\thtml.dark { background-color: #020617; }\n\t\t\t\t/* iOS Safari gives date/time inputs an intrinsic min-width that beats\n\t\t\t\t   width:100%, overflowing their container. Strip the native appearance\n\t\t\t\t   and min-width so they honor the box. */\n\t\t\t\tinput[type=\"date\"], input[type=\"datetime-local\"] {\n\t\t\t\t\t-webkit-appearance: none;\n\t\t\t\t\tappearance: none;\n\t\t\t\t\tmin-width: 0;\n\t\t\t\t\tmax-width: 100%;\n\t\t\t\t\ttext-align: left;\n\t\t\t\t}\n\t\t\t\tinput[type=\"date\"]::-webkit-date-and-time-value,\n\t\t\t\tinput[type=\"datetime-local\"]::-webkit-date-and-time-value {\n\t\t\t\t\ttext-align: left;\n\t\t\t\t}\n\t\t\t\t/* Dark date pickers: show the native calendar glyph in light-on-dark. */\n\t\t\t\t.dark input[type=\"date\"]::-webkit-calendar-picker-indicator,\n\t\t\t\t.dark input[type=\"datetime-local\"]::-webkit-calendar-picker-indicator {\n\t\t\t\t\tfilter: invert(1);\n\t\t\t\t}\n\t\t\t</style><script src=\"https://unpkg.com/htmx.org@2.0.4\"></script><script>\n\t\t\t\tif ('serviceWorker' in navigator) {\n\t\t\t\t\twindow.addEventListener('load', function () {\n\t\t\t\t\t\tnavigator.serviceWorker.register('/sw.js').catch(function () {});\n\t\t\t\t\t});\n\t\t\t\t}\n\t\t\t</script></head><body class=\"min-h-screen flex flex-col bg-[#f5f5f7] dark:bg-slate-950 text-slate-800 dark:text-slate-200 font-sans antialiased\"><header class=\"sticky top-0 z-30 bg-white/75 dark:bg-slate-900/75 backdrop-blur-xl border-b border-slate-200/70 dark:border-slate-800 pt-[env(safe-area-inset-top)]\"><!-- peer checkbox drives the mobile menu with no JS --><input type=\"checkbox\" id=\"nav-toggle\" class=\"peer hidden\"><div class=\"max-w-3xl mx-auto px-4 h-14 flex items-center justify-between gap-3\"><a href=\"/\" class=\"flex items-baseline gap-2 min-w-0\"><span class=\"text-lg font-semibold tracking-tight text-slate-900 dark:text-slate-100\">mend</span> ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -59,7 +59,7 @@ func Layout(title string, profile store.CaseProfile) templ.Component {
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(profile.InjuryName)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/layout.templ`, Line: 89, Col: 96}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/layout.templ`, Line: 96, Col: 96}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
@@ -222,7 +222,7 @@ func navLink(href, text string) templ.Component {
 		var templ_7745c5c3_Var7 templ.SafeURL
 		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinURLErrs(templ.SafeURL(href))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/layout.templ`, Line: 143, Col: 30}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/layout.templ`, Line: 150, Col: 30}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 		if templ_7745c5c3_Err != nil {
@@ -235,7 +235,7 @@ func navLink(href, text string) templ.Component {
 		var templ_7745c5c3_Var8 string
 		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(text)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/layout.templ`, Line: 143, Col: 187}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/layout.templ`, Line: 150, Col: 187}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 		if templ_7745c5c3_Err != nil {
@@ -278,7 +278,7 @@ func pageHeader(title string) templ.Component {
 		var templ_7745c5c3_Var10 string
 		templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(title)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/layout.templ`, Line: 149, Col: 94}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/layout.templ`, Line: 156, Col: 94}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
 		if templ_7745c5c3_Err != nil {
@@ -328,7 +328,7 @@ func btnLink(href, text string) templ.Component {
 		var templ_7745c5c3_Var12 templ.SafeURL
 		templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.JoinURLErrs(templ.SafeURL(href))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/layout.templ`, Line: 157, Col: 30}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/layout.templ`, Line: 164, Col: 30}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var12))
 		if templ_7745c5c3_Err != nil {
@@ -341,7 +341,7 @@ func btnLink(href, text string) templ.Component {
 		var templ_7745c5c3_Var13 string
 		templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(text)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/layout.templ`, Line: 157, Col: 215}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/layout.templ`, Line: 164, Col: 215}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
 		if templ_7745c5c3_Err != nil {
@@ -423,7 +423,7 @@ func flash(kind, msg string) templ.Component {
 			var templ_7745c5c3_Var16 string
 			templ_7745c5c3_Var16, templ_7745c5c3_Err = templ.JoinStringErrs(msg)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/layout.templ`, Line: 170, Col: 150}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/layout.templ`, Line: 177, Col: 150}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var16))
 			if templ_7745c5c3_Err != nil {
@@ -441,7 +441,7 @@ func flash(kind, msg string) templ.Component {
 			var templ_7745c5c3_Var17 string
 			templ_7745c5c3_Var17, templ_7745c5c3_Err = templ.JoinStringErrs(msg)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/layout.templ`, Line: 172, Col: 162}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/layout.templ`, Line: 179, Col: 162}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var17))
 			if templ_7745c5c3_Err != nil {
