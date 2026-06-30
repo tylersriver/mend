@@ -361,10 +361,10 @@ func (s *Store) GetRecording(ctx context.Context, id int64) (Recording, error) {
 
 func (s *Store) CreateRecording(ctx context.Context, r Recording) (int64, error) {
 	res, err := s.db.ExecContext(ctx, `
-		INSERT INTO recordings (appointment_id, audio_path, duration_sec, transcript_status)
-		VALUES (?, ?, ?, ?)`,
+		INSERT INTO recordings (appointment_id, audio_path, duration_sec, transcript, transcript_status)
+		VALUES (?, ?, ?, ?, ?)`,
 		nullZero(r.AppointmentID), nullify(r.AudioPath), nullZero(r.DurationSec),
-		recStatusOr(r.TranscriptStatus))
+		nullify(r.Transcript), recStatusOr(r.TranscriptStatus))
 	if err != nil {
 		return 0, err
 	}
