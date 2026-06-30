@@ -26,6 +26,15 @@ const inputCls = "mt-1 block w-full min-w-0 max-w-full rounded-xl border border-
 func apptURL(id int64) string     { return "/appointments/" + strconv.FormatInt(id, 10) }
 func resourceURL(id int64) string { return "/resources/" + strconv.FormatInt(id, 10) }
 func aiDocURL(id int64) string    { return "/ai/docs/" + strconv.FormatInt(id, 10) }
+func taskURL(id int64) string     { return "/tasks/" + strconv.FormatInt(id, 10) }
+
+// doneCls styles a task title based on completion.
+func doneCls(done bool) string {
+	if done {
+		return "line-through text-slate-400 dark:text-slate-500"
+	}
+	return "text-slate-800 dark:text-slate-200"
+}
 
 // providerOr gives a non-empty label for an appointment's provider.
 func providerOr(a store.Appointment) string {

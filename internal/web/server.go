@@ -189,6 +189,12 @@ func (s *Server) Routes() http.Handler {
 	mux.HandleFunc("POST /appointments/{id}", s.appointmentUpdate)
 	mux.HandleFunc("POST /appointments/{id}/questions", s.appointmentQuestions)
 
+	// Tasks (quick to-do list)
+	mux.HandleFunc("GET /tasks", s.taskList)
+	mux.HandleFunc("POST /tasks", s.taskCreate)
+	mux.HandleFunc("POST /tasks/{id}/toggle", s.taskToggle)
+	mux.HandleFunc("POST /tasks/{id}/delete", s.taskDelete)
+
 	// AI documents
 	mux.HandleFunc("GET /ai/docs/{id}", s.aiDocEdit)
 	mux.HandleFunc("POST /ai/docs/{id}", s.aiDocUpdate)
