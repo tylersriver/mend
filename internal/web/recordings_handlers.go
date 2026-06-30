@@ -33,7 +33,10 @@ func (s *Server) recordingNew(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) recordingCreate(w http.ResponseWriter, r *http.Request) {
-	if err := r.ParseMultipartForm(64 << 20); err != nil && err != http.ErrNotMultipart {
+	// Keep only a small part of the upload in memory; anything larger streams to a
+	// temp file on disk. This keeps memory flat for big audio files so we don't
+	// OOM on small (256–512MB) hosts — a likely cause of "upload failed".
+	if err := r.ParseMultipartForm(8 << 20); err != nil && err != http.ErrNotMultipart {
 		s.fail(w, "parse form", err)
 		return
 	}
