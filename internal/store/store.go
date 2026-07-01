@@ -292,13 +292,15 @@ func (s *Store) CreateAppointment(ctx context.Context, a Appointment) (int64, er
 	return res.LastInsertId()
 }
 
-// UpdateAppointment saves the editable fields (prep, outcome, status, follow-up, location).
+// UpdateAppointment saves the editable fields (provider, prep, outcome, status,
+// follow-up, location).
 func (s *Store) UpdateAppointment(ctx context.Context, a Appointment) error {
 	_, err := s.db.ExecContext(ctx, `
 		UPDATE appointments
-		SET prep_notes = ?, outcome = ?, status = ?, follow_up_on = ?, location = ?
+		SET provider_id = ?, prep_notes = ?, outcome = ?, status = ?, follow_up_on = ?, location = ?
 		WHERE id = ?`,
-		nullify(a.PrepNotes), nullify(a.Outcome), statusOr(a.Status), nullify(a.FollowUpOn), nullify(a.Location), a.ID)
+		nullZero(a.ProviderID), nullify(a.PrepNotes), nullify(a.Outcome), statusOr(a.Status),
+		nullify(a.FollowUpOn), nullify(a.Location), a.ID)
 	return err
 }
 
