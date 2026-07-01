@@ -353,7 +353,12 @@ func (s *Server) appointmentDetail(w http.ResponseWriter, r *http.Request) {
 		s.fail(w, "load recordings", err)
 		return
 	}
-	s.render(w, r, view.AppointmentDetail(s.profile(r.Context()), a, docs, recs, s.aiEnabled()))
+	providers, err := s.store.Providers(r.Context())
+	if err != nil {
+		s.fail(w, "load providers", err)
+		return
+	}
+	s.render(w, r, view.AppointmentDetail(s.profile(r.Context()), a, docs, recs, providers, s.aiEnabled()))
 }
 
 func (s *Server) appointmentUpdate(w http.ResponseWriter, r *http.Request) {
@@ -362,8 +367,10 @@ func (s *Server) appointmentUpdate(w http.ResponseWriter, r *http.Request) {
 		http.NotFound(w, r)
 		return
 	}
+	providerID, _ := strconv.ParseInt(r.FormValue("provider_id"), 10, 64)
 	a := store.Appointment{
 		ID:         id,
+		ProviderID: providerID,
 		PrepNotes:  strings.TrimSpace(r.FormValue("prep_notes")),
 		Outcome:    strings.TrimSpace(r.FormValue("outcome")),
 		Status:     r.FormValue("status"),

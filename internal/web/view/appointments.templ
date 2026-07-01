@@ -73,7 +73,7 @@ templ AppointmentForm(profile store.CaseProfile, providers []store.Provider) {
 	}
 }
 
-templ AppointmentDetail(profile store.CaseProfile, a store.Appointment, docs []store.AIDoc, recs []store.Recording, aiEnabled bool) {
+templ AppointmentDetail(profile store.CaseProfile, a store.Appointment, docs []store.AIDoc, recs []store.Recording, providers []store.Provider, aiEnabled bool) {
 	@Layout("Appointment", profile) {
 		<div class="flex items-center justify-between mb-4">
 			<div>
@@ -132,10 +132,28 @@ templ AppointmentDetail(profile store.CaseProfile, a store.Appointment, docs []s
 			<div class="hidden peer-checked:block">
 				@card() {
 					<div class="flex items-center justify-between mb-3">
-						<h2 class="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Edit prep &amp; outcome</h2>
+						<h2 class="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Edit appointment</h2>
 						<label for="edit-appt" class="text-sm text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 cursor-pointer">Cancel</label>
 					</div>
 					<form method="post" action={ templ.SafeURL(apptURL(a.ID)) } class="space-y-4">
+						<div>
+							<label class="block text-xs font-medium text-slate-500 dark:text-slate-400">Provider</label>
+							<select name="provider_id" class={ inputCls }>
+								if a.ProviderID == 0 {
+									<option value="0" selected>— none —</option>
+								} else {
+									<option value="0">— none —</option>
+								}
+								for _, p := range providers {
+									if p.ID == a.ProviderID {
+										<option value={ itoa(p.ID) } selected>{ p.Name }</option>
+									} else {
+										<option value={ itoa(p.ID) }>{ p.Name }</option>
+									}
+								}
+							</select>
+							<p class="text-xs text-slate-400 dark:text-slate-500 mt-1">No provider listed? <a href="/providers/new" class="underline">Add one</a>.</p>
+						</div>
 						<div>
 							<label class="block text-xs font-medium text-slate-500 dark:text-slate-400">Prep notes — questions to raise</label>
 							<textarea name="prep_notes" rows="5" class={ inputCls }>{ a.PrepNotes }</textarea>
