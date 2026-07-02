@@ -8,7 +8,10 @@ package view
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-// LoginPage is a standalone page (no app nav) shown when auth is required.
+// LoginPage is a standalone page (no app nav) shown when auth is required. It
+// carries its own <head> (it isn't wrapped by Layout) but mirrors the app shell:
+// same font, teal accent, and the no-flash dark-mode init so it matches whatever
+// theme the user last chose in the app.
 func LoginPage(failed bool) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
@@ -30,17 +33,39 @@ func LoginPage(failed bool) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><meta name=\"theme-color\" content=\"#f5f5f7\"><title>Sign in · mend</title><link rel=\"manifest\" href=\"/manifest.webmanifest\"><link rel=\"apple-touch-icon\" href=\"/apple-touch-icon.png\"><script src=\"https://cdn.tailwindcss.com\"></script><script>\n\t\t\t\ttailwind.config = { theme: { extend: { fontFamily: { sans: ['-apple-system', 'BlinkMacSystemFont', '\"SF Pro Text\"', '\"Segoe UI\"', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'] } } } };\n\t\t\t</script></head><body class=\"bg-[#f5f5f7] min-h-screen flex items-center justify-center p-6 font-sans antialiased text-slate-800 dark:text-slate-200\"><div class=\"w-full max-w-sm\"><div class=\"text-center mb-6\"><div class=\"inline-flex items-center justify-center w-16 h-16 rounded-3xl bg-teal-600 text-white text-3xl font-bold shadow-sm shadow-teal-600/30\">+</div><h1 class=\"mt-3 text-xl font-semibold tracking-tight text-slate-900 dark:text-slate-100\">mend</h1><p class=\"text-sm text-slate-500 dark:text-slate-400\">Sign in to continue</p></div><div class=\"bg-white dark:bg-slate-900 rounded-2xl shadow-sm ring-1 ring-slate-900/5 p-5\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover\"><meta name=\"theme-color\" content=\"#f5f5f7\" media=\"(prefers-color-scheme: light)\"><meta name=\"theme-color\" content=\"#020617\" media=\"(prefers-color-scheme: dark)\"><title>Sign in · mend</title><link rel=\"manifest\" href=\"/manifest.webmanifest\"><link rel=\"icon\" href=\"/static/icon-192.png\"><link rel=\"apple-touch-icon\" href=\"/apple-touch-icon.png\"><meta name=\"apple-mobile-web-app-capable\" content=\"yes\"><meta name=\"apple-mobile-web-app-title\" content=\"mend\"><!-- Apply the saved theme before paint so the login matches the app. --><script>\n\t\t\t\t(function () {\n\t\t\t\t\ttry {\n\t\t\t\t\t\tvar t = localStorage.getItem('theme');\n\t\t\t\t\t\tif (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {\n\t\t\t\t\t\t\tdocument.documentElement.classList.add('dark');\n\t\t\t\t\t\t}\n\t\t\t\t\t} catch (e) {}\n\t\t\t\t})();\n\t\t\t</script><script src=\"https://cdn.tailwindcss.com\"></script><script>\n\t\t\t\ttailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['-apple-system', 'BlinkMacSystemFont', '\"SF Pro Text\"', '\"Segoe UI\"', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'] } } } };\n\t\t\t</script><style>\n\t\t\t\thtml { background-color: #f5f5f7; }\n\t\t\t\thtml.dark { background-color: #020617; }\n\t\t\t</style></head><body class=\"min-h-screen flex items-center justify-center p-6 font-sans antialiased text-slate-800 dark:text-slate-200 bg-gradient-to-b from-[#f5f5f7] to-[#e6ebf0] dark:from-slate-950 dark:to-slate-900\"><main class=\"w-full max-w-sm\"><div class=\"text-center mb-8\"><div class=\"mx-auto inline-flex items-center justify-center w-16 h-16 rounded-[1.3rem] bg-gradient-to-br from-teal-400 to-teal-600 text-white shadow-lg shadow-teal-600/30 ring-1 ring-white/25\"><svg class=\"w-8 h-8\" fill=\"none\" viewBox=\"0 0 24 24\" stroke=\"currentColor\" stroke-width=\"2.2\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M3 12h4l2 5 4-10 2 5h6\"></path></svg></div><h1 class=\"mt-4 text-2xl font-semibold tracking-tight text-slate-900 dark:text-slate-100\">mend</h1><p class=\"mt-1 text-sm text-slate-500 dark:text-slate-400\">Your private recovery companion</p></div><div class=\"bg-white/80 dark:bg-slate-900/70 backdrop-blur-xl rounded-3xl shadow-xl shadow-slate-900/5 ring-1 ring-slate-900/5 dark:ring-white/10 p-6\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		if failed {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<div class=\"mb-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm px-3 py-2\">Incorrect password.</div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<div class=\"mb-4 rounded-xl bg-red-50 dark:bg-red-950/40 ring-1 ring-red-200 dark:ring-red-900/50 text-red-700 dark:text-red-300 text-sm px-3.5 py-2.5\">Incorrect password. Please try again.</div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<form method=\"post\" action=\"/login\" class=\"space-y-3\"><div><label class=\"block text-xs font-medium text-slate-500 dark:text-slate-400\">Password</label> <input type=\"password\" name=\"password\" autofocus required autocomplete=\"current-password\" class=\"mt-1 block w-full rounded-xl border border-slate-300 dark:border-slate-700 px-3 py-2 text-sm focus:border-teal-500 focus:ring-teal-500\"></div><button class=\"w-full px-4 py-2.5 bg-teal-600 text-white text-sm font-medium rounded-xl shadow-sm shadow-teal-600/20 hover:bg-teal-700 active:scale-[.98] transition\">Sign in</button></form></div></div></body></html>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<form method=\"post\" action=\"/login\" class=\"space-y-4\"><div><label for=\"password\" class=\"block text-xs font-medium text-slate-500 dark:text-slate-400\">Password</label> ")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var2 = []any{inputCls}
+		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var2...)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<input id=\"password\" type=\"password\" name=\"password\" autofocus required autocomplete=\"current-password\" placeholder=\"Enter your password\" class=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var3 string
+		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.ResolveAttributeValue(templ.CSSClasses(templ_7745c5c3_Var2).String())
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/auth.templ`, Line: 1, Col: 0}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var3)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\"></div><button class=\"w-full px-4 py-3 bg-teal-600 text-white text-sm font-semibold rounded-xl shadow-sm shadow-teal-600/25 hover:bg-teal-700 active:scale-[.98] transition\">Sign in</button></form></div><p class=\"text-center text-xs text-slate-400 dark:text-slate-500 mt-6\">Personal care-prep tool · not medical advice.</p></main></body></html>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
